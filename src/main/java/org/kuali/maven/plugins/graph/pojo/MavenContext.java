@@ -16,6 +16,7 @@
 package org.kuali.maven.plugins.graph.pojo;
 
 import org.apache.maven.shared.dependency.tree.DependencyNode;
+import org.kuali.maven.plugins.graph.tree.Node;
 
 public class MavenContext {
     int id;
@@ -24,8 +25,7 @@ public class MavenContext {
     State state;
     GraphNode graphNode;
     DependencyNode dependencyNode;
-    MavenContext replacement;
-
+    Node<MavenContext> replacement;
     public MavenContext() {
         this(null, null);
     }
@@ -60,26 +60,6 @@ public class MavenContext {
         this.id = id;
     }
 
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        MavenContext other = (MavenContext) obj;
-        return id == other.id;
-    }
-
     public String getArtifactIdentifier() {
         return artifactIdentifier;
     }
@@ -96,20 +76,20 @@ public class MavenContext {
         this.state = state;
     }
 
-    public MavenContext getReplacement() {
-        return replacement;
-    }
-
-    public void setReplacement(MavenContext replacement) {
-        this.replacement = replacement;
-    }
-
     public String getPartialArtifactIdentifier() {
         return partialArtifactIdentifier;
     }
 
     public void setPartialArtifactIdentifier(String partialArtifactIdentifier) {
         this.partialArtifactIdentifier = partialArtifactIdentifier;
+    }
+
+    public Node<MavenContext> getReplacement() {
+        return replacement;
+    }
+
+    public void setReplacement(Node<MavenContext> replacement) {
+        this.replacement = replacement;
     }
 
 }

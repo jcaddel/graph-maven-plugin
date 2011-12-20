@@ -46,6 +46,10 @@ import org.kuali.maven.plugins.graph.sanitize.ConflictSanitizer;
 import org.kuali.maven.plugins.graph.sanitize.CyclicSanitizer;
 import org.kuali.maven.plugins.graph.sanitize.DuplicateSanitizer;
 import org.kuali.maven.plugins.graph.sanitize.MavenContextSanitizer;
+import org.kuali.maven.plugins.graph.validate.ConflictDependencyNodeValidator;
+import org.kuali.maven.plugins.graph.validate.DuplicateDependencyNodeValidator;
+import org.kuali.maven.plugins.graph.validate.IncludedDependencyNodeValidator;
+import org.kuali.maven.plugins.graph.validate.NodeValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -147,27 +151,116 @@ public class TreeHelper {
         return node;
     }
 
+    public void validate(Node<MavenContext> node) {
+        List<NodeValidator<MavenContext>> validators = getValidators(node);
+        for (NodeValidator<MavenContext> validator : validators) {
+            validator.validate(node);
+        }
+        logger.info("Validation complete");
+    }
+
     public void sanitize(Node<MavenContext> node) {
+        // Flatten the tree into a list
         List<Node<MavenContext>> nodes = node.getBreadthFirstList();
+
         logger.info("Sanitizing metadata for " + nodes.size() + " dependency nodes");
+
+        // Get a handle to artifacts that are included in the build
         Included included = getIncluded(node, nodes, State.INCLUDED);
-        int count1 = getStateCount(nodes, State.INCLUDED);
 
-        int count2 = included.getIds().size();
-        int count3 = included.getPartialIds().size();
-
-        boolean valid = count1 == count2 && count2 == count3;
-
-        Assert.isTrue(valid, "Unique included artifact id counts don't match. count1=" + count1 + " count2=" + count2
-                + " count3=" + count3);
-
+        // Go through the tree and clean up nodes that are not included in the build
         List<MavenContextSanitizer> sanitizers = getSanitizers(included);
         for (MavenContextSanitizer sanitizer : sanitizers) {
             sanitizer.sanitize(node);
         }
+
+        // Apply styling based on the cleaned up tree
         for (Node<MavenContext> element : nodes) {
             updateGraphNodeStyle(element.getObject());
         }
+    }
+
+    protected void validateDuplicates(Node<MavenContext> node) {
+        List<Node<MavenContext>> list = node.getBreadthFirstList();
+        for (Node<MavenContext> element : list) {
+            State state = getState(element);
+            if (state == State.DUPLICATE) {
+                validateDuplicate(element.getObject());
+            }
+        }
+        logger.info("Validated duplicate nodes");
+    }
+
+    protected State getState(Node<MavenContext> node) {
+        return State.getState(node.getObject().getDependencyNode().getState());
+    }
+
+    protected void validateDuplicate(MavenContext context) {
+        DependencyNode dn = context.getDependencyNode();
+        // Assert.isNull(dn.getRelatedArtifact(), "Why would a duplicate node contain a related artifact?");
+        Artifact artifact = dn.getArtifact();
+        Artifact related = dn.getRelatedArtifact();
+
+        if (related == null) {
+            return;
+        }
+
+        boolean sameNamespace = areSameNamespace(artifact, related);
+
+        Assert.isTrue(sameNamespace, "Why would artifacts from different namespaces be stored here?");
+
+        String id1 = getArtifactId(artifact);
+        String id2 = getArtifactId(related);
+
+        // Assert.isTrue(id1.equals(id2), "Why would conflicting artifacts be stored here?");
+    }
+
+    protected boolean areSameNamespace(Artifact a1, Artifact a2) {
+        String n1 = getPartialArtifactId(a1);
+        String n2 = getPartialArtifactId(a2);
+        return n1.equals(n2);
+    }
+
+    protected void validateConflicts(Node<MavenContext> node) {
+        List<Node<MavenContext>> list = node.getBreadthFirstList();
+        for (Node<MavenContext> element : list) {
+            State state = getState(element);
+            if (state == State.CONFLICT) {
+                validateConflict(element.getObject());
+            }
+        }
+        logger.info("Validated conflict nodes");
+    }
+
+    protected void validateConflict(MavenContext context) {
+        Artifact artifact = context.getDependencyNode().getArtifact();
+        Artifact related = context.getDependencyNode().getRelatedArtifact();
+
+        Assert.notNull(artifact, "Main artifact for a conflict node can't be null");
+        Assert.notNull(related, "Related artifact for a conflict node can't be null");
+
+        String id1 = getArtifactId(artifact);
+        String id2 = getArtifactId(related);
+
+        String namespace1 = getPartialArtifactId(artifact);
+        String namespace2 = getPartialArtifactId(related);
+
+        boolean equal = namespace1.equals(namespace2);
+        boolean different = !id1.equals(id2);
+
+        if (!different) {
+            logger.info(id1 + "->" + id2);
+        }
+        Assert.isTrue(equal, "Conflict nodes must have the exact same artifact namespace");
+        // Assert.isTrue(different, "Why would a conflict node contain the exact same artifact twice?");
+    }
+
+    protected List<NodeValidator<MavenContext>> getValidators(Node<MavenContext> node) {
+        List<NodeValidator<MavenContext>> validators = new ArrayList<NodeValidator<MavenContext>>();
+        validators.add(new IncludedDependencyNodeValidator());
+        validators.add(new DuplicateDependencyNodeValidator());
+        validators.add(new ConflictDependencyNodeValidator());
+        return validators;
     }
 
     protected List<MavenContextSanitizer> getSanitizers(Included included) {
@@ -219,8 +312,8 @@ public class TreeHelper {
     }
 
     public Included getIncluded(Node<MavenContext> node, List<Node<MavenContext>> list, State state) {
-        Map<String, MavenContext> ids = new HashMap<String, MavenContext>();
-        Map<String, MavenContext> partialIds = new HashMap<String, MavenContext>();
+        Map<String, Node<MavenContext>> ids = new HashMap<String, Node<MavenContext>>();
+        Map<String, Node<MavenContext>> partialIds = new HashMap<String, Node<MavenContext>>();
         for (Node<MavenContext> element : list) {
             MavenContext context = element.getObject();
             DependencyNode dn = context.getDependencyNode();
@@ -228,8 +321,8 @@ public class TreeHelper {
             if (!state.equals(elementState)) {
                 continue;
             } else {
-                ids.put(context.getArtifactIdentifier(), context);
-                partialIds.put(context.getPartialArtifactIdentifier(), context);
+                ids.put(context.getArtifactIdentifier(), element);
+                partialIds.put(context.getPartialArtifactIdentifier(), element);
             }
         }
         Included included = new Included();

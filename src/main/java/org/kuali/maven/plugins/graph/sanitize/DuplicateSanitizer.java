@@ -19,6 +19,7 @@ import org.apache.maven.artifact.Artifact;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.tree.Included;
+import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,8 @@ public class DuplicateSanitizer extends MavenContextSanitizer {
     protected void sanitize(MavenContext context, Included included) {
         String id1 = context.getArtifactIdentifier();
         String partialId1 = context.getPartialArtifactIdentifier();
-        MavenContext exact1 = included.getIds().get(id1);
-        MavenContext partial1 = included.getPartialIds().get(partialId1);
+        Node<MavenContext> exact1 = included.getIds().get(id1);
+        Node<MavenContext> partial1 = included.getPartialIds().get(partialId1);
 
         if (handlePrimary(context, exact1, partial1)) {
             return;
@@ -54,14 +55,14 @@ public class DuplicateSanitizer extends MavenContextSanitizer {
 
         String id2 = TreeHelper.getArtifactId(related);
         String partialId2 = TreeHelper.getPartialArtifactId(related);
-        MavenContext exact2 = included.getIds().get(id2);
-        MavenContext partial2 = included.getPartialIds().get(partialId2);
+        Node<MavenContext> exact2 = included.getIds().get(id2);
+        Node<MavenContext> partial2 = included.getPartialIds().get(partialId2);
         if (handleRelated(context, exact2, partial2)) {
             return;
         }
     }
 
-    protected boolean handlePrimary(MavenContext context, MavenContext exact, MavenContext partial) {
+    protected boolean handlePrimary(MavenContext context, Node<MavenContext> exact, Node<MavenContext> partial) {
         // Nothing more to do
         if (exact != null) {
             context.setReplacement(exact);
@@ -82,7 +83,7 @@ public class DuplicateSanitizer extends MavenContextSanitizer {
         return false;
     }
 
-    protected void switchState(MavenContext context, MavenContext replacement) {
+    protected void switchState(MavenContext context, Node<MavenContext> replacement) {
         State switchTo = State.CONFLICT;
         logger.info(getSwitchMessage(context.getArtifactIdentifier(), switchTo));
         logger.info("No identical replacement for a 'duplicate' but a similar artifact was found");
@@ -90,7 +91,7 @@ public class DuplicateSanitizer extends MavenContextSanitizer {
         context.setReplacement(replacement);
     }
 
-    protected boolean handleRelated(MavenContext context, MavenContext exact, MavenContext partial) {
+    protected boolean handleRelated(MavenContext context, Node<MavenContext> exact, Node<MavenContext> partial) {
         if (exact != null) {
             switchState(context, exact);
             return true;

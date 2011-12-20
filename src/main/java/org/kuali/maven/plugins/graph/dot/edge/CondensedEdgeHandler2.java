@@ -32,8 +32,8 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CondensedEdgeHandler extends FlatEdgeHandler {
-    private static final Logger logger = LoggerFactory.getLogger(CondensedEdgeHandler.class);
+public class CondensedEdgeHandler2 extends FlatEdgeHandler {
+    private static final Logger logger = LoggerFactory.getLogger(CondensedEdgeHandler2.class);
     public static final String REPLACEMENT_LABEL = "replacement";
     TreeHelper helper = new TreeHelper();
 
@@ -76,8 +76,9 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
     protected void handleConflict(Node<MavenContext> node, List<Edge> edges) {
         MavenContext context = node.getObject();
 
-        // Find the node containing the replacement artifact Maven is actually going to use
-        Node<MavenContext> replacement = node.getObject().getReplacement();
+        // Get the node containing the replacement artifact Maven is actually going to use
+        Node<MavenContext> replacement = context.getReplacement();
+
         String artifactIdentifier = replacement.getObject().getArtifactIdentifier();
 
         // Check to see if we've encountered this same conflict before
@@ -111,7 +112,7 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
         DependencyNode dn = context.getDependencyNode();
 
         // Find the node that replaces us
-        Node<MavenContext> replacement = findIncludedNode(node.getRoot(), context.getArtifactIdentifier());
+        Node<MavenContext> replacement = context.getReplacement();
         // This is our parent in the tree
         GraphNode parent = node.getParent().getObject().getGraphNode();
         // This is the node that is being used instead of us

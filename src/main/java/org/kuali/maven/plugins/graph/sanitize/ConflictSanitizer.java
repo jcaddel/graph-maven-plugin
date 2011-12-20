@@ -19,6 +19,7 @@ import org.apache.maven.artifact.Artifact;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.tree.Included;
+import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,8 @@ public class ConflictSanitizer extends MavenContextSanitizer {
     protected void sanitize(MavenContext context, Included included) {
         String id1 = context.getArtifactIdentifier();
         String partialId1 = context.getPartialArtifactIdentifier();
-        MavenContext exact1 = included.getIds().get(id1);
-        MavenContext partial1 = included.getPartialIds().get(partialId1);
+        Node<MavenContext> exact1 = included.getIds().get(id1);
+        Node<MavenContext> partial1 = included.getPartialIds().get(partialId1);
 
         // This is ok. Kind of. Maven has marked it as a conflict, but it should be duplicate
         if (exact1 != null) {
@@ -69,8 +70,8 @@ public class ConflictSanitizer extends MavenContextSanitizer {
         // Examine the related artifact
         String id2 = TreeHelper.getArtifactId(related);
         String partialId2 = TreeHelper.getPartialArtifactId(related);
-        MavenContext exact2 = included.getIds().get(id2);
-        MavenContext partial2 = included.getPartialIds().get(partialId2);
+        Node<MavenContext> exact2 = included.getIds().get(id2);
+        Node<MavenContext> partial2 = included.getPartialIds().get(partialId2);
 
         if (exact2 != null) {
             // This is ok. We've located a suitable replacement

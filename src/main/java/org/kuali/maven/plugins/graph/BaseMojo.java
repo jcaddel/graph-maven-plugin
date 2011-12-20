@@ -313,6 +313,7 @@ public abstract class BaseMojo extends AbstractMojo {
         DependencyNode mavenTree = getMavenTree();
         Node<MavenContext> nodeTree = helper.getTree(mavenTree);
         preProcess(nodeTree);
+        helper.validate(nodeTree);
         helper.sanitize(nodeTree);
         TreeMetaData md = helper.getMetaData(nodeTree);
         helper.show(md);
