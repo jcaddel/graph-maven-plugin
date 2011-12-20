@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.pojo.State;
-import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -23,20 +22,17 @@ public class DuplicateDependencyNodeValidator extends DependencyNodeValidator {
             Artifact artifact = node.getArtifact();
             Artifact related = node.getRelatedArtifact();
 
-            Assert.notNull(related, "Duplicate nodes must contain related artifacts");
+            Assert.notNull(related, state + " nodes must contain related artifacts");
 
-            String id1 = TreeHelper.getArtifactId(artifact);
-            String id2 = TreeHelper.getArtifactId(related);
+            boolean equals = helper.equals(artifact, related);
+            boolean similar = helper.similar(artifact, related);
 
-            if (!id1.equals(id2)) {
-                logger.info("fake dup->" + id1);
+            if (!equals) {
+                logger.debug("fake dup->" + artifact);
             }
-
-            boolean similar = helper.areSimilar(artifact, related);
-
             Assert.state(similar, "Artifact's must be the same except for version");
         }
-        logger.debug("Validated duplicate nodes");
+        logger.debug("Validated " + state + " nodes");
     }
 
 }

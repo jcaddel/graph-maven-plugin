@@ -184,7 +184,13 @@ public class TreeHelper {
         return State.getState(node.getObject().getDependencyNode().getState());
     }
 
-    public boolean areSimilar(Artifact a1, Artifact a2) {
+    public boolean equals(Artifact a1, Artifact a2) {
+        String id1 = getArtifactId(a1);
+        String id2 = getArtifactId(a2);
+        return id1.equals(id2);
+    }
+
+    public boolean similar(Artifact a1, Artifact a2) {
         String n1 = getPartialArtifactId(a1);
         String n2 = getPartialArtifactId(a2);
         return n1.equals(n2);
