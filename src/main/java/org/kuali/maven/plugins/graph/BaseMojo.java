@@ -149,8 +149,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided all dependencies are included.<br>
      * <br>
      *
-     * The pattern syntax has the form:<br>
-     * <br>
+     * The pattern syntax has the form:
      *
      * <pre>
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
@@ -174,8 +173,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided, no artifacts are excluded.<br>
      * <br>
      *
-     * The pattern syntax has the form:<br>
-     * <br>
+     * The pattern syntax has the form:
      *
      * <pre>
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
@@ -200,8 +198,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided, no dependencies are hidden.<br>
      * <br>
      *
-     * The pattern syntax has the form:<br>
-     * <br>
+     * The pattern syntax has the form:
      *
      * <pre>
      * [scope]:[optional|required]:[state]
@@ -219,11 +216,11 @@ public abstract class BaseMojo extends AbstractMojo {
     private String hide;
 
     /**
-     * <p>
-     * Comma delimited list of dependency qualifiers used for "showing" artifacts. <code>Show</code> works "bottom up"
-     * and can be overridden by <code>hide</code>. If a dependency matches the <code>show</code> criteria, it, and all
-     * of the dependencies in the direct path from it back to the root of the dependency tree are displayed.
-     * </p>
+     * Comma delimited list of dependency patterns used for showing artifacts.<br>
+     * <br>
+     * Show patterns work "bottom up" and are overridden by hide patterns. If a dependency matches any show criteria,
+     * it, and all of the dependencies in the direct path from it back to the root of the dependency tree are displayed.<br>
+     * <br>
      *
      * The pattern syntax has the form:
      *
@@ -233,11 +230,10 @@ public abstract class BaseMojo extends AbstractMojo {
      *
      * Scopes: <code>compile,provided,runtime,test,system,import</code><br>
      * States: <code>normal,conflict,cyclic,duplicate</code><br>
+     * <br>
      *
-     * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
-     * </p>
      *
      * @parameter expression="${graph.show}"
      */
