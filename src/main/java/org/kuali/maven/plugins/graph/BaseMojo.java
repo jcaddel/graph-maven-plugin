@@ -286,8 +286,8 @@ public abstract class BaseMojo extends AbstractMojo {
     protected abstract EdgeHandler getEdgeHandler();
 
     /**
-     * Restricts the depth of the dependency tree. To show only the dependencies of your project, set this to 1. To show
-     * the dependencies of your project and their direct dependencies, set this to 2.
+     * Restricts the depth of the dependency tree. To show only the dependencies of the current project, set this to 1.
+     * To show the dependencies of the current project and its direct dependencies, set this to 2.
      *
      * @parameter expression="${graph.depth}" default-value="-1"
      */
