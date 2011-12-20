@@ -28,6 +28,7 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.artifact.versioning.VersionRange;
 
+@SuppressWarnings("deprecation")
 public class DefaultArtifact implements Artifact {
 
     String groupId;
@@ -96,12 +97,6 @@ public class DefaultArtifact implements Artifact {
     }
 
     @Override
-    public int compareTo(Object o) {
-
-        return 0;
-    }
-
-    @Override
     public boolean hasClassifier() {
 
         return false;
@@ -147,12 +142,6 @@ public class DefaultArtifact implements Artifact {
     }
 
     @Override
-    public Collection<?> getMetadataList() {
-
-        return null;
-    }
-
-    @Override
     public void setRepository(ArtifactRepository remoteRepository) {
 
     }
@@ -192,12 +181,6 @@ public class DefaultArtifact implements Artifact {
 
     @Override
     public ArtifactHandler getArtifactHandler() {
-
-        return null;
-    }
-
-    @Override
-    public List<?> getDependencyTrail() {
 
         return null;
     }
@@ -262,12 +245,6 @@ public class DefaultArtifact implements Artifact {
 
     }
 
-    @Override
-    public List<?> getAvailableVersions() {
-
-        return null;
-    }
-
     @SuppressWarnings("rawtypes")
     @Override
     public void setAvailableVersions(List versions) {
@@ -295,5 +272,29 @@ public class DefaultArtifact implements Artifact {
     public boolean isSelectedVersionKnown() throws OverConstrainedVersionException {
 
         return false;
+    }
+
+    @Override
+    public int compareTo(Artifact arg0) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public List<ArtifactVersion> getAvailableVersions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Collection<ArtifactMetadata> getMetadataList() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<String> getDependencyTrail() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

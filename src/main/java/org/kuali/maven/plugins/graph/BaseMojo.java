@@ -59,6 +59,7 @@ import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 /**
  *
  */
+@SuppressWarnings("deprecation")
 public abstract class BaseMojo extends AbstractMojo {
     Filters filters = new Filters();
 
