@@ -262,7 +262,8 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * The direction for the graph layout. Top to bottom, left to right, bottom to top, and right to left.
+     * The direction for the graph layout. Valid values are TB, LR, BT, RL. Top to bottom, left to right, bottom to top,
+     * and right to left, respectively.
      * </p>
      *
      * @parameter expression="${graph.direction}" default-value="TB"
