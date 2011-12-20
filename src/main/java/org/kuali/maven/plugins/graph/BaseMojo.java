@@ -118,21 +118,27 @@ public abstract class BaseMojo extends AbstractMojo {
     private DependencyTreeBuilder treeBuilder;
 
     /**
+     * <p>
      * The title for the graph
+     * </p>
      *
      * @parameter expression="${graph.title}" default-value="Dependency Graph for ${project.name}"
      */
     private String title;
 
     /**
+     * <p>
      * Set to true to retain the .dot file used to draw the graph
+     * </p>
      *
      * @parameter expression="${graph.keepDotFile}" default-value="false"
      */
     private boolean keepDotFile;
 
     /**
+     * <p>
      * Set to false to show only the dependencies for the current project
+     * </p>
      *
      * @parameter expression="${graph.transitive}" default-value="true"
      */
@@ -183,7 +189,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided, no artifacts are excluded.
      * </p>
      *
-     * The pattern syntax has the form:<br>
+     * The pattern syntax has the form:<br/>
      *
      * <pre>
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
@@ -212,7 +218,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided, no dependencies are hidden.
      * </p>
      *
-     * The pattern syntax has the form:<br>
+     * The pattern syntax has the form:<br/>
      *
      * <pre>
      * [scope]:[optional|required]:[state]
@@ -263,7 +269,9 @@ public abstract class BaseMojo extends AbstractMojo {
     private String show;
 
     /**
+     * <p>
      * The direction for the graph layout. Top to bottom, left to right, bottom to top, and right to left.
+     * </p>
      *
      * @parameter expression="${graph.direction}" default-value="TB"
      */

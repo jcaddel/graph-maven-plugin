@@ -25,8 +25,10 @@ import org.kuali.maven.plugins.graph.dot.edge.SmartEdgeHandler;
  * This mojo lays out the dependency graph in condensed mode.
  * </p>
  *
+ * <p>
  * Each dependency appears on the graph once. Graphviz algorithms present the connections between the dependencies as a
  * directed hierarchical graph.
+ * </p>
  *
  * @goal condensed
  * @requiresDependencyResolution compile|test|runtime
@@ -34,7 +36,9 @@ import org.kuali.maven.plugins.graph.dot.edge.SmartEdgeHandler;
 public class CondensedMojo extends BaseMojo {
 
     /**
+     * <p>
      * The file the graph will be written to
+     * </p>
      *
      * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/dependencies.png"
      */
