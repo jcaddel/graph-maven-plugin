@@ -43,7 +43,7 @@
   <description>Create dependency graphs for Maven projects using Graphviz - http://www.graphviz.org/</description>
   <properties>
     <kuali.slf4j.version>1.6.4</kuali.slf4j.version>
-    <mavenVersion>3.0.3</mavenVersion>
+    <kuali.maven.version>3.0.3</kuali.maven.version>
   </properties>
 
   <dependencies>
@@ -82,38 +82,39 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
-      <version>${mavenVersion}</version>
+      <version>${kuali.maven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-compat</artifactId>
-      <version>${mavenVersion}</version>
+      <version>${kuali.maven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
-      <version>${mavenVersion}</version>
+      <version>${kuali.maven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
-      <version>${mavenVersion}</version>
+      <version>${kuali.maven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>${mavenVersion}</version>
+      <version>${kuali.maven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-settings</artifactId>
-      <version>${mavenVersion}</version>
+      <version>${kuali.maven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-settings-builder</artifactId>
-      <version>${mavenVersion}</version>
-    </dependency>        <dependency>
+      <version>${kuali.maven.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-dependency-tree</artifactId>
       <version>1.2</version>
