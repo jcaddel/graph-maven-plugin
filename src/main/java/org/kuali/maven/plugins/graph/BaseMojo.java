@@ -139,14 +139,18 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * Comma delimited list of patterns for including artifacts.<br>
+     * <br>
      *
      * Include patterns work "bottom up" and are overridden by exclude patterns. If an artifact matches an include
      * pattern, it, and all of the dependencies in the path from it back to the root of the dependency tree are
      * displayed.<br>
+     * <br>
      *
      * If not provided all dependencies are included.<br>
+     * <br>
      *
      * The pattern syntax has the form:<br>
+     * <br>
      *
      * <pre>
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
