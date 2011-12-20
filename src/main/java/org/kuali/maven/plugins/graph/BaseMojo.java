@@ -164,13 +164,18 @@ public abstract class BaseMojo extends AbstractMojo {
     private String includes;
 
     /**
-     * Comma delimited list of artifact patterns to exclude. Exclude patterns override include patterns and work
-     * "top down". If a dependency matches any exclude pattern, it, and all dependencies below it, are removed from the
-     * display.<br>
+     * Comma delimited list of artifact patterns to exclude.<br>
+     * <br>
+     *
+     * Exclude patterns override include patterns and work "top down". If a dependency matches any exclude pattern, it,
+     * and all dependencies below it, are removed from the display.<br>
+     * <br>
      *
      * If not provided, no artifacts are excluded.<br>
+     * <br>
      *
-     * The pattern syntax has the form:
+     * The pattern syntax has the form:<br>
+     * <br>
      *
      * <pre>
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
@@ -186,13 +191,17 @@ public abstract class BaseMojo extends AbstractMojo {
     private String excludes;
 
     /**
-     * <p>
-     * Comma delimited list of dependency qualifiers used for "hiding" artifacts. <code>Hide</code> overrides
-     * <code>show</code> and works "top down". If a dependency matches the <code>hide</code> criteria, it, and
-     * dependencies below it, are removed from the display. If not provided, no dependencies are hidden.
-     * </p>
+     * Comma delimited list of dependency patterns used for hiding artifacts.<br>
+     * <br>
+     * Hide patterns override show patterns and work "top down". If a dependency matches any hide pattern, it, and all
+     * dependencies below it, are removed from the display.<br>
+     * <br>
      *
-     * The pattern syntax has the form:
+     * If not provided, no dependencies are hidden.<br>
+     * <br>
+     *
+     * The pattern syntax has the form:<br>
+     * <br>
      *
      * <pre>
      * [scope]:[optional|required]:[state]
@@ -200,11 +209,10 @@ public abstract class BaseMojo extends AbstractMojo {
      *
      * Scopes: <code>compile,provided,runtime,test,system,import</code><br>
      * States: <code>normal,conflict,cyclic,duplicate</code><br>
+     * <br>
      *
-     * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
-     * </p>
      *
      * @parameter expression="${graph.hide}"
      */
