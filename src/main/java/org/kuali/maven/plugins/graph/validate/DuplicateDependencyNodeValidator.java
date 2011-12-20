@@ -24,10 +24,10 @@ public class DuplicateDependencyNodeValidator extends DependencyNodeValidator {
 
             Assert.notNull(related, state + " nodes must contain related artifacts");
 
-            boolean equals = helper.equals(artifact, related);
+            boolean equal = helper.equals(artifact, related);
             boolean similar = helper.similar(artifact, related);
 
-            if (!equals) {
+            if (!equal) {
                 logger.debug("fake dup->" + artifact);
             }
             Assert.state(similar, "Artifact's must be the same except for version");

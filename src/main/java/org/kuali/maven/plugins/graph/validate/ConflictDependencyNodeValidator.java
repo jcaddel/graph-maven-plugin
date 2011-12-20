@@ -24,10 +24,10 @@ public class ConflictDependencyNodeValidator extends DependencyNodeValidator {
 
             Assert.notNull(related, state + " nodes must contain related artifacts");
 
-            boolean equals = helper.equals(artifact, related);
+            boolean equal = helper.equals(artifact, related);
             boolean similar = helper.similar(artifact, related);
 
-            if (equals) {
+            if (equal) {
                 logger.debug("fake conflict->" + artifact);
             }
 
