@@ -21,6 +21,9 @@ import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
 import org.kuali.maven.plugins.graph.dot.edge.SmartEdgeHandler;
 
 /**
+ * This mojo lays out the dependency graph in as condensed of a fashion as possible. Each dependency appears on the
+ * graph once. Graphviz algorithms present the connections between the dependencies as a directed hierarchical graph.
+ *
  * @goal dependencies
  * @requiresDependencyResolution compile|test|runtime
  */

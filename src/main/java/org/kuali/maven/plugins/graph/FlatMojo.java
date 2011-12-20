@@ -21,6 +21,9 @@ import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
 import org.kuali.maven.plugins.graph.dot.edge.FlatEdgeHandler;
 
 /**
+ * This mojo lays out the dependency graph in the same order they are defined in the pom's. This style can make it
+ * easier to comprehend the tree but the graph will have more nodes on it.
+ *
  * @goal flat
  * @requiresDependencyResolution compile|test|runtime
  */
