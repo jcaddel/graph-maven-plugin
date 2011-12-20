@@ -32,8 +32,8 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SmartEdgeHandler extends FlatEdgeHandler {
-    private static final Logger logger = LoggerFactory.getLogger(SmartEdgeHandler.class);
+public class CondensedEdgeHandler extends FlatEdgeHandler {
+    private static final Logger logger = LoggerFactory.getLogger(CondensedEdgeHandler.class);
     public static final String REPLACEMENT_LABEL = "replacement";
     TreeHelper helper = new TreeHelper();
 

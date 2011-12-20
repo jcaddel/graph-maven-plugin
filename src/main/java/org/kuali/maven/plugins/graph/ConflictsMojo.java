@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.GraphException;
 import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
-import org.kuali.maven.plugins.graph.dot.edge.SmartEdgeHandler;
+import org.kuali.maven.plugins.graph.dot.edge.CondensedEdgeHandler;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
@@ -54,7 +54,7 @@ public class ConflictsMojo extends BaseMojo {
 
     @Override
     protected EdgeHandler getEdgeHandler() {
-        return new SmartEdgeHandler();
+        return new CondensedEdgeHandler();
     }
 
     @Override
