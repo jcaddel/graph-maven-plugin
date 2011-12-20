@@ -18,7 +18,6 @@ package org.kuali.maven.plugins.graph.tree;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -125,9 +124,11 @@ public class TreeHelper {
     protected MavenContext getMavenContext(GraphNode gn, DependencyNode dn) {
         int id = gn.getId();
         String artifactIdentifier = getArtifactId(dn.getArtifact());
+        String partialArtifactIdentier = getPartialArtifactId(dn.getArtifact());
         MavenContext context = new MavenContext();
         context.setId(id);
         context.setArtifactIdentifier(artifactIdentifier);
+        context.setPartialArtifactIdentifier(partialArtifactIdentier);
         context.setGraphNode(gn);
         context.setDependencyNode(dn);
         context.setState(State.getState(dn.getState()));
@@ -149,11 +150,16 @@ public class TreeHelper {
     public void sanitize(Node<MavenContext> node) {
         List<Node<MavenContext>> nodes = node.getBreadthFirstList();
         logger.info("Sanitizing metadata for " + nodes.size() + " dependency nodes");
-        Map<String, MavenContext> included = getMap(node, nodes, State.INCLUDED);
-        int includedCount = getStateCount(nodes, State.INCLUDED);
+        Included included = getIncluded(node, nodes, State.INCLUDED);
+        int count1 = getStateCount(nodes, State.INCLUDED);
 
-        Assert.isTrue(includedCount == included.size(), "Unique included artifact id counts don't match. size="
-                + included.size() + " count=" + includedCount);
+        int count2 = included.getIds().size();
+        int count3 = included.getPartialIds().size();
+
+        boolean valid = count1 == count2 && count2 == count3;
+
+        Assert.isTrue(valid, "Unique included artifact id counts don't match. count1=" + count1 + " count2=" + count2
+                + " count3=" + count3);
 
         List<MavenContextSanitizer> sanitizers = getSanitizers(included);
         for (MavenContextSanitizer sanitizer : sanitizers) {
@@ -164,7 +170,7 @@ public class TreeHelper {
         }
     }
 
-    protected List<MavenContextSanitizer> getSanitizers(Map<String, MavenContext> included) {
+    protected List<MavenContextSanitizer> getSanitizers(Included included) {
         List<MavenContextSanitizer> sanitizers = new ArrayList<MavenContextSanitizer>();
         sanitizers.add(new DuplicateSanitizer(included));
         sanitizers.add(new ConflictSanitizer(included));
@@ -212,8 +218,9 @@ public class TreeHelper {
         return newList;
     }
 
-    public Map<String, MavenContext> getMap(Node<MavenContext> node, List<Node<MavenContext>> list, State state) {
-        Map<String, MavenContext> map = new HashMap<String, MavenContext>();
+    public Included getIncluded(Node<MavenContext> node, List<Node<MavenContext>> list, State state) {
+        Map<String, MavenContext> ids = new HashMap<String, MavenContext>();
+        Map<String, MavenContext> partialIds = new HashMap<String, MavenContext>();
         for (Node<MavenContext> element : list) {
             MavenContext context = element.getObject();
             DependencyNode dn = context.getDependencyNode();
@@ -221,10 +228,14 @@ public class TreeHelper {
             if (!state.equals(elementState)) {
                 continue;
             } else {
-                map.put(context.getArtifactIdentifier(), context);
+                ids.put(context.getArtifactIdentifier(), context);
+                partialIds.put(context.getPartialArtifactIdentifier(), context);
             }
         }
-        return map;
+        Included included = new Included();
+        included.setIds(ids);
+        included.setPartialIds(partialIds);
+        return included;
     }
 
     public void show(TreeMetaData md) {
@@ -240,12 +251,6 @@ public class TreeHelper {
         logger.info("unique gav info - groups:" + groups + " artifacts:" + artifacts + " versions:" + versions);
         logger.info("unique artifacts (including version): " + md.getArtifactIdentifiers().size());
         logger.info("unique artifacts  (ignoring version): " + md.getPartialArtifactIdentifiers().size());
-    }
-
-    protected List<String> getArtifactIds(Collection<String> ids) {
-        List<String> strings = new ArrayList<String>(ids);
-        Collections.sort(strings);
-        return strings;
     }
 
     protected String toString(Tracker tracker) {

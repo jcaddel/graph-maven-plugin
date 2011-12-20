@@ -20,9 +20,11 @@ import org.apache.maven.shared.dependency.tree.DependencyNode;
 public class MavenContext {
     int id;
     String artifactIdentifier;
+    String partialArtifactIdentifier;
     State state;
     GraphNode graphNode;
     DependencyNode dependencyNode;
+    MavenContext replacement;
 
     public MavenContext() {
         this(null, null);
@@ -92,6 +94,22 @@ public class MavenContext {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public MavenContext getReplacement() {
+        return replacement;
+    }
+
+    public void setReplacement(MavenContext replacement) {
+        this.replacement = replacement;
+    }
+
+    public String getPartialArtifactIdentifier() {
+        return partialArtifactIdentifier;
+    }
+
+    public void setPartialArtifactIdentifier(String partialArtifactIdentifier) {
+        this.partialArtifactIdentifier = partialArtifactIdentifier;
     }
 
 }

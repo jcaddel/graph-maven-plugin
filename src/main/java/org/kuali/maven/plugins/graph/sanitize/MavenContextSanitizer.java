@@ -16,10 +16,10 @@
 package org.kuali.maven.plugins.graph.sanitize;
 
 import java.util.List;
-import java.util.Map;
 
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
+import org.kuali.maven.plugins.graph.tree.Included;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
@@ -30,20 +30,20 @@ public abstract class MavenContextSanitizer implements NodeSanitizer<MavenContex
 
     TreeHelper helper = new TreeHelper();
 
-    Map<String, MavenContext> included;
+    Included included;
     State state;
 
     public MavenContextSanitizer() {
         this(null, null);
     }
 
-    public MavenContextSanitizer(Map<String, MavenContext> included, State state) {
+    public MavenContextSanitizer(Included included, State state) {
         super();
         this.included = included;
         this.state = state;
     }
 
-    protected abstract void sanitize(MavenContext context, Map<String, MavenContext> included);
+    protected abstract void sanitize(MavenContext context, Included included);
 
     @Override
     public void sanitize(Node<MavenContext> node) {
@@ -66,19 +66,19 @@ public abstract class MavenContextSanitizer implements NodeSanitizer<MavenContex
         return getState() + "->" + switched + " " + artifactId;
     }
 
-    public Map<String, MavenContext> getIncluded() {
-        return included;
-    }
-
-    public void setIncluded(Map<String, MavenContext> included) {
-        this.included = included;
-    }
-
     public State getState() {
         return state;
     }
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public Included getIncluded() {
+        return included;
+    }
+
+    public void setIncluded(Included included) {
+        this.included = included;
     }
 }

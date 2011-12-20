@@ -15,11 +15,9 @@
  */
 package org.kuali.maven.plugins.graph.sanitize;
 
-import java.util.Map;
-
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
-import org.kuali.maven.plugins.graph.tree.TreeHelper;
+import org.kuali.maven.plugins.graph.tree.Included;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,15 +28,14 @@ public class CyclicSanitizer extends MavenContextSanitizer {
         this(null);
     }
 
-    public CyclicSanitizer(Map<String, MavenContext> included) {
+    public CyclicSanitizer(Included included) {
         super(included, State.CYCLIC);
     }
 
     @Override
-    protected void sanitize(MavenContext context, Map<String, MavenContext> included) {
+    protected void sanitize(MavenContext context, Included included) {
         // Anything we need to do here?
-        String id = TreeHelper.getArtifactId(context.getDependencyNode().getArtifact());
-        logger.warn("cyclic->" + id);
+        logger.warn("cyclic->" + context.getArtifactIdentifier());
     }
 
 }

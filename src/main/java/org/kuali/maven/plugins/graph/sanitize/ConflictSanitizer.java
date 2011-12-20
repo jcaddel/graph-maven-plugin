@@ -15,11 +15,10 @@
  */
 package org.kuali.maven.plugins.graph.sanitize;
 
-import java.util.Map;
-
 import org.apache.maven.artifact.Artifact;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
+import org.kuali.maven.plugins.graph.tree.Included;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,44 +30,64 @@ public class ConflictSanitizer extends MavenContextSanitizer {
         this(null);
     }
 
-    public ConflictSanitizer(Map<String, MavenContext> included) {
+    public ConflictSanitizer(Included included) {
         super(included, State.CONFLICT);
     }
 
     @Override
-    protected void sanitize(MavenContext context, Map<String, MavenContext> included) {
-        String artifactId = TreeHelper.getArtifactId(context.getDependencyNode().getArtifact());
-        MavenContext replacement = included.get(artifactId);
+    protected void sanitize(MavenContext context, Included included) {
+        String id1 = context.getArtifactIdentifier();
+        String partialId1 = context.getPartialArtifactIdentifier();
+        MavenContext exact1 = included.getIds().get(id1);
+        MavenContext partial1 = included.getPartialIds().get(partialId1);
 
         // This is ok. Kind of. Maven has marked it as a conflict, but it should be duplicate
-        if (replacement != null) {
+        if (exact1 != null) {
             // Emit an "info" level log message and switch to DUPLICATE
             State switchTo = State.DUPLICATE;
-            logger.info(getSwitchMessage(artifactId, switchTo));
+            logger.info(getSwitchMessage(id1, switchTo));
             logger.info("Identical replacement for a 'conflict' artifact");
             context.setState(switchTo);
+            context.setReplacement(exact1);
             return;
         }
 
-        // Conflict with no related artifact is not ok
+        if (partial1 != null) {
+            // This is ok. We've located a suitable replacement
+            logger.debug(id1 + " meets conflict node criteria.");
+            context.setReplacement(partial1);
+            return;
+        }
+
         Artifact related = context.getDependencyNode().getRelatedArtifact();
         if (related == null) {
-            warnAndSwitch(State.UNKNOWN, artifactId, context, "No related artifact");
+            // With no related artifact, there is nothing more we can do
+            warnAndSwitch(State.UNKNOWN, id1, context, "No suitable replacement and no related artifact");
             return;
         }
 
         // Examine the related artifact
-        String relatedArtifactId = TreeHelper.getArtifactId(related);
-        replacement = included.get(relatedArtifactId);
-        if (replacement != null) {
-            // This is ok. We located the replacement
-            logger.debug(artifactId + " meets conflict node criteria.");
-            return;
-        } else {
-            // This is not ok. The related artifact is not in the included list
-            warnAndSwitch(State.UNKNOWN, artifactId, context, "No conflict replacement was found");
+        String id2 = TreeHelper.getArtifactId(related);
+        String partialId2 = TreeHelper.getPartialArtifactId(related);
+        MavenContext exact2 = included.getIds().get(id2);
+        MavenContext partial2 = included.getPartialIds().get(partialId2);
+
+        if (exact2 != null) {
+            // This is ok. We've located a suitable replacement
+            logger.debug(id1 + " meets conflict node criteria.");
+            context.setReplacement(exact2);
             return;
         }
+
+        if (partial2 != null) {
+            // This is ok. We've located a suitable replacement
+            logger.debug(id1 + " meets conflict node criteria.");
+            context.setReplacement(partial2);
+            return;
+        }
+
+        // Conflict node has no replacement that we can find
+        warnAndSwitch(State.UNKNOWN, id1, context, "No suitable replacement and no related artifact");
     }
 
 }

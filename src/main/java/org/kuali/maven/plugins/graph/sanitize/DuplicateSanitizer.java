@@ -15,11 +15,10 @@
  */
 package org.kuali.maven.plugins.graph.sanitize;
 
-import java.util.Map;
-
 import org.apache.maven.artifact.Artifact;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
+import org.kuali.maven.plugins.graph.tree.Included;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,48 +30,76 @@ public class DuplicateSanitizer extends MavenContextSanitizer {
         this(null);
     }
 
-    public DuplicateSanitizer(Map<String, MavenContext> included) {
+    public DuplicateSanitizer(Included included) {
         super(included, State.DUPLICATE);
     }
 
     @Override
-    protected void sanitize(MavenContext context, Map<String, MavenContext> included) {
-        String artifactId = TreeHelper.getArtifactId(context.getDependencyNode().getArtifact());
-        MavenContext replacement = included.get(artifactId);
+    protected void sanitize(MavenContext context, Included included) {
+        String id1 = context.getArtifactIdentifier();
+        String partialId1 = context.getPartialArtifactIdentifier();
+        MavenContext exact1 = included.getIds().get(id1);
+        MavenContext partial1 = included.getPartialIds().get(partialId1);
 
-        // Nothing more to do
-        if (replacement != null) {
-            logger.debug(artifactId + " meets duplicate node criteria");
+        if (handlePrimary(context, exact1, partial1)) {
             return;
         }
 
         Artifact related = context.getDependencyNode().getRelatedArtifact();
         if (related == null) {
             // This is not ok. There was no exact match and related is null.
-            warnAndSwitch(State.UNKNOWN, artifactId, context, "No related artifact");
+            warnAndSwitch(State.UNKNOWN, id1, context, "No replacement and no related artifact");
             return;
         }
 
-        String relatedArtifactId = TreeHelper.getArtifactId(related);
-        replacement = included.get(relatedArtifactId);
-        if (replacement != null) {
-            /**
-             * This is ok. Kind of. Maven has marked this as a duplicate because it's a duplicate of a dependency above
-             * us in the tree. In reality, it is going to get switched out for another artifact because the node above
-             * us has its dependency on this artifact marked as "conflict". The "duplicate" label is a little bit
-             * counter intuitive but the overall build tree is in a consistent state.
-             */
-            // Emit an "info" level log message and switch to CONFLICT
-            State switchTo = State.CONFLICT;
-            logger.info(getSwitchMessage(artifactId, switchTo));
-            logger.info("No identical replacement for a 'duplicate' but the related artifact was found");
-            context.setState(switchTo);
-            return;
-        } else {
-            // This is not ok. A node marked as duplicate has no replacement artifact included in the build
-            warnAndSwitch(State.UNKNOWN, artifactId, context, "No identical replacement. Related artifact not found");
+        String id2 = TreeHelper.getArtifactId(related);
+        String partialId2 = TreeHelper.getPartialArtifactId(related);
+        MavenContext exact2 = included.getIds().get(id2);
+        MavenContext partial2 = included.getPartialIds().get(partialId2);
+        if (handleRelated(context, exact2, partial2)) {
             return;
         }
     }
 
+    protected boolean handlePrimary(MavenContext context, MavenContext exact, MavenContext partial) {
+        // Nothing more to do
+        if (exact != null) {
+            context.setReplacement(exact);
+            logger.debug("{} meets duplicate node criteria", context.getArtifactIdentifier());
+            return true;
+        }
+
+        /**
+         * This is ok. Kind of. Maven has marked this as a duplicate because it's a duplicate of a dependency above us
+         * in the tree. In reality, it is going to get switched out for another artifact because the node above us has
+         * its dependency on this artifact marked as "conflict". The "duplicate" label is a little bit counter intuitive
+         * but the overall build tree is in a consistent state.
+         */
+        if (partial != null) {
+            switchState(context, partial);
+            return true;
+        }
+        return false;
+    }
+
+    protected void switchState(MavenContext context, MavenContext replacement) {
+        State switchTo = State.CONFLICT;
+        logger.info(getSwitchMessage(context.getArtifactIdentifier(), switchTo));
+        logger.info("No identical replacement for a 'duplicate' but a similar artifact was found");
+        context.setState(switchTo);
+        context.setReplacement(replacement);
+    }
+
+    protected boolean handleRelated(MavenContext context, MavenContext exact, MavenContext partial) {
+        if (exact != null) {
+            switchState(context, exact);
+            return true;
+        }
+
+        if (partial != null) {
+            switchState(context, partial);
+            return true;
+        }
+        return false;
+    }
 }
