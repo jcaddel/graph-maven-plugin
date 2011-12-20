@@ -40,7 +40,7 @@ public class CondensedMojo extends BaseMojo {
      * The file the graph will be written to
      * </p>
      *
-     * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/dependencies.png"
+     * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/condensed.png"
      */
     private File file;
 
