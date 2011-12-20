@@ -138,33 +138,33 @@ public abstract class BaseMojo extends AbstractMojo {
     private boolean transitive;
 
     /**
-     * <p>
-     * Comma delimited list of artifact patterns to include. <code>Includes</code> works "bottom up" and can be
-     * overridden by <code>excludes</code>. If an artifact matches the <code>includes</code> criteria, it, and all of
-     * the dependencies in the direct path from it back to the root of the dependency tree are displayed.
-     * </p>
+     * Comma delimited list of patterns for including artifacts.<br>
      *
-     * The pattern syntax has the form:
+     * Include patterns work "bottom up" and are overridden by exclude patterns. If an artifact matches an include
+     * pattern, it, and all of the dependencies in the path from it back to the root of the dependency tree are
+     * displayed.<br>
+     *
+     * If not provided all dependencies are included.<br>
+     *
+     * The pattern syntax has the form:<br>
      *
      * <pre>
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
      * </pre>
      *
-     * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
-     * </p>
      *
      * @parameter expression="${graph.includes}"
      */
     private String includes;
 
     /**
-     * <p>
-     * Comma delimited list of artifact patterns to exclude. <code>Excludes</code> overrides <code>includes</code> and
-     * works "top down". If a dependency matches the <code>excludes</code> criteria, it, and all dependencies below it,
-     * are removed from the display. If not provided, no artifacts are excluded.
-     * </p>
+     * Comma delimited list of artifact patterns to exclude. Exclude patterns override include patterns and work
+     * "top down". If a dependency matches any exclude pattern, it, and all dependencies below it, are removed from the
+     * display.<br>
+     *
+     * If not provided, no artifacts are excluded.<br>
      *
      * The pattern syntax has the form:
      *
