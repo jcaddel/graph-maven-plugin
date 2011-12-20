@@ -30,7 +30,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
-import org.kuali.maven.plugins.graph.collector.DependencyNodeTokenCollector;
+import org.kuali.maven.plugins.graph.collector.MavenContextTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.GraphException;
@@ -38,11 +38,11 @@ import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.dot.StringGenerator;
 import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
 import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
-import org.kuali.maven.plugins.graph.filter.DependencyNodeFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.DepthFilter;
 import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.Filters;
 import org.kuali.maven.plugins.graph.filter.MatchCondition;
+import org.kuali.maven.plugins.graph.filter.MavenContextFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.filter.NodeFilterChain;
 import org.kuali.maven.plugins.graph.filter.ReverseNodeFilter;
@@ -328,15 +328,15 @@ public abstract class BaseMojo extends AbstractMojo {
     }
 
     protected NodeFilter<MavenContext> getShowFilter() {
-        TokenCollector<DependencyNode> collector = new DependencyNodeTokenCollector();
-        Filter<DependencyNode> filter = filters.getIncludePatternFilter(getShow(), collector);
-        return new DependencyNodeFilterWrapper(filter);
+        TokenCollector<MavenContext> collector = new MavenContextTokenCollector();
+        Filter<MavenContext> filter = filters.getIncludePatternFilter(getShow(), collector);
+        return new MavenContextFilterWrapper(filter);
     }
 
     protected NodeFilter<MavenContext> getHideFilter() {
-        TokenCollector<DependencyNode> collector = new DependencyNodeTokenCollector();
-        Filter<DependencyNode> filter = filters.getExcludePatternFilter(getHide(), collector);
-        return new DependencyNodeFilterWrapper(filter);
+        TokenCollector<MavenContext> collector = new MavenContextTokenCollector();
+        Filter<MavenContext> filter = filters.getExcludePatternFilter(getHide(), collector);
+        return new MavenContextFilterWrapper(filter);
     }
 
     protected NodeFilter<MavenContext> getIncludeFilter() {
