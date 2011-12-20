@@ -159,12 +159,9 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided all dependencies are included.
      * </p>
      *
-     * The pattern syntax has the form:</br>
-     *
-     * <pre>
-     * [groupId]:[artifactId]:[type]:[classifier]:[version]
-     * </pre>
-     *
+     * <p>
+     * The pattern syntax has the form - [groupId]:[artifactId]:[type]:[classifier]:[version]
+     * </p>
      *
      * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
@@ -189,11 +186,9 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided, no artifacts are excluded.
      * </p>
      *
-     * The pattern syntax has the form:<br/>
-     *
-     * <pre>
-     * [groupId]:[artifactId]:[type]:[classifier]:[version]
-     * </pre>
+     * <p>
+     * The pattern syntax has the form - [groupId]:[artifactId]:[type]:[classifier]:[version]
+     * </p>
      *
      * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
@@ -218,16 +213,15 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided, no dependencies are hidden.
      * </p>
      *
-     * The pattern syntax has the form:<br/>
+     * <p>
+     * The pattern syntax has the form - [scope]:[optional|required]:[state]
+     *
+     * </p>
      *
      * <pre>
-     * [scope]:[optional|required]:[state]
+     * Scopes: compile,provided,runtime,test,system,import
+     * States: normal,conflict,cyclic,duplicate
      * </pre>
-     *
-     * <p>
-     * Scopes: <code>compile,provided,runtime,test,system,import</code><br>
-     * States: <code>normal,conflict,cyclic,duplicate</code>
-     * </p>
      *
      * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
@@ -242,22 +236,20 @@ public abstract class BaseMojo extends AbstractMojo {
      * <p>
      * Comma delimited list of dependency patterns used for showing artifacts.
      * </p>
+     *
      * <p>
      * Show patterns work "bottom up" and are overridden by hide patterns. If a dependency matches any show criteria,
      * it, and all of the dependencies in the direct path from it back to the root of the dependency tree are displayed.
-     * <br>
      * </p>
-     *
-     * The pattern syntax has the form:<br>
-     *
-     * <pre>
-     * [scope]:[optional|required]:[state]
-     * </pre>
      *
      * <p>
-     * Scopes: <code>compile,provided,runtime,test,system,import</code><br>
-     * States: <code>normal,conflict,cyclic,duplicate</code><br>
+     * The pattern syntax has the form - [scope]:[optional|required]:[state]
      * </p>
+     *
+     * <pre>
+     * Scopes: compile,provided,runtime,test,system,import
+     * States: normal,conflict,cyclic,duplicate
+     * </pre>
      *
      * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
