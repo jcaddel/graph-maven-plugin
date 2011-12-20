@@ -180,79 +180,14 @@ public class TreeHelper {
         }
     }
 
-    protected void validateDuplicates(Node<MavenContext> node) {
-        List<Node<MavenContext>> list = node.getBreadthFirstList();
-        for (Node<MavenContext> element : list) {
-            State state = getState(element);
-            if (state == State.DUPLICATE) {
-                validateDuplicate(element.getObject());
-            }
-        }
-        logger.info("Validated duplicate nodes");
-    }
-
-    protected State getState(Node<MavenContext> node) {
+    public State getState(Node<MavenContext> node) {
         return State.getState(node.getObject().getDependencyNode().getState());
     }
 
-    protected void validateDuplicate(MavenContext context) {
-        DependencyNode dn = context.getDependencyNode();
-        // Assert.isNull(dn.getRelatedArtifact(), "Why would a duplicate node contain a related artifact?");
-        Artifact artifact = dn.getArtifact();
-        Artifact related = dn.getRelatedArtifact();
-
-        if (related == null) {
-            return;
-        }
-
-        boolean sameNamespace = areSameNamespace(artifact, related);
-
-        Assert.isTrue(sameNamespace, "Why would artifacts from different namespaces be stored here?");
-
-        String id1 = getArtifactId(artifact);
-        String id2 = getArtifactId(related);
-
-        // Assert.isTrue(id1.equals(id2), "Why would conflicting artifacts be stored here?");
-    }
-
-    protected boolean areSameNamespace(Artifact a1, Artifact a2) {
+    public boolean areSimilar(Artifact a1, Artifact a2) {
         String n1 = getPartialArtifactId(a1);
         String n2 = getPartialArtifactId(a2);
         return n1.equals(n2);
-    }
-
-    protected void validateConflicts(Node<MavenContext> node) {
-        List<Node<MavenContext>> list = node.getBreadthFirstList();
-        for (Node<MavenContext> element : list) {
-            State state = getState(element);
-            if (state == State.CONFLICT) {
-                validateConflict(element.getObject());
-            }
-        }
-        logger.info("Validated conflict nodes");
-    }
-
-    protected void validateConflict(MavenContext context) {
-        Artifact artifact = context.getDependencyNode().getArtifact();
-        Artifact related = context.getDependencyNode().getRelatedArtifact();
-
-        Assert.notNull(artifact, "Main artifact for a conflict node can't be null");
-        Assert.notNull(related, "Related artifact for a conflict node can't be null");
-
-        String id1 = getArtifactId(artifact);
-        String id2 = getArtifactId(related);
-
-        String namespace1 = getPartialArtifactId(artifact);
-        String namespace2 = getPartialArtifactId(related);
-
-        boolean equal = namespace1.equals(namespace2);
-        boolean different = !id1.equals(id2);
-
-        if (!different) {
-            logger.info(id1 + "->" + id2);
-        }
-        Assert.isTrue(equal, "Conflict nodes must have the exact same artifact namespace");
-        // Assert.isTrue(different, "Why would a conflict node contain the exact same artifact twice?");
     }
 
     protected List<NodeValidator<MavenContext>> getValidators(Node<MavenContext> node) {

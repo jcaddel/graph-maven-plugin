@@ -7,9 +7,11 @@ import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.tree.Node;
+import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.springframework.util.Assert;
 
 public abstract class DependencyNodeValidator implements NodeValidator<MavenContext> {
+    TreeHelper helper = new TreeHelper();
     State state;
 
     public DependencyNodeValidator(State state) {

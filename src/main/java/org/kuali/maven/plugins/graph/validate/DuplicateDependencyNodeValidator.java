@@ -20,24 +20,21 @@ public class DuplicateDependencyNodeValidator extends DependencyNodeValidator {
     @Override
     protected void validateDependencyNodes(List<DependencyNode> nodes) {
         for (DependencyNode node : nodes) {
-            Artifact a = node.getArtifact();
+            Artifact artifact = node.getArtifact();
             Artifact related = node.getRelatedArtifact();
 
             Assert.notNull(related, "Duplicate nodes must contain related artifacts");
 
-            String id1 = TreeHelper.getArtifactId(a);
+            String id1 = TreeHelper.getArtifactId(artifact);
             String id2 = TreeHelper.getArtifactId(related);
 
             if (!id1.equals(id2)) {
                 logger.info("fake dup->" + id1);
             }
 
-            String partialId1 = TreeHelper.getPartialArtifactId(a);
-            String partialId2 = TreeHelper.getPartialArtifactId(related);
+            boolean similar = helper.areSimilar(artifact, related);
 
-            boolean equal = partialId1.equals(partialId2);
-
-            Assert.state(equal, "Artifact ids must be the same except for version");
+            Assert.state(similar, "Artifact's must be the same except for version");
         }
         logger.debug("Validated duplicate nodes");
     }
