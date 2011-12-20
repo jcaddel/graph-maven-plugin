@@ -30,9 +30,13 @@ import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
 /**
+ * <p>
+ * This mojo displays any dependencies where conflict resolution has taken place.
+ * </p>
+ *
  * Maven supports the resolution of artifact versions by way of nearest-wins. That is, for any set of dependencies
  * sharing the same [groupId]:[artifactId]:[type]:[classifier], the one declared nearest to the current project in the
- * dependency tree is selected for use. This mojo displays any dependencies where conflict resolution has taken place.
+ * dependency tree is selected for use.
  *
  * @goal conflicts
  * @requiresDependencyResolution compile|test|runtime
