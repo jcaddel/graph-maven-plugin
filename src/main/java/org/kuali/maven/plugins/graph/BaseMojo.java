@@ -138,42 +138,51 @@ public abstract class BaseMojo extends AbstractMojo {
     private boolean transitive;
 
     /**
-     * Comma delimited list of patterns for including artifacts.<br>
-     * <br>
+     * <p>
+     * Comma delimited list of patterns for including artifacts.
+     * </p>
      *
+     * <p>
      * Include patterns work "bottom up" and are overridden by exclude patterns. If an artifact matches an include
      * pattern, it, and all of the dependencies in the path from it back to the root of the dependency tree are
-     * displayed.<br>
-     * <br>
+     * displayed.
+     * </p>
      *
-     * If not provided all dependencies are included.<br>
-     * <br>
+     * <p>
+     * If not provided all dependencies are included.
+     * </p>
      *
-     * The pattern syntax has the form:
+     * The pattern syntax has the form:</br>
      *
      * <pre>
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
      * </pre>
      *
+     *
+     * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
+     * </p>
      *
      * @parameter expression="${graph.includes}"
      */
     private String includes;
 
     /**
-     * Comma delimited list of artifact patterns to exclude.<br>
-     * <br>
+     * <p>
+     * Comma delimited list of artifact patterns to exclude.
+     * </p>
      *
+     * <p>
      * Exclude patterns override include patterns and work "top down". If a dependency matches any exclude pattern, it,
-     * and all dependencies below it, are removed from the display.<br>
-     * <br>
+     * and all dependencies below it, are removed from the display.
+     * </p>
      *
-     * If not provided, no artifacts are excluded.<br>
-     * <br>
+     * <p>
+     * If not provided, no artifacts are excluded.
+     * </p>
      *
-     * The pattern syntax has the form:
+     * The pattern syntax has the form:<br>
      *
      * <pre>
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
@@ -189,51 +198,64 @@ public abstract class BaseMojo extends AbstractMojo {
     private String excludes;
 
     /**
-     * Comma delimited list of dependency patterns used for hiding artifacts.<br>
-     * <br>
+     * <p>
+     * Comma delimited list of dependency patterns used for hiding artifacts.
+     * </p>
+     *
+     * <p>
      * Hide patterns override show patterns and work "top down". If a dependency matches any hide pattern, it, and all
-     * dependencies below it, are removed from the display.<br>
-     * <br>
+     * dependencies below it, are removed from the display.
+     * </p>
      *
-     * If not provided, no dependencies are hidden.<br>
-     * <br>
+     * <p>
+     * If not provided, no dependencies are hidden.
+     * </p>
      *
-     * The pattern syntax has the form:
+     * The pattern syntax has the form:<br>
      *
      * <pre>
      * [scope]:[optional|required]:[state]
      * </pre>
      *
+     * <p>
      * Scopes: <code>compile,provided,runtime,test,system,import</code><br>
-     * States: <code>normal,conflict,cyclic,duplicate</code><br>
-     * <br>
+     * States: <code>normal,conflict,cyclic,duplicate</code>
+     * </p>
      *
+     * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
+     * </p>
      *
      * @parameter expression="${graph.hide}"
      */
     private String hide;
 
     /**
-     * Comma delimited list of dependency patterns used for showing artifacts.<br>
-     * <br>
+     * <p>
+     * Comma delimited list of dependency patterns used for showing artifacts.
+     * </p>
+     * <p>
      * Show patterns work "bottom up" and are overridden by hide patterns. If a dependency matches any show criteria,
-     * it, and all of the dependencies in the direct path from it back to the root of the dependency tree are displayed.<br>
+     * it, and all of the dependencies in the direct path from it back to the root of the dependency tree are displayed.
      * <br>
+     * </p>
      *
-     * The pattern syntax has the form:
+     * The pattern syntax has the form:<br>
      *
      * <pre>
      * [scope]:[optional|required]:[state]
      * </pre>
      *
+     * <p>
      * Scopes: <code>compile,provided,runtime,test,system,import</code><br>
      * States: <code>normal,conflict,cyclic,duplicate</code><br>
-     * <br>
+     * </p>
      *
+     * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
+     * </p>
      *
      * @parameter expression="${graph.show}"
      */
