@@ -16,7 +16,6 @@
 package org.kuali.maven.plugins.graph.filter;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.slf4j.Logger;
@@ -39,8 +38,7 @@ public class ArtifactFilterWrapper implements NodeFilter<MavenContext> {
     @Override
     public boolean isMatch(Node<MavenContext> node) {
         MavenContext context = node.getObject();
-        DependencyNode dependencyNode = context.getDependencyNode();
-        Artifact artifact = dependencyNode.getArtifact();
+        Artifact artifact = context.getArtifact();
         logger.debug("examining {}", artifact);
         return filter.isMatch(artifact);
     }

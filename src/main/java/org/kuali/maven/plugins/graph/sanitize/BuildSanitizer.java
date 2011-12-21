@@ -111,10 +111,6 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
         // Keyed by [groupId]:[artifactId]:[type]:[classifier]
         Map<String, MavenContext> partialIds = helper.getPartialIdMap(included);
 
-        if (conflict.getReplacement() == null) {
-            logger.error(conflict.getArtifact() + "");
-        }
-
         String partialId1 = TreeHelper.getPartialArtifactId(conflict.getReplacement());
         String partialId2 = TreeHelper.getPartialArtifactId(conflict.getArtifact());
 
@@ -126,7 +122,7 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
         String replacementId = TreeHelper.getArtifactId(conflict.getReplacement());
         MavenContext exactRelated = ids.get(replacementId);
 
-        // Both main or related yield the same similar artifact
+        // Both main and related yield the same thing here
         MavenContext similar = partialIds.get(partialId1);
 
         // If all 3 are null, there is trouble
@@ -138,11 +134,12 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             // Maven marked this as a conflict, yet the exact same version is in fact participating in the build
             // Switch to duplicate since the artifact for this node is in the build
             conflict.setState(State.DUPLICATE);
+            // Don't need a replacement, this artifact is participating in the build
             conflict.setReplacement(null);
             logger.warn("conflict->duplicate {}", conflict.getArtifactIdentifier());
         } else if (exactRelated != null) {
             // This is the normal condition we would expect for conflicts
-            // Maven marked it as a conflict, told us what artifact it conflicted with
+            // Maven marked it as a conflict, told us what artifact it conflicted with,
             // and we found that artifact in the build tree
             conflict.setState(State.CONFLICT);
             conflict.setReplacement(similar.getArtifact());

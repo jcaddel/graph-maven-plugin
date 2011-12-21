@@ -18,7 +18,6 @@ package org.kuali.maven.plugins.graph.dot.edge;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
@@ -40,11 +39,10 @@ public class FlatEdgeHandler implements EdgeHandler {
     protected Edge getEdge(Node<MavenContext> node) {
         GraphNode parent = node.getParent().getObject().getGraphNode();
         MavenContext context = node.getObject();
-        DependencyNode dn = context.getDependencyNode();
         GraphNode child = context.getGraphNode();
-        boolean optional = dn.getArtifact().isOptional();
+        boolean optional = context.getArtifact().isOptional();
         State state = context.getState();
-        Scope scope = Scope.getScope(dn.getArtifact().getScope());
+        Scope scope = Scope.getScope(context.getArtifact().getScope());
         return getEdge(parent, child, optional, scope, state);
     }
 

@@ -18,7 +18,6 @@ package org.kuali.maven.plugins.graph.collector;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
@@ -50,13 +49,12 @@ public class MavenContextTokenCollector implements TokenCollector<MavenContext> 
      */
     @Override
     public List<String> getTokens(MavenContext context) {
-        DependencyNode node = context.getDependencyNode();
-        Scope scope = Scope.getScope(node.getArtifact().getScope());
+        Scope scope = Scope.getScope(context.getArtifact().getScope());
         if (scope == null) {
             scope = Scope.DEFAULT_SCOPE;
         }
         State state = context.getState();
-        String optional = node.getArtifact().isOptional() ? TreeHelper.OPTIONAL : TreeHelper.REQUIRED;
+        String optional = context.getArtifact().isOptional() ? TreeHelper.OPTIONAL : TreeHelper.REQUIRED;
         List<String> tokens = new ArrayList<String>();
         tokens.add(scope.getValue());
         tokens.add(optional);
