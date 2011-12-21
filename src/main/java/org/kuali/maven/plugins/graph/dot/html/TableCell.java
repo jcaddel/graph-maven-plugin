@@ -1,6 +1,15 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
 public class TableCell<T> {
+    public TableCell() {
+        this(null);
+    }
+
+    public TableCell(T element) {
+        super();
+        this.element = element;
+    }
+
     TableCellAlign align;
     TableCellBrAlign balign;
     String bgcolor;

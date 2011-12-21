@@ -3,6 +3,20 @@ package org.kuali.maven.plugins.graph.dot.html;
 import java.util.List;
 
 public class Table {
+    public Table() {
+        this(null);
+    }
+
+    public Table(List<TableRow> rows) {
+        this(rows, null);
+    }
+
+    public Table(List<TableRow> rows, Font font) {
+        super();
+        this.rows = rows;
+        this.font = font;
+    }
+
     Align align;
     String bgcolor;
     String border;
@@ -11,7 +25,7 @@ public class Table {
     String cellspacing;
     String color;
     String columns;
-    boolean fixedsize;
+    FixedSize fixedsize;
     String height;
     String href;
     String id;
@@ -26,14 +40,6 @@ public class Table {
 
     List<TableRow> rows;
     Font font;
-
-    public List<TableRow> getRowCount() {
-        return rows;
-    }
-
-    public void setRows(List<TableRow> rows) {
-        this.rows = rows;
-    }
 
     public Align getAlign() {
         return align;
@@ -99,11 +105,11 @@ public class Table {
         this.columns = columns;
     }
 
-    public boolean isFixedsize() {
+    public FixedSize getFixedsize() {
         return fixedsize;
     }
 
-    public void setFixedsize(boolean fixedsize) {
+    public void setFixedsize(FixedSize fixedsize) {
         this.fixedsize = fixedsize;
     }
 
@@ -137,6 +143,14 @@ public class Table {
 
     public void setPort(String port) {
         this.port = port;
+    }
+
+    public String getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(String rowCount) {
+        this.rowCount = rowCount;
     }
 
     public String getStyle() {
@@ -187,6 +201,14 @@ public class Table {
         this.width = width;
     }
 
+    public List<TableRow> getRows() {
+        return rows;
+    }
+
+    public void setRows(List<TableRow> rows) {
+        this.rows = rows;
+    }
+
     public Font getFont() {
         return font;
     }
@@ -194,13 +216,4 @@ public class Table {
     public void setFont(Font font) {
         this.font = font;
     }
-
-    public List<TableRow> getRows() {
-        return rows;
-    }
-
-    public void setRowCount(String tableRows) {
-        this.rowCount = tableRows;
-    }
-
 }

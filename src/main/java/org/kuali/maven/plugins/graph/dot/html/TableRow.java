@@ -3,13 +3,22 @@ package org.kuali.maven.plugins.graph.dot.html;
 import java.util.List;
 
 public class TableRow {
-    List<TableCell<?>> cells;
+    public TableRow() {
+        this(null);
+    }
 
-    public List<TableCell<?>> getCells() {
+    public TableRow(List<? extends TableCell<?>> cells) {
+        super();
+        this.cells = cells;
+    }
+
+    List<? extends TableCell<?>> cells;
+
+    public List<? extends TableCell<?>> getCells() {
         return cells;
     }
 
-    public void setCells(List<TableCell<?>> cells) {
+    public void setCells(List<? extends TableCell<?>> cells) {
         this.cells = cells;
     }
 
