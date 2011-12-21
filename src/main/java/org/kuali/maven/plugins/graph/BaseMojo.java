@@ -262,12 +262,31 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Set this to true to hide artifact group id's. Can be useful for reducing graph clutter.
+     * Set this to true to hide artifact group id's. Can be useful for producing denser graphs.
      * </p>
      *
      * @parameter expression="${graph.hideGroupId}" default-value="false"
      */
     private boolean hideGroupId;
+
+    /**
+     * <p>
+     * By default criteria used in filtering the dependency tree is appended to the graph title. Set this to false to
+     * show the title without criteria.
+     * </p>
+     *
+     * @parameter expression="${graph.showFiltersInTitle}" default-value="true"
+     */
+    private boolean showFiltersInTitle;
+
+    /**
+     * <p>
+     * Set this to true to enable verbose mode.
+     * </p>
+     *
+     * @parameter expression="${graph.verbose}" default-value="false"
+     */
+    private boolean verbose;
 
     @Override
     public void execute() {
@@ -488,6 +507,22 @@ public abstract class BaseMojo extends AbstractMojo {
 
     public void setHideGroupId(boolean hideGroupId) {
         this.hideGroupId = hideGroupId;
+    }
+
+    public boolean isShowFiltersInTitle() {
+        return showFiltersInTitle;
+    }
+
+    public void setShowFiltersInTitle(boolean showFiltersInTitle) {
+        this.showFiltersInTitle = showFiltersInTitle;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
     }
 
 }
