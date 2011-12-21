@@ -55,7 +55,7 @@ public class ConflictsMojo extends BaseMojo {
     /**
      * This filter restricts the display to conflicts only.
      *
-     * @parameter expression="${graph.conflictsFilter}" default-value="::conflicts"
+     * @parameter expression="${graph.conflictsFilter}" default-value="::conflict"
      */
     private String conflictsFilter;
 

@@ -52,6 +52,7 @@ import org.kuali.maven.plugins.graph.pojo.DotContext;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
+import org.kuali.maven.plugins.graph.pojo.Hider;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
@@ -271,6 +272,15 @@ public abstract class BaseMojo extends AbstractMojo {
      */
     private Direction direction;
 
+    /**
+     * <p>
+     * Set this to true to hide artifact group id's. Can be useful for reducing graph clutter.
+     * </p>
+     *
+     * @parameter expression="${graph.hideGroupId}" default-value="false"
+     */
+    private boolean hideGroupId;
+
     @Override
     public void execute() {
         try {
@@ -327,6 +337,12 @@ public abstract class BaseMojo extends AbstractMojo {
         helper.show(nodes, edges);
         Graph graph = new GraphHelper().getGraph(title, direction, nodes, edges);
         return new StringGenerator().getString(graph);
+    }
+
+    protected Hider getHider() {
+        Hider hider = new Hider();
+        hider.setHideGroupId(hideGroupId);
+        return hider;
     }
 
     protected NodeFilter<MavenContext> getShowFilter() {
@@ -472,6 +488,14 @@ public abstract class BaseMojo extends AbstractMojo {
 
     public DependencyTreeBuilder getTreeBuilder() {
         return treeBuilder;
+    }
+
+    public boolean isHideGroupId() {
+        return hideGroupId;
+    }
+
+    public void setHideGroupId(boolean hideGroupId) {
+        this.hideGroupId = hideGroupId;
     }
 
 }
