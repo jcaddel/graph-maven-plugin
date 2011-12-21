@@ -31,10 +31,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
- * Nothing in this sanitizer takes into account the overall build tree. It just performs checks on each node
- * individually. Checks nodes marked as 'duplicate' to ensure they have related artifacts identical to the main artifact
- * stored at that node. Conversely, check to make sure nodes marked as 'conflict' have a related artifact that is a
- * different version from the main artifact stored at that node.
+ * <p>
+ * Nothing in this sanitizer takes into account the overall build tree. It only performs checks on individual nodes.
+ * </p>
+ *
+ * <p>
+ * Checks that nodes marked as <code>State.DUPLICATE</code> have 'related' artifacts identical to the main artifact
+ * stored at that node. Also checks to make sure nodes marked as <code>State.CONFLICT</code> have a 'related' artifact
+ * that is a different version from the main artifact stored at that node.
+ * </p>
+ *
+ * <p>
+ * Any <code>State.DUPLICATE</code> node that does not have an identical related artifact is switched to
+ * <code>State.CONFLICT</code>
+ * </p>
+ *
+ * <p>
+ * Any <code>State.CONFLICT</code> node that has an identical related artifact is switched to
+ * <code>State.DUPLICATE</code>
+ * </p>
  *
  * @author jeffcaddel
  */

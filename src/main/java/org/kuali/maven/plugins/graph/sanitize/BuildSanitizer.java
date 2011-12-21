@@ -31,18 +31,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
- * This sanitizer takes into account the overall build tree. After RelatedArtifactSanitizer completes its basic node
- * level checks, we are assured that:<br>
+ * <p>
+ * This sanitizer takes into account the overall build tree. It assumes that <code>RelatedArtifactSanitizer</code> has
+ * completed successfully.
+ * </p>
  *
- * 1) Nodes marked as 'conflicts' have a main artifact that is similar to its related artifact, yet is a different
- * version.<br>
- * 2) Nodes Maven originally marked as 'duplicates' have the exact same artifact version stored for both the main and
- * related artifacts.
+ * <p>
+ * Assuming there is consistency in the omitted nodes we still need to check to make sure the omitted artifacts actually
+ * do have a replacement in the build tree.
+ * </p>
  *
- * Since we now have this type of consistency in the omitted nodes we need to check to make sure the omitted artifacts
- * actually do have a replacement in the build tree.
+ * <p>
+ * For <code>State.DUPLICATE</code> nodes that have an exact match in the build tree, this sanitizer takes no action.
+ * </p>
+ *
+ * <p>
+ * <code>State.DUPLICATE</code> nodes that do not have an exact match in the build tree, but do have a similar match get
+ * set to <code>State.CONFLICT</code>
+ * </p>
+ *
+ * <p>
+ * <code>State.DUPLICATE</code> nodes that do not have a match of any kind in the build tree, get set to
+ * <code>State.UNKNOWN</code>
+ * </p>
  */
-
 public class BuildSanitizer implements NodeSanitizer<MavenContext> {
     private static final Logger logger = LoggerFactory.getLogger(BuildSanitizer.class);
     TreeHelper helper = new TreeHelper();
@@ -97,8 +109,8 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             logger.info("duplicate->conflict {}", duplicate.getArtifact());
         } else {
             // This is just weird.
-            // Maven has somehow marked this node as a duplicate, yet there is no version of this
-            // artifact participating in the build.
+            // Maven has somehow marked this node as a duplicate, but no version of this artifact
+            // is participating in the build.
             logger.warn("duplicate->unknown {}", duplicate.getArtifact());
             duplicate.setState(State.UNKNOWN);
         }
@@ -122,7 +134,7 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
         String replacementId = TreeHelper.getArtifactId(conflict.getReplacement());
         MavenContext exactRelated = ids.get(replacementId);
 
-        // Both main and related yield the same thing here
+        // Both partialId1 and partialId2 yield the same thing here
         MavenContext similar = partialIds.get(partialId1);
 
         // If all 3 are null, there is trouble
