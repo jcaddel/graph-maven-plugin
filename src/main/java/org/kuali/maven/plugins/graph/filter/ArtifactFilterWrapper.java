@@ -21,6 +21,9 @@ import org.kuali.maven.plugins.graph.tree.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Extract an artifact from a MavenContext and use the wrapped artifact filter to filter it.
+ */
 public class ArtifactFilterWrapper implements NodeFilter<MavenContext> {
     private static final Logger logger = LoggerFactory.getLogger(ArtifactFilterWrapper.class);
 
