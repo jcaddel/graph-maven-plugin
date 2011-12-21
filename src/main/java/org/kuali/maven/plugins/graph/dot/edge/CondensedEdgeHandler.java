@@ -77,7 +77,7 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
         MavenContext context = node.getObject();
 
         // Find the node containing the replacement artifact Maven is actually going to use
-        Node<MavenContext> replacement = node.getObject().getReplacement();
+        Node<MavenContext> replacement = null;// node.getObject().getReplacement();
         String artifactIdentifier = replacement.getObject().getArtifactIdentifier();
 
         // Check to see if we've encountered this same conflict before

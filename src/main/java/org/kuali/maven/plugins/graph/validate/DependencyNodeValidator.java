@@ -19,7 +19,7 @@ public abstract class DependencyNodeValidator implements NodeValidator<MavenCont
         this.state = state;
     }
 
-    protected abstract void validateDependencyNodes(List<DependencyNode> nodes);
+    protected abstract void validateNodes(List<DependencyNode> nodes);
 
     @Override
     public void validate(Node<MavenContext> node) {
@@ -33,7 +33,7 @@ public abstract class DependencyNodeValidator implements NodeValidator<MavenCont
                 nodes.add(dn);
             }
         }
-        validateDependencyNodes(nodes);
+        validateNodes(nodes);
     }
 
     public State getState() {

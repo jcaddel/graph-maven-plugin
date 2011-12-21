@@ -2,14 +2,12 @@ package org.kuali.maven.plugins.graph.validate;
 
 import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
-public class DuplicateDependencyNodeValidator extends DependencyNodeValidator {
+public class DuplicateDependencyNodeValidator extends OmittedDependencyNodeValidator {
     private static final Logger logger = LoggerFactory.getLogger(DuplicateDependencyNodeValidator.class);
 
     public DuplicateDependencyNodeValidator() {
@@ -17,22 +15,15 @@ public class DuplicateDependencyNodeValidator extends DependencyNodeValidator {
     }
 
     @Override
-    protected void validateDependencyNodes(List<DependencyNode> nodes) {
+    protected void validateNodes(List<DependencyNode> nodes) {
+        super.validateNodes(nodes);
         for (DependencyNode node : nodes) {
-            Artifact artifact = node.getArtifact();
-            Artifact related = node.getRelatedArtifact();
-
-            Assert.notNull(related, state + " nodes must contain related artifacts");
-
-            boolean equal = helper.equals(artifact, related);
-            boolean similar = helper.similar(artifact, related);
-
+            boolean equal = helper.equals(node.getArtifact(), node.getRelatedArtifact());
             if (!equal) {
-                logger.debug("fake dup->" + artifact);
+                logger.debug("fake dup->" + node.getArtifact());
             }
-            Assert.state(similar, "Artifact's must be the same except for version");
         }
-        logger.debug("Validated " + state + " nodes");
+        logger.info("Validated " + state + " nodes");
     }
 
 }

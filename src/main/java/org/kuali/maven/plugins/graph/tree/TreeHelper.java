@@ -42,10 +42,9 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.pojo.Style;
-import org.kuali.maven.plugins.graph.sanitize.ConflictSanitizer;
-import org.kuali.maven.plugins.graph.sanitize.CyclicSanitizer;
-import org.kuali.maven.plugins.graph.sanitize.DuplicateSanitizer;
-import org.kuali.maven.plugins.graph.sanitize.MavenContextSanitizer;
+import org.kuali.maven.plugins.graph.sanitize.BuildSanitizer;
+import org.kuali.maven.plugins.graph.sanitize.NodeSanitizer;
+import org.kuali.maven.plugins.graph.sanitize.RelatedArtifactSanitizer;
 import org.kuali.maven.plugins.graph.validate.ConflictDependencyNodeValidator;
 import org.kuali.maven.plugins.graph.validate.DuplicateDependencyNodeValidator;
 import org.kuali.maven.plugins.graph.validate.IncludedDependencyNodeValidator;
@@ -128,11 +127,10 @@ public class TreeHelper {
     protected MavenContext getMavenContext(GraphNode gn, DependencyNode dn) {
         int id = gn.getId();
         String artifactIdentifier = getArtifactId(dn.getArtifact());
-        String partialArtifactIdentier = getPartialArtifactId(dn.getArtifact());
         MavenContext context = new MavenContext();
         context.setId(id);
         context.setArtifactIdentifier(artifactIdentifier);
-        context.setPartialArtifactIdentifier(partialArtifactIdentier);
+        context.setArtifact(dn.getArtifact());
         context.setGraphNode(gn);
         context.setDependencyNode(dn);
         context.setState(State.getState(dn.getState()));
@@ -166,11 +164,11 @@ public class TreeHelper {
         logger.info("Sanitizing metadata for " + nodes.size() + " dependency nodes");
 
         // Get a handle to artifacts that are included in the build
-        Included included = getIncluded(node, nodes, State.INCLUDED);
+        // Included included = getIncluded(node, nodes);
 
         // Go through the tree and clean up nodes that are not included in the build
-        List<MavenContextSanitizer> sanitizers = getSanitizers(included);
-        for (MavenContextSanitizer sanitizer : sanitizers) {
+        List<NodeSanitizer<MavenContext>> sanitizers = getSanitizers(node);
+        for (NodeSanitizer<MavenContext> sanitizer : sanitizers) {
             sanitizer.sanitize(node);
         }
 
@@ -204,11 +202,10 @@ public class TreeHelper {
         return validators;
     }
 
-    protected List<MavenContextSanitizer> getSanitizers(Included included) {
-        List<MavenContextSanitizer> sanitizers = new ArrayList<MavenContextSanitizer>();
-        sanitizers.add(new DuplicateSanitizer(included));
-        sanitizers.add(new ConflictSanitizer(included));
-        sanitizers.add(new CyclicSanitizer(included));
+    protected List<NodeSanitizer<MavenContext>> getSanitizers(Node<MavenContext> node) {
+        List<NodeSanitizer<MavenContext>> sanitizers = new ArrayList<NodeSanitizer<MavenContext>>();
+        sanitizers.add(new RelatedArtifactSanitizer());
+        sanitizers.add(new BuildSanitizer());
         return sanitizers;
     }
 
@@ -236,39 +233,56 @@ public class TreeHelper {
         return count;
     }
 
-    public List<MavenContext> getList(Node<MavenContext> node, State state) {
-        Assert.notNull(state, "state is required");
-        List<Node<MavenContext>> list = node.getBreadthFirstList();
-        List<MavenContext> newList = new ArrayList<MavenContext>();
-        for (Node<MavenContext> element : list) {
-            MavenContext context = element.getObject();
-            DependencyNode dn = context.getDependencyNode();
-            State elementState = State.getState(dn.getState());
-            if (!state.equals(elementState)) {
-                continue;
+    protected boolean isMatch(State state, State[] states) {
+        for (State arrayState : states) {
+            if (state == arrayState) {
+                return true;
             }
-            newList.add(context);
         }
-        return newList;
+        return false;
     }
 
-    public Included getIncluded(Node<MavenContext> node, List<Node<MavenContext>> list, State state) {
+    public List<MavenContext> getList(Node<MavenContext> node, State... states) {
+        Assert.notNull(states, "states are required");
+        List<MavenContext> contexts = new ArrayList<MavenContext>();
+        for (Node<MavenContext> element : node.getBreadthFirstList()) {
+            MavenContext context = element.getObject();
+            State elementState = context.getState();
+            if (isMatch(elementState, states)) {
+                contexts.add(context);
+            }
+        }
+        return contexts;
+    }
+
+    public Map<String, MavenContext> getMap(List<MavenContext> contexts) {
+        Map<String, MavenContext> map = new HashMap<String, MavenContext>();
+        for (MavenContext context : contexts) {
+            map.put(context.getArtifactIdentifier(), context);
+        }
+        return map;
+    }
+
+    public Map<String, MavenContext> getPartialIdMap(List<MavenContext> contexts) {
+        Map<String, MavenContext> map = new HashMap<String, MavenContext>();
+        for (MavenContext context : contexts) {
+            map.put(getPartialArtifactId(context.getArtifact()), context);
+        }
+        return map;
+    }
+
+    public Included getIncluded(Node<MavenContext> node, List<Node<MavenContext>> list) {
         Map<String, Node<MavenContext>> ids = new HashMap<String, Node<MavenContext>>();
-        Map<String, Node<MavenContext>> partialIds = new HashMap<String, Node<MavenContext>>();
         for (Node<MavenContext> element : list) {
             MavenContext context = element.getObject();
             DependencyNode dn = context.getDependencyNode();
             State elementState = State.getState(dn.getState());
-            if (!state.equals(elementState)) {
-                continue;
-            } else {
+            if (elementState == State.INCLUDED) {
                 ids.put(context.getArtifactIdentifier(), element);
-                partialIds.put(context.getPartialArtifactIdentifier(), element);
             }
         }
         Included included = new Included();
         included.setIds(ids);
-        included.setPartialIds(partialIds);
         return included;
     }
 

@@ -15,17 +15,18 @@
  */
 package org.kuali.maven.plugins.graph.pojo;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
-import org.kuali.maven.plugins.graph.tree.Node;
 
 public class MavenContext {
     int id;
     String artifactIdentifier;
-    String partialArtifactIdentifier;
+    Artifact artifact;
+    Artifact replacement;
     State state;
     GraphNode graphNode;
     DependencyNode dependencyNode;
-    Node<MavenContext> replacement;
+
     public MavenContext() {
         this(null, null);
     }
@@ -34,6 +35,46 @@ public class MavenContext {
         super();
         this.graphNode = graphNode;
         this.dependencyNode = dependencyNode;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getArtifactIdentifier() {
+        return artifactIdentifier;
+    }
+
+    public void setArtifactIdentifier(String artifactIdentifier) {
+        this.artifactIdentifier = artifactIdentifier;
+    }
+
+    public Artifact getArtifact() {
+        return artifact;
+    }
+
+    public void setArtifact(Artifact artifact) {
+        this.artifact = artifact;
+    }
+
+    public Artifact getReplacement() {
+        return replacement;
+    }
+
+    public void setReplacement(Artifact replacement) {
+        this.replacement = replacement;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public GraphNode getGraphNode() {
@@ -51,45 +92,4 @@ public class MavenContext {
     public void setDependencyNode(DependencyNode dependencyNode) {
         this.dependencyNode = dependencyNode;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getArtifactIdentifier() {
-        return artifactIdentifier;
-    }
-
-    public void setArtifactIdentifier(String artifactId) {
-        this.artifactIdentifier = artifactId;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public String getPartialArtifactIdentifier() {
-        return partialArtifactIdentifier;
-    }
-
-    public void setPartialArtifactIdentifier(String partialArtifactIdentifier) {
-        this.partialArtifactIdentifier = partialArtifactIdentifier;
-    }
-
-    public Node<MavenContext> getReplacement() {
-        return replacement;
-    }
-
-    public void setReplacement(Node<MavenContext> replacement) {
-        this.replacement = replacement;
-    }
-
 }

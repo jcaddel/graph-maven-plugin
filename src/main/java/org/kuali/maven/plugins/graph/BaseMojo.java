@@ -34,8 +34,6 @@ import org.kuali.maven.plugins.graph.collector.MavenContextTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.GraphException;
-import org.kuali.maven.plugins.graph.dot.GraphHelper;
-import org.kuali.maven.plugins.graph.dot.StringGenerator;
 import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
 import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.DepthFilter;
@@ -49,12 +47,10 @@ import org.kuali.maven.plugins.graph.filter.ReverseNodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.DotContext;
 import org.kuali.maven.plugins.graph.pojo.Edge;
-import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
-import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 
 /**
  *
@@ -315,17 +311,18 @@ public abstract class BaseMojo extends AbstractMojo {
         preProcess(nodeTree);
         helper.validate(nodeTree);
         helper.sanitize(nodeTree);
-        TreeMetaData md = helper.getMetaData(nodeTree);
-        helper.show(md);
-        helper.include(nodeTree, getIncludeFilter());
-        helper.exclude(nodeTree, getExcludeFilter());
-        List<GraphNode> nodes = helper.getGraphNodes(nodeTree);
-        EdgeHandler handler = getEdgeHandler();
-        List<Edge> edges = helper.getEdges(nodeTree, handler);
-        postProcess(nodeTree, nodes, edges);
-        helper.show(nodes, edges);
-        Graph graph = new GraphHelper().getGraph(title, direction, nodes, edges);
-        return new StringGenerator().getString(graph);
+        // TreeMetaData md = helper.getMetaData(nodeTree);
+        // helper.show(md);
+        // helper.include(nodeTree, getIncludeFilter());
+        // helper.exclude(nodeTree, getExcludeFilter());
+        // List<GraphNode> nodes = helper.getGraphNodes(nodeTree);
+        // EdgeHandler handler = getEdgeHandler();
+        // List<Edge> edges = helper.getEdges(nodeTree, handler);
+        // postProcess(nodeTree, nodes, edges);
+        // helper.show(nodes, edges);
+        // Graph graph = new GraphHelper().getGraph(title, direction, nodes, edges);
+        // return new StringGenerator().getString(graph);
+        return null;
     }
 
     protected NodeFilter<MavenContext> getShowFilter() {

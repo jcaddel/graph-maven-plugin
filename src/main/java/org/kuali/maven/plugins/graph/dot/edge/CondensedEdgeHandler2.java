@@ -77,7 +77,7 @@ public class CondensedEdgeHandler2 extends FlatEdgeHandler {
         MavenContext context = node.getObject();
 
         // Get the node containing the replacement artifact Maven is actually going to use
-        Node<MavenContext> replacement = context.getReplacement();
+        Node<MavenContext> replacement = null;// context.getReplacement();
 
         String artifactIdentifier = replacement.getObject().getArtifactIdentifier();
 
@@ -112,7 +112,7 @@ public class CondensedEdgeHandler2 extends FlatEdgeHandler {
         DependencyNode dn = context.getDependencyNode();
 
         // Find the node that replaces us
-        Node<MavenContext> replacement = context.getReplacement();
+        Node<MavenContext> replacement = null; // context.getReplacement();
         // This is our parent in the tree
         GraphNode parent = node.getParent().getObject().getGraphNode();
         // This is the node that is being used instead of us

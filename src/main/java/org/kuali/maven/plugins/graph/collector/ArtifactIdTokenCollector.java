@@ -36,7 +36,7 @@ public class ArtifactIdTokenCollector extends VersionFreeArtifactTokenCollector 
     @Override
     public List<String> getTokens(Artifact artifact) {
         List<String> tokens = super.getTokens(artifact);
-        tokens.add(artifact.getBaseVersion());
+        tokens.add(artifact.getVersion());
         return tokens;
     }
 

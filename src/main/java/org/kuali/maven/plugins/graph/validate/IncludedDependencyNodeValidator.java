@@ -17,7 +17,7 @@ public class IncludedDependencyNodeValidator extends DependencyNodeValidator {
     }
 
     @Override
-    protected void validateDependencyNodes(List<DependencyNode> nodes) {
+    protected void validateNodes(List<DependencyNode> nodes) {
         Map<String, Artifact> ids = new HashMap<String, Artifact>();
         Map<String, Artifact> partialIds = new HashMap<String, Artifact>();
         for (DependencyNode node : nodes) {
@@ -33,9 +33,9 @@ public class IncludedDependencyNodeValidator extends DependencyNodeValidator {
         int c2 = ids.size();
         int c3 = partialIds.size();
 
-        boolean equal = c1 == c2 && c2 == c3;
+        boolean valid = c1 == c2 && c2 == c3;
 
-        Assert.state(equal, "Unique included artifact id counts don't match.  c1=" + c1 + " c2=" + c2 + " c3=" + c3);
+        Assert.state(valid, "Unique included artifact id counts don't match.  c1=" + c1 + " c2=" + c2 + " c3=" + c3);
     }
 
 }
