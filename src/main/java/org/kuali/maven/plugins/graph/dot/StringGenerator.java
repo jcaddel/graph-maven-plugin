@@ -49,7 +49,7 @@ public class StringGenerator {
         }
         StringBuilder sb = new StringBuilder();
         sb.append("  graph [");
-        sb.append(" label=\"" + decorator.getLabel() + "\"");
+        sb.append(" label=" + decorator.getLabel() + "");
         sb.append(" labeljust=\"" + decorator.getLabeljust() + "\"");
         sb.append(" labelloc=\"" + decorator.getLabelloc() + "\"");
         sb.append(" fontsize=\"" + decorator.getFontsize() + "\"");

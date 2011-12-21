@@ -55,6 +55,7 @@ import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.Hider;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
+import org.kuali.maven.plugins.graph.pojo.NameValue;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
@@ -332,42 +333,32 @@ public abstract class BaseMojo extends AbstractMojo {
         }
     }
 
-    protected String getGraphTitle() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(title);
-        List<String> tokens = new ArrayList<String>();
-        addToken("includes", includes, tokens);
-        addToken("excludes", excludes, tokens);
-        addToken("show", show, tokens);
-        addToken("hide", hide, tokens);
+    protected List<NameValue> getLegendLabels() {
+        List<NameValue> labels = new ArrayList<NameValue>();
+        addLabel("includes", includes, labels);
+        addLabel("excludes", excludes, labels);
+        addLabel("show", show, labels);
+        addLabel("hide", hide, labels);
         if (!transitive) {
-            addToken("transitive", transitive + "", tokens);
+            addLabel("transitive", transitive + "", labels);
         }
         if (depth != -1) {
-            addToken("depth", depth + "", tokens);
+            addLabel("depth", depth + "", labels);
         }
-        if (!Helper.isEmpty(tokens)) {
-            sb.append("\\n" + getFilters(tokens));
-        }
-
-        return sb.toString();
+        return labels;
     }
 
-    protected String getFilters(List<String> tokens) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tokens.size(); i++) {
-            if (i != 0) {
-                sb.append("\\n");
-            }
-            sb.append(tokens.get(i));
+    protected void addLabel(String name, String value, List<NameValue> labels) {
+        if (!Helper.isBlank(value)) {
+            NameValue nv = new NameValue(name, value);
+            labels.add(nv);
         }
-        return sb.toString();
     }
 
-    protected void addToken(String name, String content, List<String> tokens) {
-        if (!Helper.isBlank(content)) {
-            tokens.add(name + "=" + content);
-        }
+    protected String getGraphTitle() {
+        GraphHelper gh = new GraphHelper();
+        List<NameValue> labels = getLegendLabels();
+        return gh.getLegendTitle(title, labels);
     }
 
     protected String getDotFileContent(String title, Direction direction) {

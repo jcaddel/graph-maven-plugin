@@ -23,8 +23,36 @@ import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
+import org.kuali.maven.plugins.graph.pojo.NameValue;
 
 public class GraphHelper {
+
+    public String getLegendTitle(String title, List<NameValue> labels) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("< ");
+        sb.append("<TABLE BORDER=\"0\">");
+        sb.append("<TR>");
+        sb.append("<TD ALIGN=\"LEFT\">" + title + "</TD>");
+        sb.append("</TR>");
+        for (NameValue label : labels) {
+            sb.append(getLabel(label));
+        }
+        sb.append("</TABLE>");
+        sb.append(" >");
+        return sb.toString();
+    }
+
+    protected String getLabel(NameValue label) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<TR>");
+        sb.append("<TD ALIGN=\"LEFT\">");
+        sb.append("<FONT COLOR=\"#007CCC\" POINT-SIZE=\"12\">");
+        sb.append(label.getName() + "=" + label.getValue());
+        sb.append("</FONT>");
+        sb.append("</TD>");
+        sb.append("</TR>");
+        return sb.toString();
+    }
 
     public Graph getGraph(String title) {
         return getGraph(title, Direction.DEFAULT_DIRECTION, new ArrayList<GraphNode>(), new ArrayList<Edge>());
