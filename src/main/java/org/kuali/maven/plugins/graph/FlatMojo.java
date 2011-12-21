@@ -26,7 +26,7 @@ import org.kuali.maven.plugins.graph.dot.edge.FlatEdgeHandler;
  * </p>
  *
  * <p>
- * This style can make it easier to comprehend the tree but the graph will have more nodes on it.
+ * This style can make it easier to comprehend the dependency tree but the graph will have more nodes on it.
  * </p>
  *
  * @goal flat
