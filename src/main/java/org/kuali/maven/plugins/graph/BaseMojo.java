@@ -55,6 +55,7 @@ import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.Hider;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
+import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.kuali.maven.plugins.graph.tree.TreeMetaData;
@@ -65,6 +66,7 @@ import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 @SuppressWarnings("deprecation")
 public abstract class BaseMojo extends AbstractMojo {
     Filters filters = new Filters();
+    TreeHelper helper = new TreeHelper();
 
     /**
      * @required
@@ -330,8 +332,30 @@ public abstract class BaseMojo extends AbstractMojo {
         }
     }
 
+    protected String getGraphTitle() {
+        List<String> tokens = new ArrayList<String>();
+        tokens.add(title);
+        addToken("includes", includes, tokens);
+        addToken("excludes", excludes, tokens);
+        addToken("show", show, tokens);
+        addToken("hide", hide, tokens);
+        if (!transitive) {
+            addToken("transitive", transitive + "", tokens);
+        }
+        if (depth != -1) {
+            addToken("depth", depth + "", tokens);
+        }
+
+        return GraphNodeGenerator.getLabel(tokens);
+    }
+
+    protected void addToken(String name, String content, List<String> tokens) {
+        if (!Helper.isBlank(content)) {
+            tokens.add(name + " - " + content);
+        }
+    }
+
     protected String getDotFileContent(String title, Direction direction) {
-        TreeHelper helper = new TreeHelper();
         DependencyNode mavenTree = getMavenTree();
         Node<MavenContext> nodeTree = helper.getTree(mavenTree);
         preProcess(nodeTree);
