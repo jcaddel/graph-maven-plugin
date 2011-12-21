@@ -32,7 +32,7 @@ import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.collector.VersionFreeArtifactTokenCollector;
 import org.kuali.maven.plugins.graph.dot.GraphException;
-import org.kuali.maven.plugins.graph.dot.NodeGenerator;
+import org.kuali.maven.plugins.graph.dot.GraphNodeGenerator;
 import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Edge;
@@ -62,7 +62,7 @@ public class TreeHelper {
     public static final String OPTIONAL = "optional";
     public static final String REQUIRED = "required";
     Counter counter = new Counter();
-    NodeGenerator ng = new NodeGenerator();
+    GraphNodeGenerator ng = new GraphNodeGenerator();
     Properties properties = getProperties();
 
     public void include(Node<MavenContext> node, NodeFilter<MavenContext> filter) {

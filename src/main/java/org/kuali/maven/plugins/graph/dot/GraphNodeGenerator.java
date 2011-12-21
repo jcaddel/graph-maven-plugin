@@ -22,7 +22,7 @@ import org.apache.maven.artifact.Artifact;
 import org.kuali.maven.plugins.graph.pojo.Hider;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
-public class NodeGenerator {
+public class GraphNodeGenerator {
     public static final String DEFAULT_TYPE = "jar";
 
     protected void add(List<String> list, String s, boolean skip) {
