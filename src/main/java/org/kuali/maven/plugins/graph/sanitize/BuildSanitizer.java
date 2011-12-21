@@ -126,35 +126,35 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
         String replacementId = TreeHelper.getArtifactId(conflict.getReplacement());
         MavenContext exactRelated = ids.get(replacementId);
 
-        // Either main or related would yield the same similar artifact
+        // Both main or related yield the same similar artifact
         MavenContext similar = partialIds.get(partialId1);
 
         // If all 3 are null, there is trouble
         if (exactMain == null && exactRelated == null && similar == null) {
             conflict.setState(State.UNKNOWN);
-            logger.warn("bs:conflict->unknown {}", conflict.getArtifactIdentifier());
+            logger.warn("conflict->unknown {}", conflict.getArtifactIdentifier());
             return;
         } else if (exactMain != null) {
             // Maven marked this as a conflict, yet the exact same version is in fact participating in the build
             // Switch to duplicate since the artifact for this node is in the build
             conflict.setState(State.DUPLICATE);
             conflict.setReplacement(null);
-            logger.warn("bs:conflict->duplicate {}", conflict.getArtifactIdentifier());
+            logger.warn("conflict->duplicate {}", conflict.getArtifactIdentifier());
         } else if (exactRelated != null) {
             // This is the normal condition we would expect for conflicts
             // Maven marked it as a conflict, told us what artifact it conflicted with
             // and we found that artifact in the build tree
             conflict.setState(State.CONFLICT);
             conflict.setReplacement(similar.getArtifact());
-            logger.debug("bs:verified conflict {}", conflict.getArtifactIdentifier());
+            logger.debug("verified conflict {}", conflict.getArtifactIdentifier());
         } else if (similar != null) {
             // This is not normal, but it's ok. Kind of. Maven marked it as a conflict and gave us the artifact
             // it conflicted with. That exact artifact is not participating in the build, but a similar one is.
             // We will accept this, and use the similar artifact instead of the one Maven handed us.
             conflict.setState(State.CONFLICT);
             conflict.setReplacement(similar.getArtifact());
-            String id2 = TreeHelper.getArtifactId(similar.getArtifact());
-            logger.warn("bs:conflict->conflict {}->{}", replacementId, id2);
+            String originalId = TreeHelper.getArtifactId(similar.getArtifact());
+            logger.warn("conflict->conflict {}->{}", replacementId, originalId);
         } else {
             Assert.isTrue(false, "Invalid state");
         }
