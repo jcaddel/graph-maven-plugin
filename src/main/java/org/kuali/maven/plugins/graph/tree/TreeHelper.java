@@ -154,7 +154,7 @@ public class TreeHelper {
         for (NodeValidator<MavenContext> validator : validators) {
             validator.validate(node);
         }
-        logger.info("Validation complete");
+        logger.debug("Validation complete");
     }
 
     public void sanitize(Node<MavenContext> node) {

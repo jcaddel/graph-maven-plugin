@@ -136,7 +136,7 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             conflict.setState(State.DUPLICATE);
             // Don't need a replacement, this artifact is participating in the build
             conflict.setReplacement(null);
-            logger.warn("conflict->duplicate {}", conflict.getArtifactIdentifier());
+            logger.info("conflict->duplicate {}", conflict.getArtifactIdentifier());
         } else if (exactRelated != null) {
             // This is the normal condition we would expect for conflicts
             // Maven marked it as a conflict, told us what artifact it conflicted with,

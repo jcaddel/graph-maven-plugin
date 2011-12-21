@@ -333,8 +333,9 @@ public abstract class BaseMojo extends AbstractMojo {
     }
 
     protected String getGraphTitle() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(title);
         List<String> tokens = new ArrayList<String>();
-        tokens.add(title);
         addToken("includes", includes, tokens);
         addToken("excludes", excludes, tokens);
         addToken("show", show, tokens);
@@ -345,13 +346,27 @@ public abstract class BaseMojo extends AbstractMojo {
         if (depth != -1) {
             addToken("depth", depth + "", tokens);
         }
+        if (!Helper.isEmpty(tokens)) {
+            sb.append("\\n" + getFilters(tokens));
+        }
 
-        return GraphNodeGenerator.getLabel(tokens);
+        return sb.toString();
+    }
+
+    protected String getFilters(List<String> tokens) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tokens.size(); i++) {
+            if (i != 0) {
+                sb.append("\\n");
+            }
+            sb.append(tokens.get(i));
+        }
+        return sb.toString();
     }
 
     protected void addToken(String name, String content, List<String> tokens) {
         if (!Helper.isBlank(content)) {
-            tokens.add(name + " - " + content);
+            tokens.add(name + "=" + content);
         }
     }
 
@@ -362,15 +377,19 @@ public abstract class BaseMojo extends AbstractMojo {
         helper.validate(nodeTree);
         helper.sanitize(nodeTree);
         TreeMetaData md = helper.getMetaData(nodeTree);
-        helper.show(md);
+        if (verbose) {
+            helper.show(md);
+        }
         helper.include(nodeTree, getIncludeFilter());
         helper.exclude(nodeTree, getExcludeFilter());
         List<GraphNode> nodes = helper.getGraphNodes(nodeTree);
         EdgeHandler handler = getEdgeHandler();
         List<Edge> edges = helper.getEdges(nodeTree, handler);
         postProcess(nodeTree, nodes, edges);
-        helper.show(nodes, edges);
-        Graph graph = new GraphHelper().getGraph(title, direction, nodes, edges);
+        if (verbose) {
+            helper.show(nodes, edges);
+        }
+        Graph graph = new GraphHelper().getGraph(getGraphTitle(), direction, nodes, edges);
         return new StringGenerator().getString(graph);
     }
 

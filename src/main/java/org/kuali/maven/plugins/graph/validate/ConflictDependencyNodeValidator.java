@@ -23,7 +23,7 @@ public class ConflictDependencyNodeValidator extends OmittedDependencyNodeValida
                 logger.debug("fake conflict->" + node.getArtifact());
             }
         }
-        logger.info("Validated " + state + " nodes");
+        logger.debug("Validated " + state + " nodes");
     }
 
 }

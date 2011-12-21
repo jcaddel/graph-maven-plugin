@@ -50,7 +50,7 @@ public class GraphNodeGenerator {
         return getLabel(labelTokens);
     }
 
-    public static String getLabel(List<String> tokens) {
+    public String getLabel(List<String> tokens) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tokens.size(); i++) {
             if (i != 0) {
