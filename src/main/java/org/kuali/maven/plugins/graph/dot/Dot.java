@@ -31,6 +31,9 @@ import org.kuali.maven.plugins.graph.pojo.DotContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Execute the "dot" command for drawing graphs
+ */
 public class Dot {
     private static final Logger logger = LoggerFactory.getLogger(Dot.class);
 
