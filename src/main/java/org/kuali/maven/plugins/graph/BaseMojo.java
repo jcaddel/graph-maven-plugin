@@ -36,6 +36,7 @@ import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.GraphException;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
+import org.kuali.maven.plugins.graph.dot.GraphNodeGenerator;
 import org.kuali.maven.plugins.graph.dot.StringGenerator;
 import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
 import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
@@ -295,11 +296,19 @@ public abstract class BaseMojo extends AbstractMojo {
     }
 
     protected void preProcess(Node<MavenContext> node) {
-        // do nothing by default
     }
 
     protected void postProcess(Node<MavenContext> node, List<GraphNode> nodes, List<Edge> edges) {
-        // do nothing by default
+        GraphNodeGenerator gng = new GraphNodeGenerator();
+        Hider hider = getHider();
+        List<Node<MavenContext>> treeNodes = node.getBreadthFirstList();
+        for (Node<MavenContext> element : treeNodes) {
+            MavenContext context = element.getObject();
+            GraphNode graphNode = context.getGraphNode();
+            Artifact artifact = context.getArtifact();
+            String label = gng.getLabel(artifact, hider);
+            graphNode.setLabel(label);
+        }
     }
 
     protected String getDotFileContent(String title, Direction direction) {

@@ -81,6 +81,7 @@ public class ConflictsMojo extends BaseMojo {
 
     @Override
     protected void postProcess(Node<MavenContext> node, List<GraphNode> nodes, List<Edge> edges) {
+        super.postProcess(node, nodes, edges);
         TreeHelper helper = new TreeHelper();
         List<MavenContext> contexts = getContexts(node);
         List<Edge> conflictEdges = getEdges(contexts, edges);
