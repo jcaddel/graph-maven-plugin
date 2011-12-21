@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.GraphException;
+import org.kuali.maven.plugins.graph.dot.edge.CondensedEdgeHandler2;
 import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
-import org.kuali.maven.plugins.graph.dot.edge.CondensedEdgeHandler;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
@@ -52,9 +52,16 @@ public class ConflictsMojo extends BaseMojo {
      */
     private File file;
 
+    /**
+     * This filter restricts the display to conflicts only.
+     *
+     * @parameter expression="${graph.conflictsFilter}" default-value="::conflicts"
+     */
+    private String conflictsFilter;
+
     @Override
     protected EdgeHandler getEdgeHandler() {
-        return new CondensedEdgeHandler();
+        return new CondensedEdgeHandler2();
     }
 
     @Override
@@ -68,10 +75,7 @@ public class ConflictsMojo extends BaseMojo {
 
     @Override
     public void execute() {
-        setIncludes(null);
-        setExcludes(null);
-        setHide(null);
-        setShow("::conflict");
+        setShow(getShow() == null ? conflictsFilter : getShow() + "," + conflictsFilter);
         super.execute();
     }
 
@@ -141,6 +145,14 @@ public class ConflictsMojo extends BaseMojo {
             }
         }
         return contexts;
+    }
+
+    public String getConflictsFilter() {
+        return conflictsFilter;
+    }
+
+    public void setConflictsFilter(String conflictsFilter) {
+        this.conflictsFilter = conflictsFilter;
     }
 
 }

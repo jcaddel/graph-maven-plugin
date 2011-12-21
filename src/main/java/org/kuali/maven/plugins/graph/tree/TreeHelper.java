@@ -163,9 +163,6 @@ public class TreeHelper {
 
         logger.info("Sanitizing metadata for " + nodes.size() + " dependency nodes");
 
-        // Get a handle to artifacts that are included in the build
-        // Included included = getIncluded(node, nodes);
-
         // Go through the tree and clean up nodes that are not included in the build
         List<NodeSanitizer<MavenContext>> sanitizers = getSanitizers(node);
         for (NodeSanitizer<MavenContext> sanitizer : sanitizers) {
@@ -175,6 +172,13 @@ public class TreeHelper {
         // Apply styling based on the cleaned up tree
         for (Node<MavenContext> element : nodes) {
             updateGraphNodeStyle(element.getObject());
+        }
+
+        for (Node<MavenContext> element : nodes) {
+            Artifact replacement = element.getObject().getReplacement();
+            if (element.getObject().getState() == State.CONFLICT) {
+                Assert.isTrue(replacement != null, "Illegal state " + element.getObject().getArtifactIdentifier());
+            }
         }
     }
 
