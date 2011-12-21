@@ -273,7 +273,7 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * By default criteria used in filtering the dependency tree is appended to the graph title. Set this to false to
+     * By default, criteria used in filtering the dependency tree is appended to the graph title. Set this to false to
      * show the title without criteria.
      * </p>
      *
