@@ -24,6 +24,9 @@ import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.NodeDecorator;
 
+/**
+ * Convert a Graph object into text
+ */
 public class StringGenerator {
 
     public String getString(Graph graph) {
