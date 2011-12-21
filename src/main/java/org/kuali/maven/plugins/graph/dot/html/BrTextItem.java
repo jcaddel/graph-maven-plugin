@@ -1,5 +1,5 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class TextLabel extends Label<Text<?>> {
+public class BrTextItem extends TextItem<Br> {
 
 }
