@@ -292,7 +292,7 @@ public abstract class BaseMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        String content = getDotFileContent(title, direction);
+        String content = getDotFileContent(getGraphTitle(), direction);
         Dot dot = new Dot();
         DotContext context = dot.getDotContext(getFile(), content, keepDotFile);
         dot.execute(context);
@@ -389,7 +389,7 @@ public abstract class BaseMojo extends AbstractMojo {
         if (verbose) {
             helper.show(nodes, edges);
         }
-        Graph graph = new GraphHelper().getGraph(getGraphTitle(), direction, nodes, edges);
+        Graph graph = new GraphHelper().getGraph(title, direction, nodes, edges);
         return new StringGenerator().getString(graph);
     }
 
