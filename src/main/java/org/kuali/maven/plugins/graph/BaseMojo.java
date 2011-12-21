@@ -148,7 +148,8 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Comma delimited list of patterns for including artifacts.
+     * Comma delimited list of patterns for including artifacts. The pattern syntax has the form -
+     * [groupId]:[artifactId]:[type]:[classifier]:[version]
      * </p>
      *
      * <p>
@@ -162,10 +163,6 @@ public abstract class BaseMojo extends AbstractMojo {
      * </p>
      *
      * <p>
-     * The pattern syntax has the form - [groupId]:[artifactId]:[type]:[classifier]:[version]
-     * </p>
-     *
-     * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
      * </p>
@@ -176,7 +173,8 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Comma delimited list of artifact patterns to exclude.
+     * Comma delimited list of artifact patterns to exclude. The pattern syntax has the form -
+     * [groupId]:[artifactId]:[type]:[classifier]:[version]
      * </p>
      *
      * <p>
@@ -186,10 +184,6 @@ public abstract class BaseMojo extends AbstractMojo {
      *
      * <p>
      * If not provided, no artifacts are excluded.
-     * </p>
-     *
-     * <p>
-     * The pattern syntax has the form - [groupId]:[artifactId]:[type]:[classifier]:[version]
      * </p>
      *
      * <p>
@@ -203,7 +197,8 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Comma delimited list of dependency patterns used for hiding artifacts.
+     * Comma delimited list of dependency patterns used for hiding artifacts. The pattern syntax has the form -
+     * [scope]:[optional|required]:[state]
      * </p>
      *
      * <p>
@@ -213,11 +208,6 @@ public abstract class BaseMojo extends AbstractMojo {
      *
      * <p>
      * If not provided, no dependencies are hidden.
-     * </p>
-     *
-     * <p>
-     * The pattern syntax has the form - [scope]:[optional|required]:[state]
-     *
      * </p>
      *
      * <pre>
@@ -236,16 +226,13 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Comma delimited list of dependency patterns used for showing artifacts.
+     * Comma delimited list of dependency patterns used for showing artifacts. The pattern syntax has the form -
+     * [scope]:[optional|required]:[state]
      * </p>
      *
      * <p>
      * Show patterns work "bottom up" and are overridden by hide patterns. If a dependency matches any show criteria,
      * it, and all of the dependencies in the direct path from it back to the root of the dependency tree are displayed.
-     * </p>
-     *
-     * <p>
-     * The pattern syntax has the form - [scope]:[optional|required]:[state]
      * </p>
      *
      * <pre>
@@ -283,14 +270,10 @@ public abstract class BaseMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        try {
-            String content = getDotFileContent(title, direction);
-            Dot dot = new Dot();
-            DotContext context = dot.getDotContext(getFile(), content, keepDotFile);
-            dot.execute(context);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String content = getDotFileContent(title, direction);
+        Dot dot = new Dot();
+        DotContext context = dot.getDotContext(getFile(), content, keepDotFile);
+        dot.execute(context);
     }
 
     protected abstract File getFile();
