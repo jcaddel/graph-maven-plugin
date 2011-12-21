@@ -17,7 +17,7 @@ package org.kuali.maven.plugins.graph;
 
 import java.io.File;
 
-import org.kuali.maven.plugins.graph.dot.edge.CondensedEdgeHandler2;
+import org.kuali.maven.plugins.graph.dot.edge.CondensedEdgeHandler;
 import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
 
 /**
@@ -46,7 +46,7 @@ public class CondensedMojo extends BaseMojo {
 
     @Override
     protected EdgeHandler getEdgeHandler() {
-        return new CondensedEdgeHandler2();
+        return new CondensedEdgeHandler();
     }
 
     @Override

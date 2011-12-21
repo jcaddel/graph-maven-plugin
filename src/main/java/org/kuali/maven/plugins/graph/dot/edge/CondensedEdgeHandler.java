@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.dot.GraphException;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
@@ -76,8 +75,11 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
     protected void handleConflict(Node<MavenContext> node, List<Edge> edges) {
         MavenContext context = node.getObject();
 
-        // Find the node containing the replacement artifact Maven is actually going to use
-        Node<MavenContext> replacement = null;// node.getObject().getReplacement();
+        String replacementArtifactId = TreeHelper.getArtifactId(context.getReplacement());
+
+        // Get the node containing the replacement artifact Maven is actually going to use
+        Node<MavenContext> replacement = findIncludedNode(node.getRoot(), replacementArtifactId);
+
         String artifactIdentifier = replacement.getObject().getArtifactIdentifier();
 
         // Check to see if we've encountered this same conflict before
@@ -108,7 +110,6 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
 
     protected void handleDuplicate(Node<MavenContext> node, List<Edge> edges) {
         MavenContext context = node.getObject();
-        DependencyNode dn = context.getDependencyNode();
 
         // Find the node that replaces us
         Node<MavenContext> replacement = findIncludedNode(node.getRoot(), context.getArtifactIdentifier());
@@ -117,8 +118,8 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
         // This is the node that is being used instead of us
         GraphNode child = replacement.getObject().getGraphNode();
         // Use our optional/scope settings
-        boolean optional = dn.getArtifact().isOptional();
-        Scope scope = Scope.getScope(dn.getArtifact().getScope());
+        boolean optional = context.getArtifact().isOptional();
+        Scope scope = Scope.getScope(context.getArtifact().getScope());
 
         // Draw an edge from our parent to the node that replaced us
         Edge edge = getEdge(parent, child, optional, scope, State.INCLUDED);
