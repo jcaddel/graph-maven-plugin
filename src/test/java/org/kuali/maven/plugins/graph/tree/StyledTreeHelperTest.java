@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
-import org.kuali.maven.plugins.graph.dot.GraphException;
+import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.pojo.Style;

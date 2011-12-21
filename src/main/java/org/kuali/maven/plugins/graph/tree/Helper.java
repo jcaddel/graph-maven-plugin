@@ -26,7 +26,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections15.list.SetUniqueList;
 import org.apache.commons.collections15.map.ListOrderedMap;
-import org.kuali.maven.plugins.graph.dot.GraphException;
+import org.kuali.maven.plugins.graph.pojo.GraphException;
 
 /**
  * General purpose utility methods

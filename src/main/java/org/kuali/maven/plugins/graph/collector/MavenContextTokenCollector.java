@@ -25,7 +25,7 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
 /**
  * <p>
- * Provide filter tokens for a Maven <code>DependencyNode</code>
+ * Provide filter tokens for a <code>MavenContext</code>
  * </p>
  *
  * <pre>
