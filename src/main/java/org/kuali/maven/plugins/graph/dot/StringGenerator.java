@@ -17,7 +17,7 @@ package org.kuali.maven.plugins.graph.dot;
 
 import java.util.List;
 
-import org.kuali.maven.plugins.graph.dot.html.HtmlUtil;
+import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.EdgeDecorator;
 import org.kuali.maven.plugins.graph.pojo.Graph;
@@ -29,7 +29,7 @@ import org.kuali.maven.plugins.graph.pojo.NodeDecorator;
  * Convert a Graph object into text
  */
 public class StringGenerator {
-    HtmlUtil htmlUtil = new HtmlUtil();
+    HtmlUtils htmlUtil = new HtmlUtils();
 
     public String getString(Graph graph) {
         StringBuilder sb = new StringBuilder();

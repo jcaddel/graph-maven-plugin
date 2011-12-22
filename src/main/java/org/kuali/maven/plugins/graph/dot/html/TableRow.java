@@ -1,9 +1,10 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TableRow implements HtmlElement {
+public class TableRow extends NestedElement {
 
     @Override
     public String getName() {
@@ -11,17 +12,15 @@ public class TableRow implements HtmlElement {
     }
 
     @Override
-    public String[] getElementNames() {
-        return new String[] { "cells" };
+    public List<String> getElementNames() {
+        List<String> names = new ArrayList<String>();
+        names.add("cells");
+        return names;
     }
 
     @Override
-    public HtmlElement[] getElements() {
-        HtmlElement[] elements = new HtmlElement[cells.size()];
-        for (int i = 0; i < elements.length; i++) {
-            elements[i] = cells.get(i);
-        }
-        return elements;
+    public List<? extends HtmlElement> getElements() {
+        return cells;
     }
 
     public TableRow() {

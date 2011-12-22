@@ -1,9 +1,13 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.List;
+
 public interface HtmlElement {
     String getName();
 
-    HtmlElement[] getElements();
+    List<? extends HtmlElement> getElements();
 
-    String[] getElementNames();
+    List<String> getElementNames();
+
+    String toHtml();
 }

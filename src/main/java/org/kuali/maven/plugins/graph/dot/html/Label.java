@@ -1,29 +1,36 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.util.Assert;
 
-public class Label implements HtmlElement {
+public class Label extends NestedElement {
 
     Text text;
     Table table;
 
     @Override
     public String getName() {
-        return "label";
+        return null;
     }
 
     @Override
-    public String[] getElementNames() {
-        return new String[] { "text", "table" };
+    public List<String> getElementNames() {
+        List<String> names = new ArrayList<String>();
+        names.add("text");
+        names.add("table");
+        return names;
     }
 
     @Override
-    public HtmlElement[] getElements() {
+    public List<? extends HtmlElement> getElements() {
         Assert.isTrue((text == null || table == null) && (text != null || table != null));
         if (text == null) {
-            return new HtmlElement[] { table };
+            return Collections.singletonList(table);
         } else {
-            return new HtmlElement[] { text };
+            return Collections.singletonList(text);
         }
     }
 

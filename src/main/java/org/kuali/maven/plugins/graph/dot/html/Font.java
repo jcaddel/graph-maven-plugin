@@ -1,5 +1,8 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.util.Assert;
 
 public class Font implements HtmlElement {
@@ -14,14 +17,25 @@ public class Font implements HtmlElement {
     }
 
     @Override
-    public HtmlElement[] getElements() {
+    public List<? extends HtmlElement> getElements() {
         Assert.isTrue(text != null);
-        return new HtmlElement[] { text };
+        return Collections.singletonList(text);
     }
 
     @Override
-    public String[] getElementNames() {
-        return new String[] { "text" };
+    public List<String> getElementNames() {
+        return Collections.singletonList("text");
+    }
+
+    @Override
+    public String toHtml() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<" + getName() + HtmlUtils.getAttributes(this, getElementNames()) + ">");
+        for (HtmlElement element : getElements()) {
+            sb.append(element.toHtml());
+        }
+        sb.append("</" + getName() + ">");
+        return sb.toString();
     }
 
     public Font() {

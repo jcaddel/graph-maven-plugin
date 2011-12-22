@@ -1,11 +1,22 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-import org.springframework.util.Assert;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class TextItem implements HtmlElement {
+public class TextItem extends NestedElement {
     String string;
     Br br;
     Font font;
+
+    @Override
+    public String toHtml() {
+        if (string == null) {
+            return super.toHtml();
+        } else {
+            return string;
+        }
+    }
 
     @Override
     public String getName() {
@@ -13,17 +24,21 @@ public class TextItem implements HtmlElement {
     }
 
     @Override
-    public String[] getElementNames() {
-        return new String[] { "br", "font" };
+    public List<String> getElementNames() {
+        List<String> names = new ArrayList<String>();
+        names.add("br");
+        names.add("font");
+        return names;
     }
 
     @Override
-    public HtmlElement[] getElements() {
-        Assert.isTrue((br == null || font == null) && (br != null || font != null));
-        if (br == null) {
-            return new HtmlElement[] { font };
+    public List<? extends HtmlElement> getElements() {
+        if (br != null) {
+            return Collections.singletonList(br);
+        } else if (font != null) {
+            return Collections.singletonList(font);
         } else {
-            return new HtmlElement[] { br };
+            return Collections.emptyList();
         }
     }
 

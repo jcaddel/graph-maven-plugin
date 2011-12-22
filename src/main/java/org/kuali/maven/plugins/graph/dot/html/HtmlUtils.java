@@ -24,15 +24,70 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.kuali.maven.plugins.graph.dot.html.enums.TableCellAlign;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
-public class HtmlUtil {
+public class HtmlUtils {
+
+    public String getAttributesHtml(HtmlElement element) {
+        Map<String, ?> description = getAttributes(element);
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (String key : description.keySet()) {
+            Object value = description.get(key);
+            if (value == null) {
+                continue;
+            }
+            if (count++ != 0) {
+                sb.append(" ");
+            }
+            sb.append(key.toUpperCase() + "=" + quote(value.toString()));
+        }
+        if (count > 0) {
+            return " " + sb.toString();
+        } else {
+            return sb.toString();
+        }
+    }
+
+    public Map<String, ?> getAttributes(HtmlElement element) {
+        Map<String, Object> description = describe(element);
+        for (String key : description.keySet()) {
+            Object value = description.get(key);
+            if (value instanceof HtmlElement) {
+                description.remove(key);
+            }
+        }
+        description.remove("class");
+        description.remove("name");
+        description.remove("elementNames");
+        description.remove("elements");
+        description.remove("string");
+        return description;
+    }
 
     public String toHtml(HtmlElement element) {
         String name = element.getName();
-        HtmlElement[] elements = element.getElements();
+        List<? extends HtmlElement> elements = element.getElements();
+        List<String> excludes = element.getElementNames();
+        excludes.add("name");
+        excludes.add("elements");
+        excludes.add("elementNames");
+        excludes.add("string");
+        String attributes = toHtml(getAttributes(element, excludes));
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("<" + name + "/>");
-        return sb.toString();
+        String string = (String) describe(element).get("string");
+
+        StringBuilder nested = new StringBuilder();
+        for (HtmlElement nestedElement : elements) {
+            nested.append(toHtml(nestedElement));
+        }
+        if (string != null) {
+            return string.toString();
+        } else if (name == null) {
+            return nested.toString();
+        } else if (nested.length() == 0) {
+            return "<" + name + attributes + "/>";
+        } else {
+            return "<" + name + attributes + ">" + nested + "</" + name + ">";
+        }
     }
 
     public List<TableCell> getTableCells(List<String> contents, TableCellAlign align, Font font) {
@@ -110,6 +165,13 @@ public class HtmlUtil {
             Object value = attributes.get(key);
             copyProperty(dest, key, value);
         }
+    }
+
+    public static Map<String, Object> getAttributes(Object object, List<String> excludes) {
+        String[] array = excludes.toArray(new String[excludes.size()]);
+        Map<String, Object> attributes = describe(object, array);
+        attributes.remove("class");
+        return attributes;
     }
 
     protected Map<String, Object> getAttributes(Object object, String... excludes) {
@@ -200,12 +262,12 @@ public class HtmlUtil {
     public String toHtml(Table table) {
         StringBuilder sb = new StringBuilder();
         sb.append("<TABLE" + getAttributesHtml(table, "rows") + ">");
-        sb.append(toHtml(table.getTrs()));
+        sb.append(toHtml(table.getRows()));
         sb.append("</TABLE>");
         return sb.toString();
     }
 
-    public String toHtml(Map<String, Object> attributes) {
+    public static String toHtml(Map<String, ?> attributes) {
         StringBuilder sb = new StringBuilder();
         int count = 0;
         for (String key : attributes.keySet()) {
@@ -246,21 +308,33 @@ public class HtmlUtil {
         }
     }
 
-    public String quote(String s) {
+    public static String quote(String s) {
         return '"' + s + '"';
     }
 
-    protected Map<String, Object> describe(Object bean, String... excludes) {
+    protected Map<String, Object> describe(Object bean, List<String> excludes) {
+        return describe(bean, excludes.toArray(new String[excludes.size()]));
+    }
+
+    protected static Map<String, Object> describe(Object bean, String... excludes) {
         Map<String, Object> description = describe(bean);
         remove(description, excludes);
         return description;
     }
 
-    protected void remove(Map<String, Object> description, String... keys) {
+    protected static void remove(Map<String, Object> description, String... keys) {
         if (keys != null) {
             for (String key : keys) {
                 description.remove(key);
             }
+        }
+    }
+
+    protected String getProperty(Object bean, String name) {
+        try {
+            return BeanUtils.getProperty(bean, name);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 
@@ -273,7 +347,7 @@ public class HtmlUtil {
     }
 
     @SuppressWarnings("unchecked")
-    protected Map<String, Object> describe(Object bean) {
+    protected static Map<String, Object> describe(Object bean) {
         try {
             return new TreeMap<String, Object>(BeanUtils.describe(bean));
         } catch (Exception e) {

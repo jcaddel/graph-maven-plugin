@@ -1,5 +1,6 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,18 +8,18 @@ import org.kuali.maven.plugins.graph.dot.html.enums.Align;
 import org.kuali.maven.plugins.graph.dot.html.enums.VerticalAlignment;
 import org.springframework.util.Assert;
 
-public class Table implements HtmlElement {
+public class Table extends NestedElement {
     public Table() {
         super();
     }
 
-    public Table(TableRow... trs) {
-        this(Arrays.asList(trs));
+    public Table(TableRow... rows) {
+        this(Arrays.asList(rows));
     }
 
-    public Table(List<TableRow> trs) {
+    public Table(List<TableRow> rows) {
         super();
-        this.trs = trs;
+        this.rows = rows;
     }
 
     @Override
@@ -27,18 +28,16 @@ public class Table implements HtmlElement {
     }
 
     @Override
-    public String[] getElementNames() {
-        return new String[] { "rows" };
+    public List<String> getElementNames() {
+        List<String> names = new ArrayList<String>();
+        names.add("rows");
+        return names;
     }
 
     @Override
-    public HtmlElement[] getElements() {
-        Assert.isTrue(trs != null);
-        HtmlElement[] elements = new HtmlElement[trs.size()];
-        for (int i = 0; i < elements.length; i++) {
-            elements[i] = trs.get(i);
-        }
-        return elements;
+    public List<? extends HtmlElement> getElements() {
+        Assert.isTrue(rows != null);
+        return rows;
     }
 
     Align align;
@@ -62,7 +61,7 @@ public class Table implements HtmlElement {
     VerticalAlignment valign;
     String width;
 
-    List<TableRow> trs;
+    List<TableRow> rows;
 
     public Align getAlign() {
         return align;
@@ -224,11 +223,11 @@ public class Table implements HtmlElement {
         this.width = width;
     }
 
-    public List<TableRow> getTrs() {
-        return trs;
+    public List<TableRow> getRows() {
+        return rows;
     }
 
-    public void setTrs(List<TableRow> trs) {
-        this.trs = trs;
+    public void setRows(List<TableRow> trs) {
+        this.rows = trs;
     }
 }

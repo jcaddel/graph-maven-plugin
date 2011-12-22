@@ -1,11 +1,15 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.kuali.maven.plugins.graph.dot.html.enums.Align;
 import org.kuali.maven.plugins.graph.dot.html.enums.TableCellAlign;
 import org.kuali.maven.plugins.graph.dot.html.enums.VerticalAlignment;
 import org.springframework.util.Assert;
 
-public class TableCell implements HtmlElement {
+public class TableCell extends NestedElement {
 
     @Override
     public String getName() {
@@ -13,17 +17,20 @@ public class TableCell implements HtmlElement {
     }
 
     @Override
-    public String[] getElementNames() {
-        return new String[] { "img", "label" };
+    public List<String> getElementNames() {
+        List<String> names = new ArrayList<String>();
+        names.add("img");
+        names.add("label");
+        return names;
     }
 
     @Override
-    public HtmlElement[] getElements() {
+    public List<? extends HtmlElement> getElements() {
         Assert.isTrue((img == null || label == null) && (img != null || label != null));
         if (img == null) {
-            return new HtmlElement[] { label };
+            return Collections.singletonList(label);
         } else {
-            return new HtmlElement[] { img };
+            return Collections.singletonList(img);
         }
     }
 
