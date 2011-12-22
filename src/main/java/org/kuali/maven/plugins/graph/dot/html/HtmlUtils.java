@@ -129,6 +129,14 @@ public class HtmlUtils {
         return " " + sb.toString();
     }
 
+    protected String getTranslatedAttribute(String attribute) {
+        if (attribute.equals("pointSize")) {
+            return "point-size";
+        } else {
+            return attribute;
+        }
+    }
+
     public String quote(String s) {
         return '"' + s + '"';
     }
