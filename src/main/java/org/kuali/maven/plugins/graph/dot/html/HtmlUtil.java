@@ -39,10 +39,13 @@ public class HtmlUtil {
 
     public String toHtml(Label label) {
         StringBuilder sb = new StringBuilder();
+        sb.append("label=");
         if (label.getText() != null) {
-            sb.append(toHtml(label.getText()));
+            sb.append(quote(toHtml(label.getText())));
         } else if (label.getTable() != null) {
+            sb.append("< ");
             sb.append(toHtml(label.getTable()));
+            sb.append(" >");
         }
         return sb.toString();
     }
