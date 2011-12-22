@@ -10,6 +10,20 @@ import org.springframework.util.Assert;
 
 public class TableCell implements HtmlElement {
 
+    public TableCell() {
+        super();
+    }
+
+    public TableCell(Label label) {
+        super();
+        this.label = label;
+    }
+
+    public TableCell(Img img) {
+        super();
+        this.img = img;
+    }
+
     @Override
     public String getName() {
         return "td";
@@ -23,20 +37,6 @@ public class TableCell implements HtmlElement {
         } else {
             return Collections.singletonList(img);
         }
-    }
-
-    public TableCell() {
-        super();
-    }
-
-    public TableCell(Label label) {
-        super();
-        this.label = label;
-    }
-
-    public TableCell(Img img) {
-        super();
-        this.img = img;
     }
 
     // Attributes
@@ -60,7 +60,7 @@ public class TableCell implements HtmlElement {
     VerticalAlignment valign;
     String width;
 
-    // Nested elements
+    // Elements
     Label label;
     Img img;
 
