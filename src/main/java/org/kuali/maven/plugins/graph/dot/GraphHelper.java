@@ -16,12 +16,13 @@
 package org.kuali.maven.plugins.graph.dot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import org.kuali.maven.plugins.graph.dot.html.Font;
 import org.kuali.maven.plugins.graph.dot.html.Label;
 import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.dot.html.TableCell;
+import org.kuali.maven.plugins.graph.dot.html.TableCellAlign;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
 import org.kuali.maven.plugins.graph.dot.html.Text;
 import org.kuali.maven.plugins.graph.dot.html.TextItem;
@@ -34,14 +35,26 @@ import org.kuali.maven.plugins.graph.pojo.NameValue;
 
 public class GraphHelper {
 
-    public Table getLegendTable(String title, List<NameValue> labels) {
-        Text text = new Text(new TextItem(title));
-        Label label = new Label(text);
-        TableCell cell = new TableCell(label);
-        TableRow row = new TableRow(Collections.singletonList(cell));
-        Table table = new Table(Collections.singletonList(row));
-        table.setBorder("1");
+    public Table getTitle(String title, List<NameValue> labels) {
+        TableRow titleRow = new TableRow(new TableCell(new Label(new Text(new TextItem(title)))));
+        List<TableRow> rows = getTableRows(labels);
+        rows.add(0, titleRow);
+        Table table = new Table(rows);
+        table.setBorder("0");
         return table;
+    }
+
+    protected List<TableRow> getTableRows(List<NameValue> labels) {
+        List<TableRow> rows = new ArrayList<TableRow>();
+        for (NameValue label : labels) {
+            String name = label.getName();
+            String value = label.getValue();
+            Font font = new Font(new Text(new TextItem(name + " " + value)), "cornflowerblue", "8");
+            TableCell cell = new TableCell(new Label(new Text(new TextItem(font))));
+            cell.setAlign(TableCellAlign.LEFT);
+            rows.add(new TableRow(cell));
+        }
+        return rows;
     }
 
     public Graph getGraph(String title) {
@@ -53,9 +66,16 @@ public class GraphHelper {
     }
 
     public Graph getGraph(String title, Direction direction, List<GraphNode> nodes, List<Edge> edges) {
-        GraphDecorator decorator = new GraphDecorator();
-        decorator.setRankdir(direction.name());
-        decorator.setLabel(title);
+        GraphDecorator decorator = new GraphDecorator(title, direction.name());
+        return getGraph(decorator, nodes, edges);
+    }
+
+    public Graph getGraph(Table title, Direction direction, List<GraphNode> nodes, List<Edge> edges) {
+        GraphDecorator decorator = new GraphDecorator(title, direction.name());
+        return getGraph(decorator, nodes, edges);
+    }
+
+    public Graph getGraph(GraphDecorator decorator, List<GraphNode> nodes, List<Edge> edges) {
         Graph graph = new Graph();
         graph.setGraphDecorator(decorator);
         graph.setNodes(nodes);

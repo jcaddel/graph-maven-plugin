@@ -11,8 +11,19 @@ public class Font {
     }
 
     public Font(Text text) {
+        this(text, null, null);
+    }
+
+    public Font(Text text, String color, String pointSize) {
+        this(text, color, null, pointSize);
+    }
+
+    public Font(Text text, String color, String face, String pointSize) {
         super();
         this.text = text;
+        this.color = color;
+        this.face = face;
+        this.pointSize = pointSize;
     }
 
     public String getColor() {

@@ -38,6 +38,7 @@ import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.dot.GraphNodeGenerator;
 import org.kuali.maven.plugins.graph.dot.StringGenerator;
 import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
+import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.DepthFilter;
 import org.kuali.maven.plugins.graph.filter.Filter;
@@ -355,20 +356,20 @@ public abstract class BaseMojo extends AbstractMojo {
         }
     }
 
-    protected String getGraphTitle() {
+    protected Table getGraphTitle() {
         GraphHelper gh = new GraphHelper();
         List<NameValue> labels = getLegendLabels();
-        return gh.getLegendTitle(title, labels);
+        return gh.getTitle(title, labels);
     }
 
-    protected String getDotFileContent(String title, Direction direction) {
+    protected String getDotFileContent(Table title, Direction direction) {
         DependencyNode mavenTree = getMavenTree();
         Node<MavenContext> nodeTree = helper.getTree(mavenTree);
         preProcess(nodeTree);
         helper.validate(nodeTree);
         helper.sanitize(nodeTree);
-        TreeMetaData md = helper.getMetaData(nodeTree);
         if (verbose) {
+            TreeMetaData md = helper.getMetaData(nodeTree);
             helper.show(md);
         }
         helper.include(nodeTree, getIncludeFilter());

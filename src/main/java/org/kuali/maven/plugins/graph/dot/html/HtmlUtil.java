@@ -15,19 +15,36 @@
  */
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
 public class HtmlUtil {
 
+    public List<TableCell> getTableCells(List<String> contents, TableCellAlign align, Font font) {
+        List<TableCell> cells = new ArrayList<TableCell>();
+        for (String content : contents) {
+            TableCell cell = getTableCell(content, align, font);
+            cells.add(cell);
+        }
+        return cells;
+    }
+
+    public TableCell getTableCell(String content, TableCellAlign align, Font font) {
+        Text text = new Text(new TextItem(content));
+        font.setText(text);
+        TableCell cell = new TableCell(new Label(new Text(new TextItem(font))));
+        cell.setAlign(align);
+        return cell;
+    }
+
     public String toHtml(TableCell cell) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<TD" + getAttributes(cell, "label", "img") + ">");
+        sb.append("<TD" + getAttributesHtml(cell, "label", "img") + ">");
         if (cell.getLabel() != null) {
             sb.append(toHtml(cell.getLabel()));
         } else if (cell.getImg() != null) {
@@ -69,35 +86,44 @@ public class HtmlUtil {
         return sb.toString();
     }
 
-    public String getFontAttributes(Font font) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getAttributes(font, "text", "pointSize"));
-        if (font.getPointSize() == null) {
-            return sb.toString();
+    public void copyAttributes(Font dest, Font orig) {
+        Map<String, Object> attributes = getAttributes(orig);
+        for (String key : attributes.keySet()) {
+            Object value = attributes.get(key);
+            copyProperty(dest, key, value);
         }
-        if (sb.length() > 0) {
-            sb.append(" ");
+    }
+
+    public Map<String, Object> getAttributes(Font font) {
+        return describe(font, "text");
+    }
+
+    protected String getAttributesHtml(Font font) {
+        Map<String, Object> attributes = getAttributes(font);
+        Object pointSize = attributes.get("pointSize");
+        if (pointSize != null) {
+            attributes.put("POINT-SIZE", pointSize);
+            attributes.remove("pointSize");
         }
-        sb.append("POINT-SIZE=" + quote(font.getPointSize()));
-        return sb.toString();
+        return getHtmlFragment(attributes);
     }
 
     public String toHtml(Font font) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<FONT" + getFontAttributes(font) + ">");
+        sb.append("<FONT" + getAttributesHtml(font) + ">");
         if (font.getText() != null) {
-            sb.append(toHtml(font));
+            sb.append(toHtml(font.getText()));
         }
         sb.append("</FONT>");
         return sb.toString();
     }
 
     public String toHtml(Br br) {
-        return "<BR" + getAttributes(br) + " />";
+        return "<BR" + getAttributesHtml(br) + " />";
     }
 
     public String toHtml(Img img) {
-        return "<IMG" + getAttributes(img) + " />";
+        return "<IMG" + getAttributesHtml(img) + " />";
     }
 
     public String getHtml(List<TableCell> cells) {
@@ -135,13 +161,33 @@ public class HtmlUtil {
 
     public String toHtml(Table table) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<TABLE" + getAttributes(table, "rows", "font") + ">");
+        sb.append("<TABLE" + getAttributesHtml(table, "rows") + ">");
         sb.append(toHtml(table.getRows()));
         sb.append("</TABLE>");
         return sb.toString();
     }
 
-    protected <T> String getAttributes(T object, String... excludes) {
+    protected <T> String getHtmlFragment(Map<String, Object> attributes) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (String key : attributes.keySet()) {
+            Object value = attributes.get(key);
+            if (value == null) {
+                continue;
+            }
+            if (count++ != 0) {
+                sb.append(" ");
+            }
+            sb.append(key.toUpperCase() + "=" + quote(value.toString()));
+        }
+        if (count > 0) {
+            return " " + sb.toString();
+        } else {
+            return sb.toString();
+        }
+    }
+
+    protected <T> String getAttributesHtml(T object, String... excludes) {
         Map<String, Object> description = describe(object, excludes);
         StringBuilder sb = new StringBuilder();
         int count = 0;
@@ -175,12 +221,20 @@ public class HtmlUtil {
         return description;
     }
 
+    protected void copyProperty(Object bean, String name, Object value) {
+        try {
+            BeanUtils.copyProperty(bean, name, value);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     protected <T> Map<String, Object> describe(T bean) {
         try {
             return new TreeMap<String, Object>(BeanUtils.describe(bean));
         } catch (Exception e) {
-            throw new GraphException(e);
+            throw new IllegalStateException(e);
         }
     }
 }

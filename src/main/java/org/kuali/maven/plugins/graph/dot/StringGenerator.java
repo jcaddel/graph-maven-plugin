@@ -17,6 +17,7 @@ package org.kuali.maven.plugins.graph.dot;
 
 import java.util.List;
 
+import org.kuali.maven.plugins.graph.dot.html.HtmlUtil;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.EdgeDecorator;
 import org.kuali.maven.plugins.graph.pojo.Graph;
@@ -28,6 +29,7 @@ import org.kuali.maven.plugins.graph.pojo.NodeDecorator;
  * Convert a Graph object into text
  */
 public class StringGenerator {
+    HtmlUtil htmlUtil = new HtmlUtil();
 
     public String getString(Graph graph) {
         StringBuilder sb = new StringBuilder();
@@ -43,13 +45,22 @@ public class StringGenerator {
         return sb.toString();
     }
 
+    public String getLabel(GraphDecorator decorator) {
+        if (decorator.getLabelTable() != null) {
+            return "< " + htmlUtil.toHtml(decorator.getLabelTable()) + " >";
+        } else {
+            return '"' + decorator.getLabel() + '"';
+        }
+    }
+
     public String getString(GraphDecorator decorator) {
         if (decorator == null) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
         sb.append("  graph [");
-        sb.append(" label=" + decorator.getLabel() + "");
+        String label = getLabel(decorator);
+        sb.append(" label=" + label + "");
         sb.append(" labeljust=\"" + decorator.getLabeljust() + "\"");
         sb.append(" labelloc=\"" + decorator.getLabelloc() + "\"");
         sb.append(" fontsize=\"" + decorator.getFontsize() + "\"");
