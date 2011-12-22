@@ -22,22 +22,6 @@ public class Font implements HtmlElement {
         return Collections.singletonList(text);
     }
 
-    @Override
-    public List<String> getElementNames() {
-        return Collections.singletonList("text");
-    }
-
-    @Override
-    public String toHtml() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<" + getName() + HtmlUtils.getAttributes(this, getElementNames()) + ">");
-        for (HtmlElement element : getElements()) {
-            sb.append(element.toHtml());
-        }
-        sb.append("</" + getName() + ">");
-        return sb.toString();
-    }
-
     public Font() {
         this(null);
     }

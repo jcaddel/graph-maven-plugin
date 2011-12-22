@@ -1,6 +1,5 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,19 +8,11 @@ import org.kuali.maven.plugins.graph.dot.html.enums.TableCellAlign;
 import org.kuali.maven.plugins.graph.dot.html.enums.VerticalAlignment;
 import org.springframework.util.Assert;
 
-public class TableCell extends NestedElement {
+public class TableCell implements HtmlElement {
 
     @Override
     public String getName() {
         return "td";
-    }
-
-    @Override
-    public List<String> getElementNames() {
-        List<String> names = new ArrayList<String>();
-        names.add("img");
-        names.add("label");
-        return names;
     }
 
     @Override

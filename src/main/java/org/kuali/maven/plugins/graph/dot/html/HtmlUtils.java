@@ -16,6 +16,7 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,27 +27,6 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 
 public class HtmlUtils {
 
-    public String getAttributesHtml(HtmlElement element) {
-        Map<String, ?> description = getAttributes(element);
-        StringBuilder sb = new StringBuilder();
-        int count = 0;
-        for (String key : description.keySet()) {
-            Object value = description.get(key);
-            if (value == null) {
-                continue;
-            }
-            if (count++ != 0) {
-                sb.append(" ");
-            }
-            sb.append(key.toUpperCase() + "=" + quote(value.toString()));
-        }
-        if (count > 0) {
-            return " " + sb.toString();
-        } else {
-            return sb.toString();
-        }
-    }
-
     public Map<String, ?> getAttributes(HtmlElement element) {
         Map<String, Object> description = describe(element);
         for (String key : description.keySet()) {
@@ -54,11 +34,12 @@ public class HtmlUtils {
             if (value instanceof HtmlElement) {
                 description.remove(key);
             }
+            if (value instanceof Collection<?>) {
+                description.remove(key);
+            }
         }
         description.remove("class");
         description.remove("name");
-        description.remove("elementNames");
-        description.remove("elements");
         description.remove("string");
         return description;
     }
@@ -66,13 +47,7 @@ public class HtmlUtils {
     public String toHtml(HtmlElement element) {
         String name = element.getName();
         List<? extends HtmlElement> elements = element.getElements();
-        List<String> excludes = element.getElementNames();
-        excludes.add("name");
-        excludes.add("elements");
-        excludes.add("elementNames");
-        excludes.add("string");
-        String attributes = toHtml(getAttributes(element, excludes));
-
+        Map<String, ?> attributes = getAttributes(element);
         String string = (String) describe(element).get("string");
 
         StringBuilder nested = new StringBuilder();

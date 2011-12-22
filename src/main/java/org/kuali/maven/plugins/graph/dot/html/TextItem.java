@@ -1,34 +1,16 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TextItem extends NestedElement {
+public class TextItem implements HtmlElement {
     String string;
     Br br;
     Font font;
 
     @Override
-    public String toHtml() {
-        if (string == null) {
-            return super.toHtml();
-        } else {
-            return string;
-        }
-    }
-
-    @Override
     public String getName() {
         return null;
-    }
-
-    @Override
-    public List<String> getElementNames() {
-        List<String> names = new ArrayList<String>();
-        names.add("br");
-        names.add("font");
-        return names;
     }
 
     @Override

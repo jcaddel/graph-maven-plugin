@@ -1,12 +1,11 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.springframework.util.Assert;
 
-public class Label extends NestedElement {
+public class Label implements HtmlElement {
 
     Text text;
     Table table;
@@ -14,14 +13,6 @@ public class Label extends NestedElement {
     @Override
     public String getName() {
         return null;
-    }
-
-    @Override
-    public List<String> getElementNames() {
-        List<String> names = new ArrayList<String>();
-        names.add("text");
-        names.add("table");
-        return names;
     }
 
     @Override

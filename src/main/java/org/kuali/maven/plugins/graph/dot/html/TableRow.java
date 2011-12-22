@@ -1,21 +1,13 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TableRow extends NestedElement {
+public class TableRow implements HtmlElement {
 
     @Override
     public String getName() {
         return "tr";
-    }
-
-    @Override
-    public List<String> getElementNames() {
-        List<String> names = new ArrayList<String>();
-        names.add("cells");
-        return names;
     }
 
     @Override

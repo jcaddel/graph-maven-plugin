@@ -6,8 +6,4 @@ public interface HtmlElement {
     String getName();
 
     List<? extends HtmlElement> getElements();
-
-    List<String> getElementNames();
-
-    String toHtml();
 }
