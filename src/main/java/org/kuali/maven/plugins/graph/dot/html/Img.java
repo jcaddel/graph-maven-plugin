@@ -1,6 +1,6 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Img {
+public class Img implements HtmlElement {
     Scale scale;
     String src;
 

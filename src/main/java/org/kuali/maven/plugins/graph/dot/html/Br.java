@@ -1,6 +1,6 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Br {
+public class Br implements HtmlElement {
     Align align;
 
     public Align getAlign() {

@@ -25,6 +25,7 @@ import org.kuali.maven.plugins.graph.dot.html.LabelTableCell;
 import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.dot.html.TableCell;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
+import org.kuali.maven.plugins.graph.dot.html.Text;
 import org.kuali.maven.plugins.graph.dot.html.TextItem;
 import org.kuali.maven.plugins.graph.dot.html.TextItemLabel;
 import org.kuali.maven.plugins.graph.pojo.Direction;
@@ -39,17 +40,25 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 public class GraphHelper {
 
     public Table getLegendTable(String title, List<NameValue> labels) {
-        TextItem<String> textItem = new TextItem<String>(title);
+        Text text = new Text(title);
+        TextItem<Text> textItem = new TextItem<Text>(text);
         TextItemLabel label = new TextItemLabel(textItem);
         LabelTableCell cell = new LabelTableCell(label);
         TableRow row = new TableRow(Collections.singletonList(cell));
         Table table = new Table(Collections.singletonList(row));
-        table.setBorder("0");
+        table.setBorder("1");
         return table;
+    }
+
+    public String toHtmlTableCellElement(Object object) {
+        return "";
     }
 
     public String toHtml(TableCell<?> cell) {
         StringBuilder sb = new StringBuilder();
+        sb.append("<TD" + getAttributes(cell, "class", "element") + ">");
+        sb.append(toHtmlTableCellElement(cell.getElement()));
+        sb.append("</TD>");
         return sb.toString();
     }
 
@@ -88,7 +97,8 @@ public class GraphHelper {
 
     public String toHtml(Table table) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<TABLE " + getAttributes(table, "class", "rows", "font") + ">");
+        sb.append("<TABLE" + getAttributes(table, "class", "rows", "font") + ">");
+        sb.append(toHtml(table.getRows()));
         sb.append("</TABLE>");
         return sb.toString();
     }
@@ -106,7 +116,11 @@ public class GraphHelper {
                 sb.append(key.toUpperCase() + "=" + quote(value.toString()));
             }
         }
-        return sb.toString();
+        if (count > 0) {
+            return " " + sb.toString();
+        } else {
+            return sb.toString();
+        }
     }
 
     protected String quote(String s) {

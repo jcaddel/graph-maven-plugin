@@ -1,6 +1,6 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Label {
+public class Text {
+    TextItem textItem;
     Text text;
-    Table table;
 }

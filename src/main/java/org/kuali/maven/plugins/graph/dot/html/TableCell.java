@@ -1,14 +1,6 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class TableCell<T> {
-    public TableCell() {
-        this(null);
-    }
-
-    public TableCell(T element) {
-        super();
-        this.element = element;
-    }
+public class TableCell {
 
     TableCellAlign align;
     TableCellBrAlign balign;
@@ -17,19 +9,21 @@ public class TableCell<T> {
     String cellpadding;
     String cellspacing;
     String color;
-    int colspan;
-    boolean fixedsize;
+    Integer colspan;
+    FixedSize fixedsize;
     String height;
     String href;
     String id;
     String port;
-    int rowspan;
+    Integer rowspan;
     String target;
     String title;
     String tooltip;
     VerticalAlignment valign;
     String width;
-    T element;
+
+    Label label;
+    Img img;
 
     public TableCellAlign getAlign() {
         return align;
@@ -87,19 +81,19 @@ public class TableCell<T> {
         this.color = color;
     }
 
-    public int getColspan() {
+    public Integer getColspan() {
         return colspan;
     }
 
-    public void setColspan(int colspan) {
+    public void setColspan(Integer colspan) {
         this.colspan = colspan;
     }
 
-    public boolean isFixedsize() {
+    public FixedSize getFixedsize() {
         return fixedsize;
     }
 
-    public void setFixedsize(boolean fixedsize) {
+    public void setFixedsize(FixedSize fixedsize) {
         this.fixedsize = fixedsize;
     }
 
@@ -135,11 +129,11 @@ public class TableCell<T> {
         this.port = port;
     }
 
-    public int getRowspan() {
+    public Integer getRowspan() {
         return rowspan;
     }
 
-    public void setRowspan(int rowspan) {
+    public void setRowspan(Integer rowspan) {
         this.rowspan = rowspan;
     }
 
@@ -181,14 +175,6 @@ public class TableCell<T> {
 
     public void setWidth(String width) {
         this.width = width;
-    }
-
-    public T getElement() {
-        return element;
-    }
-
-    public void setElement(T element) {
-        this.element = element;
     }
 
 }

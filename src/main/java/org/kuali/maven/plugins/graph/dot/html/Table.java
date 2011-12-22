@@ -38,8 +38,8 @@ public class Table {
     VerticalAlignment valign;
     String width;
 
-    List<TableRow> rows;
     Font font;
+    List<TableRow> rows;
 
     public Align getAlign() {
         return align;
