@@ -3,7 +3,21 @@ package org.kuali.maven.plugins.graph.dot.html;
 import java.util.Collections;
 import java.util.List;
 
-public class TableRow {
+public class TableRow implements HtmlElement {
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public HtmlElement[] elements() {
+        HtmlElement[] elements = new HtmlElement[cells.size()];
+        for (int i = 0; i < elements.length; i++) {
+            elements[i] = cells.get(i);
+        }
+        return elements;
+    }
 
     public TableRow() {
         super();

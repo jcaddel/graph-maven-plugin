@@ -1,9 +1,19 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Text {
+public class Text implements HtmlElement {
 
     TextItem textItem;
     Text text;
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public HtmlElement[] elements() {
+        return new HtmlElement[] { text, textItem };
+    }
 
     public Text() {
         super();
@@ -34,4 +44,5 @@ public class Text {
     public void setText(Text text) {
         this.text = text;
     }
+
 }

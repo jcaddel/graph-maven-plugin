@@ -44,7 +44,7 @@ public class HtmlUtil {
 
     public String toHtml(TableCell cell) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<TD" + getAttributesHtml(cell, "label", "img") + ">");
+        sb.append("<TD" + getAttributesHtml(cell) + ">");
         if (cell.getLabel() != null) {
             sb.append(toHtml(cell.getLabel()));
         } else if (cell.getImg() != null) {
@@ -86,7 +86,7 @@ public class HtmlUtil {
         return sb.toString();
     }
 
-    public void copyAttributes(Font dest, Font orig) {
+    public void copyAttributes(TableCell dest, TableCell orig) {
         Map<String, Object> attributes = getAttributes(orig);
         for (String key : attributes.keySet()) {
             Object value = attributes.get(key);
@@ -94,8 +94,36 @@ public class HtmlUtil {
         }
     }
 
-    public Map<String, Object> getAttributes(Font font) {
-        return describe(font, "text");
+    public void copyAttributes(Font dest, Font orig) {
+        Map<String, ?> attributes = getAttributes(orig);
+        for (String key : attributes.keySet()) {
+            Object value = attributes.get(key);
+            copyProperty(dest, key, value);
+        }
+    }
+
+    protected Map<String, Object> getAttributes(Object object, String... excludes) {
+        Map<String, Object> attributes = describe(object, excludes);
+        attributes.remove("class");
+        return attributes;
+    }
+
+    protected Map<String, Object> getAttributes(Font font) {
+        return getAttributes(font, "text");
+    }
+
+    protected Map<String, Object> getAttributes(TableCell cell) {
+        return describe(cell, "img", "label");
+    }
+
+    protected String getAttributesHtml(TableCell cell) {
+        Map<String, Object> attributes = getAttributes(cell);
+        return toHtml(attributes);
+    }
+
+    protected String getAttributesHtml(Object object) {
+        Map<String, Object> attributes = getAttributes(object);
+        return toHtml(attributes);
     }
 
     protected String getAttributesHtml(Font font) {
@@ -105,7 +133,7 @@ public class HtmlUtil {
             attributes.put("POINT-SIZE", pointSize);
             attributes.remove("pointSize");
         }
-        return getHtmlFragment(attributes);
+        return toHtml(attributes);
     }
 
     public String toHtml(Font font) {
@@ -167,7 +195,7 @@ public class HtmlUtil {
         return sb.toString();
     }
 
-    protected <T> String getHtmlFragment(Map<String, Object> attributes) {
+    public String toHtml(Map<String, Object> attributes) {
         StringBuilder sb = new StringBuilder();
         int count = 0;
         for (String key : attributes.keySet()) {
@@ -178,7 +206,7 @@ public class HtmlUtil {
             if (count++ != 0) {
                 sb.append(" ");
             }
-            sb.append(key.toUpperCase() + "=" + quote(value.toString()));
+            sb.append(key + "=" + quote(value.toString()));
         }
         if (count > 0) {
             return " " + sb.toString();
@@ -187,7 +215,7 @@ public class HtmlUtil {
         }
     }
 
-    protected <T> String getAttributesHtml(T object, String... excludes) {
+    protected String getAttributesHtml(Object object, String... excludes) {
         Map<String, Object> description = describe(object, excludes);
         StringBuilder sb = new StringBuilder();
         int count = 0;
@@ -212,13 +240,18 @@ public class HtmlUtil {
         return '"' + s + '"';
     }
 
-    protected <T> Map<String, Object> describe(T bean, String... excludes) {
+    protected Map<String, Object> describe(Object bean, String... excludes) {
         Map<String, Object> description = describe(bean);
-        for (String exclude : excludes) {
-            description.remove(exclude);
-        }
-        description.remove("class");
+        remove(description, excludes);
         return description;
+    }
+
+    protected void remove(Map<String, Object> description, String... keys) {
+        if (keys != null) {
+            for (String key : keys) {
+                description.remove(key);
+            }
+        }
     }
 
     protected void copyProperty(Object bean, String name, Object value) {
@@ -230,7 +263,7 @@ public class HtmlUtil {
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> Map<String, Object> describe(T bean) {
+    protected Map<String, Object> describe(Object bean) {
         try {
             return new TreeMap<String, Object>(BeanUtils.describe(bean));
         } catch (Exception e) {

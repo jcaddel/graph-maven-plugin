@@ -1,10 +1,20 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Font {
+public class Font implements HtmlElement {
     String color;
     String face;
     String pointSize;
     Text text;
+
+    @Override
+    public String getName() {
+        return "font";
+    }
+
+    @Override
+    public HtmlElement[] elements() {
+        return new HtmlElement[] { text };
+    }
 
     public Font() {
         this(null);

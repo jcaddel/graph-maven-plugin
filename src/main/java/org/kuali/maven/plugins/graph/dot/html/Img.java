@@ -1,8 +1,13 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Img {
+public class Img extends SimpleElement {
     Scale scale;
     String src;
+
+    @Override
+    public String getName() {
+        return "img";
+    }
 
     public Scale getScale() {
         return scale;

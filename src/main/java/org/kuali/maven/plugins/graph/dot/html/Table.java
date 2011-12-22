@@ -3,7 +3,7 @@ package org.kuali.maven.plugins.graph.dot.html;
 import java.util.Arrays;
 import java.util.List;
 
-public class Table {
+public class Table implements HtmlElement {
     public Table() {
         super();
     }
@@ -17,6 +17,20 @@ public class Table {
         this.rows = rows;
     }
 
+    @Override
+    public String getName() {
+        return "table";
+    }
+
+    @Override
+    public HtmlElement[] elements() {
+        HtmlElement[] elements = new HtmlElement[rows.size()];
+        for (int i = 0; i < elements.length; i++) {
+            elements[i] = rows.get(i);
+        }
+        return elements;
+    }
+
     Align align;
     String bgcolor;
     String border;
@@ -25,7 +39,7 @@ public class Table {
     String cellspacing;
     String color;
     String columns;
-    FixedSize fixedsize;
+    Boolean fixedsize;
     String height;
     String href;
     String id;
@@ -104,11 +118,11 @@ public class Table {
         this.columns = columns;
     }
 
-    public FixedSize getFixedsize() {
+    public Boolean getFixedsize() {
         return fixedsize;
     }
 
-    public void setFixedsize(FixedSize fixedsize) {
+    public void setFixedsize(Boolean fixedsize) {
         this.fixedsize = fixedsize;
     }
 

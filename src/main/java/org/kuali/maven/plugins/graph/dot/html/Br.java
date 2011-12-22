@@ -1,6 +1,12 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Br {
+public class Br extends SimpleElement {
+
+    @Override
+    public String getName() {
+        return "br";
+    }
+
     public Br() {
         this(null);
     }

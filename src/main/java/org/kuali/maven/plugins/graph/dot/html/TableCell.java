@@ -1,6 +1,16 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class TableCell {
+public class TableCell implements HtmlElement {
+
+    @Override
+    public String getName() {
+        return "td";
+    }
+
+    @Override
+    public HtmlElement[] elements() {
+        return new HtmlElement[] { label, img };
+    }
 
     public TableCell() {
         super();
@@ -16,6 +26,7 @@ public class TableCell {
         this.img = img;
     }
 
+    // Attributes
     TableCellAlign align;
     Align balign;
     String bgcolor;
@@ -24,7 +35,7 @@ public class TableCell {
     String cellspacing;
     String color;
     Integer colspan;
-    FixedSize fixedsize;
+    Boolean fixedsize;
     String height;
     String href;
     String id;
@@ -36,6 +47,7 @@ public class TableCell {
     VerticalAlignment valign;
     String width;
 
+    // Nested elements
     Label label;
     Img img;
 
@@ -93,14 +105,6 @@ public class TableCell {
 
     public void setColspan(Integer colspan) {
         this.colspan = colspan;
-    }
-
-    public FixedSize getFixedsize() {
-        return fixedsize;
-    }
-
-    public void setFixedsize(FixedSize fixedsize) {
-        this.fixedsize = fixedsize;
     }
 
     public String getHeight() {

@@ -1,9 +1,19 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Label {
+public class Label implements HtmlElement {
 
     Text text;
     Table table;
+
+    @Override
+    public String getName() {
+        return "label";
+    }
+
+    @Override
+    public HtmlElement[] elements() {
+        return new HtmlElement[] { text, table };
+    }
 
     public Label() {
         super();
