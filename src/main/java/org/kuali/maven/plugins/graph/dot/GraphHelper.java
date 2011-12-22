@@ -40,7 +40,7 @@ public class GraphHelper {
         List<TableRow> rows = getTableRows(labels);
         rows.add(0, titleRow);
         Table table = new Table(rows);
-        table.setBorder("0");
+        table.setBorder(0);
         return table;
     }
 
