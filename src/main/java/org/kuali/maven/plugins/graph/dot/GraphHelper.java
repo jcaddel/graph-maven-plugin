@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.kuali.maven.plugins.graph.dot.html.LabelTableCell;
+import org.kuali.maven.plugins.graph.dot.html.Img;
+import org.kuali.maven.plugins.graph.dot.html.Label;
 import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.dot.html.TableCell;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
 import org.kuali.maven.plugins.graph.dot.html.Text;
 import org.kuali.maven.plugins.graph.dot.html.TextItem;
-import org.kuali.maven.plugins.graph.dot.html.TextItemLabel;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
@@ -40,34 +40,44 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 public class GraphHelper {
 
     public Table getLegendTable(String title, List<NameValue> labels) {
-        Text text = new Text(title);
-        TextItem<Text> textItem = new TextItem<Text>(text);
-        TextItemLabel label = new TextItemLabel(textItem);
-        LabelTableCell cell = new LabelTableCell(label);
+        TextItem textItem = new TextItem(title);
+        Text text = new Text(textItem);
+        Label label = new Label(text);
+        TableCell cell = new TableCell(label);
         TableRow row = new TableRow(Collections.singletonList(cell));
         Table table = new Table(Collections.singletonList(row));
         table.setBorder("1");
         return table;
     }
 
-    public String toHtmlTableCellElement(Object object) {
-        return "";
-    }
-
-    public String toHtml(TableCell<?> cell) {
+    public String toHtml(TableCell cell) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<TD" + getAttributes(cell, "class", "element") + ">");
-        sb.append(toHtmlTableCellElement(cell.getElement()));
+        sb.append("<TD" + getAttributes(cell, "class", "label", "img") + ">");
+        if (cell.getLabel() != null) {
+            sb.append(toHtml(cell.getLabel()));
+        } else if (cell.getImg() != null) {
+            sb.append(toHtml(cell.getImg()));
+        }
         sb.append("</TD>");
         return sb.toString();
     }
 
-    public String toHtmlTableCells(List<? extends TableCell<?>> cells) {
+    public String toHtml(Label label) {
+        StringBuilder sb = new StringBuilder();
+        return sb.toString();
+    }
+
+    public String toHtml(Img img) {
+        StringBuilder sb = new StringBuilder();
+        return sb.toString();
+    }
+
+    public String toHtmlTableCells(List<TableCell> cells) {
         if (Helper.isEmpty(cells)) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        for (TableCell<?> cell : cells) {
+        for (TableCell cell : cells) {
             sb.append(toHtml(cell));
         }
         return sb.toString();

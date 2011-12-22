@@ -2,6 +2,20 @@ package org.kuali.maven.plugins.graph.dot.html;
 
 public class TableCell {
 
+    public TableCell() {
+        super();
+    }
+
+    public TableCell(Label label) {
+        super();
+        this.label = label;
+    }
+
+    public TableCell(Img img) {
+        super();
+        this.img = img;
+    }
+
     TableCellAlign align;
     TableCellBrAlign balign;
     String bgcolor;
@@ -175,6 +189,22 @@ public class TableCell {
 
     public void setWidth(String width) {
         this.width = width;
+    }
+
+    public Label getLabel() {
+        return label;
+    }
+
+    public void setLabel(Label label) {
+        this.label = label;
+    }
+
+    public Img getImg() {
+        return img;
+    }
+
+    public void setImg(Img img) {
+        this.img = img;
     }
 
 }
