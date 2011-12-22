@@ -17,7 +17,7 @@ public class TableCell {
     }
 
     TableCellAlign align;
-    TableCellBrAlign balign;
+    Align balign;
     String bgcolor;
     String border;
     String cellpadding;
@@ -45,14 +45,6 @@ public class TableCell {
 
     public void setAlign(TableCellAlign align) {
         this.align = align;
-    }
-
-    public TableCellBrAlign getBalign() {
-        return balign;
-    }
-
-    public void setBalign(TableCellBrAlign balign) {
-        this.balign = balign;
     }
 
     public String getBgcolor() {
@@ -205,6 +197,14 @@ public class TableCell {
 
     public void setImg(Img img) {
         this.img = img;
+    }
+
+    public Align getBalign() {
+        return balign;
+    }
+
+    public void setBalign(Align balign) {
+        this.balign = balign;
     }
 
 }
