@@ -2,8 +2,8 @@ package org.kuali.maven.plugins.graph.dot;
 
 import org.junit.Test;
 import org.kuali.maven.plugins.graph.dot.html.Font;
-import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
 import org.kuali.maven.plugins.graph.dot.html.HtmlElement;
+import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
 import org.kuali.maven.plugins.graph.dot.html.Label;
 import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.dot.html.TableCell;
@@ -26,7 +26,6 @@ public class HtmlUtilTest {
         Table table = new Table(row);
         table.setBorder("1");
         String html = htmlUtil.toHtml((HtmlElement) table);
-
         System.out.println(html);
         // System.out.println(label.toHtml());
 

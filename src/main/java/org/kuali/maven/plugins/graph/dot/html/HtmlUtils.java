@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.kuali.maven.plugins.graph.dot.html.enums.TableCellAlign;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
@@ -29,12 +30,12 @@ public class HtmlUtils {
 
     public Map<String, ?> getAttributes(HtmlElement element) {
         Map<String, Object> description = describe(element);
-        for (String key : description.keySet()) {
+        List<String> keys = new ArrayList<String>(description.keySet());
+        for (String key : keys) {
             Object value = description.get(key);
-            if (value instanceof HtmlElement) {
-                description.remove(key);
-            }
-            if (value instanceof Collection<?>) {
+            boolean remove1 = value instanceof HtmlElement;
+            boolean remove2 = value instanceof Collection;
+            if (remove1 || remove2) {
                 description.remove(key);
             }
         }
@@ -44,18 +45,22 @@ public class HtmlUtils {
         return description;
     }
 
+    public String toHtmlFromList(List<? extends HtmlElement> elements) {
+        StringBuilder sb = new StringBuilder();
+        for (HtmlElement element : elements) {
+            sb.append(toHtml(element));
+        }
+        return sb.toString();
+    }
+
     public String toHtml(HtmlElement element) {
         String name = element.getName();
-        List<? extends HtmlElement> elements = element.getElements();
-        Map<String, ?> attributes = getAttributes(element);
+        String attributes = toHtml(getAttributes(element));
         String string = (String) describe(element).get("string");
+        String nested = toHtmlFromList(element.getElements());
 
-        StringBuilder nested = new StringBuilder();
-        for (HtmlElement nestedElement : elements) {
-            nested.append(toHtml(nestedElement));
-        }
         if (string != null) {
-            return string.toString();
+            return string;
         } else if (name == null) {
             return nested.toString();
         } else if (nested.length() == 0) {
@@ -305,9 +310,9 @@ public class HtmlUtils {
         }
     }
 
-    protected String getProperty(Object bean, String name) {
+    protected Object getProperty(Object bean, String name) {
         try {
-            return BeanUtils.getProperty(bean, name);
+            return PropertyUtils.getProperty(bean, name);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -324,7 +329,7 @@ public class HtmlUtils {
     @SuppressWarnings("unchecked")
     protected static Map<String, Object> describe(Object bean) {
         try {
-            return new TreeMap<String, Object>(BeanUtils.describe(bean));
+            return new TreeMap<String, Object>(PropertyUtils.describe(bean));
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }

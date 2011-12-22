@@ -3,8 +3,6 @@ package org.kuali.maven.plugins.graph.dot.html;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.util.Assert;
-
 public class Font implements HtmlElement {
     String color;
     String face;
@@ -18,7 +16,6 @@ public class Font implements HtmlElement {
 
     @Override
     public List<? extends HtmlElement> getElements() {
-        Assert.isTrue(text != null);
         return Collections.singletonList(text);
     }
 

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.html.enums.Align;
 import org.kuali.maven.plugins.graph.dot.html.enums.VerticalAlignment;
-import org.springframework.util.Assert;
 
 public class Table implements HtmlElement {
     public Table() {
@@ -28,7 +27,6 @@ public class Table implements HtmlElement {
 
     @Override
     public List<? extends HtmlElement> getElements() {
-        Assert.isTrue(rows != null);
         return rows;
     }
 
