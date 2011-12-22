@@ -16,6 +16,7 @@ public class HtmlUtilTest {
 
     @Test
     public void test1() {
+        Font font = new Font();
         TextItem textItem = new TextItem("hello world");
         Text text = new Text(textItem);
         Label label = new Label(text);

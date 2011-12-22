@@ -9,16 +9,6 @@ public class Font implements HtmlElement {
     String pointSize;
     Text text;
 
-    @Override
-    public String getName() {
-        return "font";
-    }
-
-    @Override
-    public List<? extends HtmlElement> getElements() {
-        return Collections.singletonList(text);
-    }
-
     public Font() {
         this(null);
     }
@@ -31,12 +21,26 @@ public class Font implements HtmlElement {
         this(text, color, null, pointSize);
     }
 
+    public Font(String color, String face, String pointSize) {
+        this(null, color, face, pointSize);
+    }
+
     public Font(Text text, String color, String face, String pointSize) {
         super();
         this.text = text;
         this.color = color;
         this.face = face;
         this.pointSize = pointSize;
+    }
+
+    @Override
+    public String getName() {
+        return "font";
+    }
+
+    @Override
+    public List<? extends HtmlElement> getElements() {
+        return Collections.singletonList(text);
     }
 
     public String getColor() {
