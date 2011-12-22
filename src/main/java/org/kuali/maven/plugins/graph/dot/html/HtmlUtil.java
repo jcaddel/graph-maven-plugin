@@ -26,6 +26,15 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 
 public class HtmlUtil {
 
+    public String toHtml(HtmlElement element) {
+        String name = element.getName();
+        HtmlElement[] elements = element.getElements();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<" + name + "/>");
+        return sb.toString();
+    }
+
     public List<TableCell> getTableCells(List<String> contents, TableCellAlign align, Font font) {
         List<TableCell> cells = new ArrayList<TableCell>();
         for (String content : contents) {

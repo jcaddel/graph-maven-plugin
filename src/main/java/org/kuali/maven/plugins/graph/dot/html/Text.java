@@ -13,7 +13,12 @@ public class Text implements HtmlElement {
     }
 
     @Override
-    public HtmlElement[] elements() {
+    public String[] getElementNames() {
+        return new String[] { "text", "textItem" };
+    }
+
+    @Override
+    public HtmlElement[] getElements() {
         Assert.isTrue((text == null || textItem == null) && (text != null || textItem != null));
         if (text == null) {
             return new HtmlElement[] { textItem };

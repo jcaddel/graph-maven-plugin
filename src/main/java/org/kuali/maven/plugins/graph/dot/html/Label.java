@@ -13,7 +13,12 @@ public class Label implements HtmlElement {
     }
 
     @Override
-    public HtmlElement[] elements() {
+    public String[] getElementNames() {
+        return new String[] { "text", "table" };
+    }
+
+    @Override
+    public HtmlElement[] getElements() {
         Assert.isTrue((text == null || table == null) && (text != null || table != null));
         if (text == null) {
             return new HtmlElement[] { table };

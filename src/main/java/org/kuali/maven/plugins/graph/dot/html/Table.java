@@ -27,7 +27,12 @@ public class Table implements HtmlElement {
     }
 
     @Override
-    public HtmlElement[] elements() {
+    public String[] getElementNames() {
+        return new String[] { "rows" };
+    }
+
+    @Override
+    public HtmlElement[] getElements() {
         Assert.isTrue(trs != null);
         HtmlElement[] elements = new HtmlElement[trs.size()];
         for (int i = 0; i < elements.length; i++) {

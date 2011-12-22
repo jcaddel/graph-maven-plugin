@@ -14,9 +14,14 @@ public class Font implements HtmlElement {
     }
 
     @Override
-    public HtmlElement[] elements() {
+    public HtmlElement[] getElements() {
         Assert.isTrue(text != null);
         return new HtmlElement[] { text };
+    }
+
+    @Override
+    public String[] getElementNames() {
+        return new String[] { "text" };
     }
 
     public Font() {

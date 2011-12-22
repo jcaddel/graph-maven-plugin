@@ -11,7 +11,12 @@ public class TableRow implements HtmlElement {
     }
 
     @Override
-    public HtmlElement[] elements() {
+    public String[] getElementNames() {
+        return new String[] { "cells" };
+    }
+
+    @Override
+    public HtmlElement[] getElements() {
         HtmlElement[] elements = new HtmlElement[cells.size()];
         for (int i = 0; i < elements.length; i++) {
             elements[i] = cells.get(i);

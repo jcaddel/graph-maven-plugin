@@ -13,7 +13,12 @@ public class TableCell implements HtmlElement {
     }
 
     @Override
-    public HtmlElement[] elements() {
+    public String[] getElementNames() {
+        return new String[] { "img", "label" };
+    }
+
+    @Override
+    public HtmlElement[] getElements() {
         Assert.isTrue((img == null || label == null) && (img != null || label != null));
         if (img == null) {
             return new HtmlElement[] { label };
