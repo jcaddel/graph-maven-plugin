@@ -1,11 +1,16 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.Collections;
 import java.util.List;
 
 public class TableRow {
 
     public TableRow() {
-        this(null);
+        super();
+    }
+
+    public TableRow(TableCell cell) {
+        this(Collections.singletonList(cell));
     }
 
     public TableRow(List<TableCell> cells) {

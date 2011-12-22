@@ -1,10 +1,15 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Table {
     public Table() {
-        this(null);
+        super();
+    }
+
+    public Table(TableRow... rows) {
+        this(Arrays.asList(rows));
     }
 
     public Table(List<TableRow> rows) {
