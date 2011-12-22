@@ -17,7 +17,7 @@ public class Table implements HtmlElement {
 
     public Table(List<TableRow> rows) {
         super();
-        this.rows = rows;
+        this.tableRows = rows;
     }
 
     @Override
@@ -27,23 +27,23 @@ public class Table implements HtmlElement {
 
     @Override
     public List<? extends HtmlElement> getElements() {
-        return rows;
+        return tableRows;
     }
 
     Align align;
     String bgcolor;
-    String border;
-    String cellborder;
-    String cellpadding;
-    String cellspacing;
+    Integer border;
+    Integer cellborder;
+    Integer cellpadding;
+    Integer cellspacing;
     String color;
-    String columns;
+    Integer columns;
     Boolean fixedsize;
     String height;
     String href;
     String id;
     String port;
-    String rowCount;
+    Integer rows;
     String style;
     String target;
     String title;
@@ -51,7 +51,7 @@ public class Table implements HtmlElement {
     VerticalAlignment valign;
     String width;
 
-    List<TableRow> rows;
+    List<TableRow> tableRows;
 
     public Align getAlign() {
         return align;
@@ -69,35 +69,35 @@ public class Table implements HtmlElement {
         this.bgcolor = bgcolor;
     }
 
-    public String getBorder() {
+    public Integer getBorder() {
         return border;
     }
 
-    public void setBorder(String border) {
+    public void setBorder(Integer border) {
         this.border = border;
     }
 
-    public String getCellborder() {
+    public Integer getCellborder() {
         return cellborder;
     }
 
-    public void setCellborder(String cellborder) {
+    public void setCellborder(Integer cellborder) {
         this.cellborder = cellborder;
     }
 
-    public String getCellpadding() {
+    public Integer getCellpadding() {
         return cellpadding;
     }
 
-    public void setCellpadding(String cellpadding) {
+    public void setCellpadding(Integer cellpadding) {
         this.cellpadding = cellpadding;
     }
 
-    public String getCellspacing() {
+    public Integer getCellspacing() {
         return cellspacing;
     }
 
-    public void setCellspacing(String cellspacing) {
+    public void setCellspacing(Integer cellspacing) {
         this.cellspacing = cellspacing;
     }
 
@@ -109,11 +109,11 @@ public class Table implements HtmlElement {
         this.color = color;
     }
 
-    public String getColumns() {
+    public Integer getColumns() {
         return columns;
     }
 
-    public void setColumns(String columns) {
+    public void setColumns(Integer columns) {
         this.columns = columns;
     }
 
@@ -157,12 +157,12 @@ public class Table implements HtmlElement {
         this.port = port;
     }
 
-    public String getRowCount() {
-        return rowCount;
+    public Integer getRows() {
+        return rows;
     }
 
-    public void setRowCount(String rowCount) {
-        this.rowCount = rowCount;
+    public void setRows(Integer rows) {
+        this.rows = rows;
     }
 
     public String getStyle() {
@@ -213,11 +213,12 @@ public class Table implements HtmlElement {
         this.width = width;
     }
 
-    public List<TableRow> getRows() {
-        return rows;
+    public List<TableRow> getTableRows() {
+        return tableRows;
     }
 
-    public void setRows(List<TableRow> trs) {
-        this.rows = trs;
+    public void setTableRows(List<TableRow> tableRows) {
+        this.tableRows = tableRows;
     }
+
 }

@@ -39,7 +39,7 @@ public class HtmlUtils {
         return false;
     }
 
-    public <T extends HtmlElement> T copy(T element) {
+    public <T extends HtmlElement> T cloneAttributes(T element) {
         Map<String, ?> attributes = getAttributes(element);
         T newElement = newInstance(element);
         for (String property : attributes.keySet()) {
@@ -101,7 +101,7 @@ public class HtmlUtils {
     public List<TableCell> getTableCells(List<String> contents, TableCellAlign align, Font font) {
         List<TableCell> cells = new ArrayList<TableCell>();
         for (String content : contents) {
-            TableCell cell = getTableCell(content, align, copy(font));
+            TableCell cell = getTableCell(content, align, cloneAttributes(font));
             cells.add(cell);
         }
         return cells;
@@ -109,7 +109,8 @@ public class HtmlUtils {
 
     public TableCell getTableCell(String content, TableCellAlign align, Font font) {
         Text text = new Text(new TextItem(content));
-        font.setText(text);
+        Font clone = cloneAttributes(font);
+        clone.setText(text);
         TableCell cell = new TableCell(new Label(new Text(new TextItem(font))));
         cell.setAlign(align);
         return cell;
