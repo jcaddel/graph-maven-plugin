@@ -3,18 +3,22 @@ package org.kuali.maven.plugins.graph.dot.html;
 import java.util.Arrays;
 import java.util.List;
 
+import org.kuali.maven.plugins.graph.dot.html.enums.Align;
+import org.kuali.maven.plugins.graph.dot.html.enums.VerticalAlignment;
+import org.springframework.util.Assert;
+
 public class Table implements HtmlElement {
     public Table() {
         super();
     }
 
-    public Table(TableRow... rows) {
-        this(Arrays.asList(rows));
+    public Table(TableRow... trs) {
+        this(Arrays.asList(trs));
     }
 
-    public Table(List<TableRow> rows) {
+    public Table(List<TableRow> trs) {
         super();
-        this.rows = rows;
+        this.trs = trs;
     }
 
     @Override
@@ -24,9 +28,10 @@ public class Table implements HtmlElement {
 
     @Override
     public HtmlElement[] elements() {
-        HtmlElement[] elements = new HtmlElement[rows.size()];
+        Assert.isTrue(trs != null);
+        HtmlElement[] elements = new HtmlElement[trs.size()];
         for (int i = 0; i < elements.length; i++) {
-            elements[i] = rows.get(i);
+            elements[i] = trs.get(i);
         }
         return elements;
     }
@@ -52,7 +57,7 @@ public class Table implements HtmlElement {
     VerticalAlignment valign;
     String width;
 
-    List<TableRow> rows;
+    List<TableRow> trs;
 
     public Align getAlign() {
         return align;
@@ -214,11 +219,11 @@ public class Table implements HtmlElement {
         this.width = width;
     }
 
-    public List<TableRow> getRows() {
-        return rows;
+    public List<TableRow> getTrs() {
+        return trs;
     }
 
-    public void setRows(List<TableRow> rows) {
-        this.rows = rows;
+    public void setTrs(List<TableRow> trs) {
+        this.trs = trs;
     }
 }

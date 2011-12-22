@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.kuali.maven.plugins.graph.dot.html.enums.TableCellAlign;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
 public class HtmlUtil {
@@ -190,7 +191,7 @@ public class HtmlUtil {
     public String toHtml(Table table) {
         StringBuilder sb = new StringBuilder();
         sb.append("<TABLE" + getAttributesHtml(table, "rows") + ">");
-        sb.append(toHtml(table.getRows()));
+        sb.append(toHtml(table.getTrs()));
         sb.append("</TABLE>");
         return sb.toString();
     }

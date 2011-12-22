@@ -7,7 +7,7 @@ public class TableRow implements HtmlElement {
 
     @Override
     public String getName() {
-        return null;
+        return "tr";
     }
 
     @Override

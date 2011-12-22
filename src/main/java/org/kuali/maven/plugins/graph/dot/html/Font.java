@@ -1,5 +1,7 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import org.springframework.util.Assert;
+
 public class Font implements HtmlElement {
     String color;
     String face;
@@ -13,6 +15,7 @@ public class Font implements HtmlElement {
 
     @Override
     public HtmlElement[] elements() {
+        Assert.isTrue(text != null);
         return new HtmlElement[] { text };
     }
 

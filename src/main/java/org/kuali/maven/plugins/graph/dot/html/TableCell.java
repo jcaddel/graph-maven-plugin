@@ -1,5 +1,10 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import org.kuali.maven.plugins.graph.dot.html.enums.Align;
+import org.kuali.maven.plugins.graph.dot.html.enums.TableCellAlign;
+import org.kuali.maven.plugins.graph.dot.html.enums.VerticalAlignment;
+import org.springframework.util.Assert;
+
 public class TableCell implements HtmlElement {
 
     @Override
@@ -9,7 +14,12 @@ public class TableCell implements HtmlElement {
 
     @Override
     public HtmlElement[] elements() {
-        return new HtmlElement[] { label, img };
+        Assert.isTrue((img == null || label == null) && (img != null || label != null));
+        if (img == null) {
+            return new HtmlElement[] { label };
+        } else {
+            return new HtmlElement[] { img };
+        }
     }
 
     public TableCell() {
@@ -209,6 +219,14 @@ public class TableCell implements HtmlElement {
 
     public void setBalign(Align balign) {
         this.balign = balign;
+    }
+
+    public Boolean getFixedsize() {
+        return fixedsize;
+    }
+
+    public void setFixedsize(Boolean fixedsize) {
+        this.fixedsize = fixedsize;
     }
 
 }

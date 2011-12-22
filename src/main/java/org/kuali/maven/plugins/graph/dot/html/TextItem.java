@@ -1,5 +1,7 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import org.springframework.util.Assert;
+
 public class TextItem implements HtmlElement {
     String string;
     Br br;
@@ -12,7 +14,12 @@ public class TextItem implements HtmlElement {
 
     @Override
     public HtmlElement[] elements() {
-        return new HtmlElement[] { br, font };
+        Assert.isTrue((br == null || font == null) && (br != null || font != null));
+        if (br == null) {
+            return new HtmlElement[] { font };
+        } else {
+            return new HtmlElement[] { br };
+        }
     }
 
     public TextItem() {
