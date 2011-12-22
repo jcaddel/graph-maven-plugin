@@ -2,6 +2,9 @@ package org.kuali.maven.plugins.graph.dot.html;
 
 public class Label {
 
+    Text text;
+    Table table;
+
     public Label() {
         super();
     }
@@ -15,9 +18,6 @@ public class Label {
         super();
         this.text = text;
     }
-
-    Text text;
-    Table table;
 
     public Text getText() {
         return text;

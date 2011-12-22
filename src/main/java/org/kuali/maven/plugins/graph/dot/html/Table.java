@@ -8,13 +8,8 @@ public class Table {
     }
 
     public Table(List<TableRow> rows) {
-        this(rows, null);
-    }
-
-    public Table(List<TableRow> rows, Font font) {
         super();
         this.rows = rows;
-        this.font = font;
     }
 
     Align align;
@@ -38,7 +33,6 @@ public class Table {
     VerticalAlignment valign;
     String width;
 
-    Font font;
     List<TableRow> rows;
 
     public Align getAlign() {
@@ -207,13 +201,5 @@ public class Table {
 
     public void setRows(List<TableRow> rows) {
         this.rows = rows;
-    }
-
-    public Font getFont() {
-        return font;
-    }
-
-    public void setFont(Font font) {
-        this.font = font;
     }
 }

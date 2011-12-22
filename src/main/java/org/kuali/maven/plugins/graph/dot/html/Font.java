@@ -1,9 +1,19 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-public class Font implements HtmlElement {
+public class Font {
     String color;
     String face;
     String pointSize;
+    Text text;
+
+    public Font() {
+        this(null);
+    }
+
+    public Font(Text text) {
+        super();
+        this.text = text;
+    }
 
     public String getColor() {
         return color;
@@ -27,6 +37,14 @@ public class Font implements HtmlElement {
 
     public void setPointSize(String pointSize) {
         this.pointSize = pointSize;
+    }
+
+    public Text getText() {
+        return text;
+    }
+
+    public void setText(Text text) {
+        this.text = text;
     }
 
 }
