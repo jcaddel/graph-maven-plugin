@@ -1,74 +1,65 @@
-package org.kuali.maven.plugins.graph.dot.html;
+package org.kuali.maven.plugins.graph.dot.html.copy;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.html.enums.Align;
-import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
 import org.kuali.maven.plugins.graph.dot.html.enums.VAlign;
-import org.springframework.util.Assert;
 
-public class TableCell implements HtmlElement {
+public class Table implements HtmlTag {
+    HtmlUtils htmlUtils = new HtmlUtils();
 
-    public TableCell() {
+    public Table() {
         super();
     }
 
-    public TableCell(Label label) {
-        super();
-        this.label = label;
+    public Table(TableRow... rows) {
+        this(Arrays.asList(rows));
     }
 
-    public TableCell(Img img) {
+    public Table(List<TableRow> rows) {
         super();
-        this.img = img;
+        this.rows = rows;
     }
 
     @Override
     public String getName() {
-        return "td";
+        return "table";
     }
 
     @Override
-    public List<? extends HtmlElement> getElements() {
-        Assert.isTrue((img == null || label == null) && (img != null || label != null));
-        if (img == null) {
-            return Collections.singletonList(label);
-        } else {
-            return Collections.singletonList(img);
-        }
+    public String getContent() {
+        return htmlUtils.toHtml(rows);
     }
 
-    // Attributes
-    CellAlign align;
-    Align balign;
+    Align align;
     String bgcolor;
-    String border;
-    String cellpadding;
-    String cellspacing;
+    Integer border;
+    Integer cellborder;
+    Integer cellpadding;
+    Integer cellspacing;
     String color;
-    Integer colspan;
+    Integer columns;
     Boolean fixedsize;
     String height;
     String href;
     String id;
     String port;
-    Integer rowspan;
+    Integer rowCount;
+    String style;
     String target;
     String title;
     String tooltip;
     VAlign valign;
     String width;
 
-    // Elements
-    Label label;
-    Img img;
+    List<TableRow> rows;
 
-    public CellAlign getAlign() {
+    public Align getAlign() {
         return align;
     }
 
-    public void setAlign(CellAlign align) {
+    public void setAlign(Align align) {
         this.align = align;
     }
 
@@ -80,27 +71,35 @@ public class TableCell implements HtmlElement {
         this.bgcolor = bgcolor;
     }
 
-    public String getBorder() {
+    public Integer getBorder() {
         return border;
     }
 
-    public void setBorder(String border) {
+    public void setBorder(Integer border) {
         this.border = border;
     }
 
-    public String getCellpadding() {
+    public Integer getCellborder() {
+        return cellborder;
+    }
+
+    public void setCellborder(Integer cellborder) {
+        this.cellborder = cellborder;
+    }
+
+    public Integer getCellpadding() {
         return cellpadding;
     }
 
-    public void setCellpadding(String cellpadding) {
+    public void setCellpadding(Integer cellpadding) {
         this.cellpadding = cellpadding;
     }
 
-    public String getCellspacing() {
+    public Integer getCellspacing() {
         return cellspacing;
     }
 
-    public void setCellspacing(String cellspacing) {
+    public void setCellspacing(Integer cellspacing) {
         this.cellspacing = cellspacing;
     }
 
@@ -112,12 +111,20 @@ public class TableCell implements HtmlElement {
         this.color = color;
     }
 
-    public Integer getColspan() {
-        return colspan;
+    public Integer getColumns() {
+        return columns;
     }
 
-    public void setColspan(Integer colspan) {
-        this.colspan = colspan;
+    public void setColumns(Integer columns) {
+        this.columns = columns;
+    }
+
+    public Boolean getFixedsize() {
+        return fixedsize;
+    }
+
+    public void setFixedsize(Boolean fixedsize) {
+        this.fixedsize = fixedsize;
     }
 
     public String getHeight() {
@@ -152,12 +159,20 @@ public class TableCell implements HtmlElement {
         this.port = port;
     }
 
-    public Integer getRowspan() {
-        return rowspan;
+    public Integer getRowCount() {
+        return rowCount;
     }
 
-    public void setRowspan(Integer rowspan) {
-        this.rowspan = rowspan;
+    public void setRowCount(Integer rows) {
+        this.rowCount = rows;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     public String getTarget() {
@@ -200,36 +215,12 @@ public class TableCell implements HtmlElement {
         this.width = width;
     }
 
-    public Label getLabel() {
-        return label;
+    public List<TableRow> getRows() {
+        return rows;
     }
 
-    public void setLabel(Label label) {
-        this.label = label;
-    }
-
-    public Img getImg() {
-        return img;
-    }
-
-    public void setImg(Img img) {
-        this.img = img;
-    }
-
-    public Align getBalign() {
-        return balign;
-    }
-
-    public void setBalign(Align balign) {
-        this.balign = balign;
-    }
-
-    public Boolean getFixedsize() {
-        return fixedsize;
-    }
-
-    public void setFixedsize(Boolean fixedsize) {
-        this.fixedsize = fixedsize;
+    public void setRows(List<TableRow> tableRows) {
+        this.rows = tableRows;
     }
 
 }

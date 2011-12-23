@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.maven.plugins.graph.dot.html;
+package org.kuali.maven.plugins.graph.dot.html.copy;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
 
 public class HtmlUtils {
 
@@ -33,13 +32,13 @@ public class HtmlUtils {
         if (value instanceof Collection) {
             return true;
         }
-        if (value instanceof HtmlElement) {
+        if (value instanceof HtmlTag) {
             return true;
         }
         return false;
     }
 
-    public <T extends HtmlElement> T cloneAttributes(T element) {
+    public <T extends HtmlTag> T cloneAttributes(T element) {
         Map<String, ?> attributes = getAttributes(element);
         T newElement = newInstance(element);
         for (String property : attributes.keySet()) {
@@ -58,7 +57,7 @@ public class HtmlUtils {
         }
     }
 
-    public Map<String, ?> getAttributes(HtmlElement element) {
+    public Map<String, ?> getAttributes(HtmlTag element) {
         Map<String, ?> description = describe(element);
         List<String> keys = new ArrayList<String>(description.keySet());
         for (String key : keys) {
@@ -69,52 +68,32 @@ public class HtmlUtils {
         }
         description.remove("class");
         description.remove("name");
-        description.remove("string");
+        description.remove("content");
         return description;
     }
 
-    public String toHtml(List<? extends HtmlElement> elements) {
+    public String toHtml(List<? extends HtmlTag> tags) {
+        if (tags == null) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
-        for (HtmlElement element : elements) {
-            sb.append(toHtml(element));
+        for (HtmlTag tag : tags) {
+            sb.append(toHtml(tag));
         }
         return sb.toString();
     }
 
-    public String toHtml(HtmlElement element) {
-        String name = element.getName();
-        Map<String, ?> attributeMap = getAttributes(element);
+    public String toHtml(HtmlTag tag) {
+        String name = tag.getName();
+        String content = tag.getContent();
+        Map<String, ?> attributeMap = getAttributes(tag);
         String attributes = toHtml(attributeMap);
-        String string = (String) describe(element).get("string");
-        String nested = toHtml(element.getElements());
 
-        if (string != null) {
-            return string;
-        } else if (name == null) {
-            return nested.toString();
-        } else if (nested.length() == 0) {
+        if (content == null || content.trim().length() == 0) {
             return "<" + name + attributes + "/>";
         } else {
-            return "<" + name + attributes + ">" + nested + "</" + name + ">";
+            return "<" + name + attributes + ">" + content + "</" + name + ">";
         }
-    }
-
-    public List<TableCell> getTableCells(List<String> contents, CellAlign align, Font font) {
-        List<TableCell> cells = new ArrayList<TableCell>();
-        for (String content : contents) {
-            TableCell cell = getTableCell(content, align, cloneAttributes(font));
-            cells.add(cell);
-        }
-        return cells;
-    }
-
-    public TableCell getTableCell(String content, CellAlign align, Font font) {
-        Text text = new Text(new TextItem(content));
-        Font clone = cloneAttributes(font);
-        clone.setText(text);
-        TableCell cell = new TableCell(new Label(new Text(new TextItem(font))));
-        cell.setAlign(align);
-        return cell;
     }
 
     public String toHtml(Map<String, ?> attributes) {
@@ -124,17 +103,20 @@ public class HtmlUtils {
         StringBuilder sb = new StringBuilder();
         for (String key : attributes.keySet()) {
             String value = attributes.get(key).toString();
-            sb.append(key + "=" + quote(value) + " ");
+            String name = getTranslatedAttributeName(key);
+            sb.append(name + "=" + quote(value) + " ");
         }
         sb.replace(sb.lastIndexOf(" "), sb.length(), "");
         return " " + sb.toString();
     }
 
-    protected String getTranslatedAttribute(String attribute) {
-        if (attribute.equals("pointSize")) {
+    protected String getTranslatedAttributeName(String name) {
+        if (name.equals("pointSize")) {
             return "point-size";
+        } else if (name.equals("rowCount")) {
+            return "rows";
         } else {
-            return attribute;
+            return name;
         }
     }
 
@@ -143,7 +125,7 @@ public class HtmlUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public Map<String, ?> describe(HtmlElement element) {
+    public Map<String, ?> describe(HtmlTag element) {
         try {
             return new TreeMap<String, Object>(PropertyUtils.describe(element));
         } catch (Exception e) {
@@ -151,7 +133,7 @@ public class HtmlUtils {
         }
     }
 
-    public void setProperty(HtmlElement element, String property, Object value) {
+    public void setProperty(HtmlTag element, String property, Object value) {
         try {
             PropertyUtils.setProperty(element, property, value);
         } catch (Exception e) {

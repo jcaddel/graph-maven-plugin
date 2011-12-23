@@ -1,42 +1,23 @@
-package org.kuali.maven.plugins.graph.dot.html;
-
-import java.util.Collections;
-import java.util.List;
+package org.kuali.maven.plugins.graph.dot.html.copy;
 
 import org.kuali.maven.plugins.graph.dot.html.enums.Align;
 import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
 import org.kuali.maven.plugins.graph.dot.html.enums.VAlign;
-import org.springframework.util.Assert;
 
-public class TableCell implements HtmlElement {
+public class TableCell implements HtmlTag {
 
     public TableCell() {
-        super();
+        this(null);
     }
 
-    public TableCell(Label label) {
+    public TableCell(String content) {
         super();
-        this.label = label;
-    }
-
-    public TableCell(Img img) {
-        super();
-        this.img = img;
+        this.content = content;
     }
 
     @Override
     public String getName() {
         return "td";
-    }
-
-    @Override
-    public List<? extends HtmlElement> getElements() {
-        Assert.isTrue((img == null || label == null) && (img != null || label != null));
-        if (img == null) {
-            return Collections.singletonList(label);
-        } else {
-            return Collections.singletonList(img);
-        }
     }
 
     // Attributes
@@ -60,9 +41,8 @@ public class TableCell implements HtmlElement {
     VAlign valign;
     String width;
 
-    // Elements
-    Label label;
-    Img img;
+    // content
+    String content;
 
     public CellAlign getAlign() {
         return align;
@@ -70,6 +50,14 @@ public class TableCell implements HtmlElement {
 
     public void setAlign(CellAlign align) {
         this.align = align;
+    }
+
+    public Align getBalign() {
+        return balign;
+    }
+
+    public void setBalign(Align balign) {
+        this.balign = balign;
     }
 
     public String getBgcolor() {
@@ -118,6 +106,14 @@ public class TableCell implements HtmlElement {
 
     public void setColspan(Integer colspan) {
         this.colspan = colspan;
+    }
+
+    public Boolean getFixedsize() {
+        return fixedsize;
+    }
+
+    public void setFixedsize(Boolean fixedsize) {
+        this.fixedsize = fixedsize;
     }
 
     public String getHeight() {
@@ -200,36 +196,13 @@ public class TableCell implements HtmlElement {
         this.width = width;
     }
 
-    public Label getLabel() {
-        return label;
+    @Override
+    public String getContent() {
+        return content;
     }
 
-    public void setLabel(Label label) {
-        this.label = label;
-    }
-
-    public Img getImg() {
-        return img;
-    }
-
-    public void setImg(Img img) {
-        this.img = img;
-    }
-
-    public Align getBalign() {
-        return balign;
-    }
-
-    public void setBalign(Align balign) {
-        this.balign = balign;
-    }
-
-    public Boolean getFixedsize() {
-        return fixedsize;
-    }
-
-    public void setFixedsize(Boolean fixedsize) {
-        this.fixedsize = fixedsize;
+    public void setContent(String content) {
+        this.content = content;
     }
 
 }

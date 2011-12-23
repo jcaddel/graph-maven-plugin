@@ -1,47 +1,75 @@
 package org.kuali.maven.plugins.graph.dot;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
-import org.kuali.maven.plugins.graph.dot.html.Font;
-import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
-import org.kuali.maven.plugins.graph.dot.html.Label;
-import org.kuali.maven.plugins.graph.dot.html.Table;
-import org.kuali.maven.plugins.graph.dot.html.TableCell;
-import org.kuali.maven.plugins.graph.dot.html.TableRow;
-import org.kuali.maven.plugins.graph.dot.html.Text;
-import org.kuali.maven.plugins.graph.dot.html.TextItem;
+import org.kuali.maven.plugins.graph.dot.html.copy.Br;
+import org.kuali.maven.plugins.graph.dot.html.copy.Font;
+import org.kuali.maven.plugins.graph.dot.html.copy.HtmlUtils;
+import org.kuali.maven.plugins.graph.dot.html.copy.Img;
+import org.kuali.maven.plugins.graph.dot.html.copy.Table;
+import org.kuali.maven.plugins.graph.dot.html.copy.TableCell;
+import org.kuali.maven.plugins.graph.dot.html.copy.TableRow;
+import org.kuali.maven.plugins.graph.dot.html.enums.Align;
+import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
+import org.kuali.maven.plugins.graph.dot.html.enums.Scale;
 
 public class HtmlUtilTest {
 
-    HtmlUtils htmlUtil = new HtmlUtils();
+    HtmlUtils h = new HtmlUtils();
 
     @Test
-    public void test1() {
-        Font font = new Font();
-        TextItem textItem = new TextItem("hello world");
-        Text text = new Text(textItem);
-        Label label = new Label(text);
-        TableCell cell = new TableCell();
-        cell.setLabel(label);
+    public void testBr() {
+        String expected = "<br align=\"LEFT\"/>";
+        Br br = new Br(Align.LEFT);
+        Assert.assertEquals(expected, h.toHtml(br));
+    }
+
+    @Test
+    public void testImg() {
+        String expected = "<img scale=\"BOTH\" src=\"http://www.yahoo.com\"/>";
+        Img img = new Img(Scale.BOTH, "http://www.yahoo.com");
+        String s = h.toHtml(img);
+        Assert.assertEquals(expected, s);
+    }
+
+    @Test
+    public void testFont() {
+        String expected = "<font color=\"black\" point-size=\"14\"><br align=\"LEFT\"/></font>";
+        Br br = new Br(Align.LEFT);
+        Font font = new Font("black", 14);
+        font.setContent(h.toHtml(br));
+        String s = h.toHtml(font);
+        Assert.assertEquals(expected, s);
+    }
+
+    @Test
+    public void testCell() {
+        String expected = "<td align=\"LEFT\">http://www.yahoo.com</td>";
+        TableCell cell = new TableCell("http://www.yahoo.com");
+        cell.setAlign(CellAlign.LEFT);
+        String s = h.toHtml(cell);
+        Assert.assertEquals(expected, s);
+    }
+
+    @Test
+    public void testRow() {
+        String expected = "<tr><td align=\"LEFT\">http://www.yahoo.com</td></tr>";
+        TableCell cell = new TableCell("http://www.yahoo.com");
+        cell.setAlign(CellAlign.LEFT);
+        TableRow row = new TableRow(cell);
+        String s = h.toHtml(row);
+        Assert.assertEquals(expected, s);
+    }
+
+    @Test
+    public void testTable() {
+        String expected = "<table><tr><td align=\"LEFT\">http://www.yahoo.com</td></tr></table>";
+        TableCell cell = new TableCell("http://www.yahoo.com");
+        cell.setAlign(CellAlign.LEFT);
         TableRow row = new TableRow(cell);
         Table table = new Table(row);
-        table.setBorder(1);
-        String html = htmlUtil.toHtml(table);
-        System.out.println(html);
-        // System.out.println(label.toHtml());
-
-        TableRow row1 = new TableRow(new TableCell(new Label(new Text(new TextItem("Dependency Graph")))));
-        TableRow row2 = new TableRow(new TableCell(new Label(new Text(new TextItem("show ::conflict")))));
-        // Table table = new Table(row1, row2);
-        // String s = htmlUtil.toHtml(new Label(table));
-        // System.out.println(s);
+        String s = h.toHtml(table);
+        Assert.assertEquals(expected, s);
     }
-
-    @Test
-    public void test2() {
-        Font font = new Font(new Text(new TextItem("whatever")), "cornflowerblue", "8");
-        TableCell cell = new TableCell(new Label(new Text(new TextItem(font))));
-        String s = htmlUtil.toHtml(cell);
-        // System.out.println(s);
-    }
-
 }

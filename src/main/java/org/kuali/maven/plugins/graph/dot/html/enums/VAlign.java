@@ -1,5 +1,5 @@
 package org.kuali.maven.plugins.graph.dot.html.enums;
 
-public enum VerticalAlignment {
+public enum VAlign {
     MIDDLE, BOTTOM, TOP;
 }

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.html.enums.Align;
-import org.kuali.maven.plugins.graph.dot.html.enums.VerticalAlignment;
+import org.kuali.maven.plugins.graph.dot.html.enums.VAlign;
 
 public class Table implements HtmlElement {
     public Table() {
@@ -48,7 +48,7 @@ public class Table implements HtmlElement {
     String target;
     String title;
     String tooltip;
-    VerticalAlignment valign;
+    VAlign valign;
     String width;
 
     List<TableRow> tableRows;
@@ -197,11 +197,11 @@ public class Table implements HtmlElement {
         this.tooltip = tooltip;
     }
 
-    public VerticalAlignment getValign() {
+    public VAlign getValign() {
         return valign;
     }
 
-    public void setValign(VerticalAlignment valign) {
+    public void setValign(VAlign valign) {
         this.valign = valign;
     }
 

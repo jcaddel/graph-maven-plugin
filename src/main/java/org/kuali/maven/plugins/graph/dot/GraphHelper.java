@@ -25,7 +25,7 @@ import org.kuali.maven.plugins.graph.dot.html.TableCell;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
 import org.kuali.maven.plugins.graph.dot.html.Text;
 import org.kuali.maven.plugins.graph.dot.html.TextItem;
-import org.kuali.maven.plugins.graph.dot.html.enums.TableCellAlign;
+import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
@@ -51,7 +51,7 @@ public class GraphHelper {
             String value = label.getValue();
             Font font = new Font(new Text(new TextItem(name + " " + value)), "cornflowerblue", "8");
             TableCell cell = new TableCell(new Label(new Text(new TextItem(font))));
-            cell.setAlign(TableCellAlign.LEFT);
+            cell.setAlign(CellAlign.LEFT);
             rows.add(new TableRow(cell));
         }
         return rows;

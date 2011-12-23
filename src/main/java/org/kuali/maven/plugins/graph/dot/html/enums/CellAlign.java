@@ -1,5 +1,5 @@
 package org.kuali.maven.plugins.graph.dot.html.enums;
 
-public enum TableCellAlign {
+public enum CellAlign {
     CENTER, LEFT, RIGHT, TEXT;
 }
