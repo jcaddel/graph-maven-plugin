@@ -44,30 +44,42 @@ public class GraphHelper {
     HtmlUtils htmlUtils = new HtmlUtils();
     public static final String DEFAULT_TYPE = "jar";
 
-    protected String getLegendText(NameValue label) {
+    protected String getLegendText(NameValue label, int padding) {
         StringBuilder sb = new StringBuilder();
-        sb.append(StringUtils.leftPad(label.getName(), 10, " "));
+        sb.append(StringUtils.leftPad(label.getName(), padding, " "));
         sb.append(" = ");
         sb.append(label.getValue());
         return sb.toString();
     }
 
-    protected TableRow getLegendRow(NameValue label, Font font) {
-        font.setContent(getLegendText(label));
+    protected TableRow getLegendRow(NameValue label, Font font, int padding) {
+        font.setContent(getLegendText(label, padding));
         TableCell cell = new TableCell(htmlUtils.toHtml(font));
         cell.setAlign(CellAlign.LEFT);
         return new TableRow(cell);
     }
 
+    protected int getMaxNameLength(List<NameValue> labels) {
+        int max = 0;
+        for (NameValue label : labels) {
+            int length = label.getName().length();
+            if (length > max) {
+                max = length;
+            }
+        }
+        return max;
+    }
+
     protected List<TableRow> getLegendRows(List<NameValue> labels) {
-        Font font = new Font("black", 10);
-        font.setFace("Courier New");
+        Font font = new Font("black", 8);
+        font.setFace("Courier");
         font.setContent(" ");
         List<TableRow> rows = new ArrayList<TableRow>();
         // Add a blank row for spacing
         rows.add(new TableRow(new TableCell(htmlUtils.toHtml(font))));
+        int padding = getMaxNameLength(labels);
         for (NameValue label : labels) {
-            rows.add(getLegendRow(label, font));
+            rows.add(getLegendRow(label, font, padding));
         }
         // Add a blank row for spacing
         font.setContent(" ");
