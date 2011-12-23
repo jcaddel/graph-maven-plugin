@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * Perform validation on nodes Maven has marked as <code>State.CONFLICT</state>
+ * Perform validation on nodes Maven marks as <code>State.CONFLICT</state>
  * </p>
  */
 public class ConflictDependencyNodeValidator extends OmittedDependencyNodeValidator {

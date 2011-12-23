@@ -271,21 +271,6 @@ public class TreeHelper {
         return map;
     }
 
-    public Included getIncluded(Node<MavenContext> node, List<Node<MavenContext>> list) {
-        Map<String, Node<MavenContext>> ids = new HashMap<String, Node<MavenContext>>();
-        for (Node<MavenContext> element : list) {
-            MavenContext context = element.getObject();
-            DependencyNode dn = context.getDependencyNode();
-            State elementState = State.getState(dn.getState());
-            if (elementState == State.INCLUDED) {
-                ids.put(context.getArtifactIdentifier(), element);
-            }
-        }
-        Included included = new Included();
-        included.setIds(ids);
-        return included;
-    }
-
     public void show(TreeMetaData md) {
         logger.info("Metadata for " + md.getSize() + " dependency nodes");
         logger.info("states -" + toString(md.getStates()));

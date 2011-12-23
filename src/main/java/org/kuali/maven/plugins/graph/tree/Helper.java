@@ -29,7 +29,9 @@ import org.apache.commons.collections15.map.ListOrderedMap;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 
 /**
- * General purpose utility methods
+ * <p>
+ * General purpose utility methods.
+ * </p>
  */
 public class Helper {
     public static final String COMMA = ",";

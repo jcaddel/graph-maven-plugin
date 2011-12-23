@@ -16,7 +16,9 @@
 package org.kuali.maven.plugins.graph.tree;
 
 /**
- * Thread safe counter
+ * <p>
+ * Thread safe counter.
+ * </p>
  */
 public class Counter implements Comparable<Counter> {
 
