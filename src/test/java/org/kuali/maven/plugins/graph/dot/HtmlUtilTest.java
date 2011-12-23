@@ -3,16 +3,16 @@ package org.kuali.maven.plugins.graph.dot;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.kuali.maven.plugins.graph.dot.html.Align;
 import org.kuali.maven.plugins.graph.dot.html.Br;
+import org.kuali.maven.plugins.graph.dot.html.CellAlign;
 import org.kuali.maven.plugins.graph.dot.html.Font;
 import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
 import org.kuali.maven.plugins.graph.dot.html.Img;
+import org.kuali.maven.plugins.graph.dot.html.Scale;
 import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.dot.html.TableCell;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
-import org.kuali.maven.plugins.graph.dot.html.enums.Align;
-import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
-import org.kuali.maven.plugins.graph.dot.html.enums.Scale;
 
 public class HtmlUtilTest {
 

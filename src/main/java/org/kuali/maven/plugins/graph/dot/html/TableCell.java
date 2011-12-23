@@ -1,8 +1,5 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-import org.kuali.maven.plugins.graph.dot.html.enums.Align;
-import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
-import org.kuali.maven.plugins.graph.dot.html.enums.VAlign;
 
 public class TableCell implements HtmlTag {
 

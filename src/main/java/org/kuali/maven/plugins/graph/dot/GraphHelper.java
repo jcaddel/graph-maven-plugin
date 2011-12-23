@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.plexus.util.StringUtils;
+import org.kuali.maven.plugins.graph.dot.html.CellAlign;
 import org.kuali.maven.plugins.graph.dot.html.Font;
 import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
 import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.dot.html.TableCell;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
-import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
@@ -51,7 +51,7 @@ public class GraphHelper {
     }
 
     protected List<TableRow> getLegendRows(List<NameValue> labels) {
-        Font font = new Font("black", 8);
+        Font font = new Font("black", 10);
         font.setFace("Courier New");
         font.setContent(" ");
         List<TableRow> rows = new ArrayList<TableRow>();
@@ -76,20 +76,6 @@ public class GraphHelper {
         table.setCellpadding(0);
         table.setCellspacing(0);
         return table;
-    }
-
-    protected List<TableRow> getTableRows(List<NameValue> labels) {
-        List<TableRow> rows = new ArrayList<TableRow>();
-        for (NameValue label : labels) {
-            TableCell cell1 = new TableCell(label.getName());
-            cell1.setWidth("15");
-            cell1.setAlign(CellAlign.RIGHT);
-            TableCell cell2 = new TableCell("=");
-            TableCell cell3 = new TableCell(label.getValue());
-            cell3.setAlign(CellAlign.LEFT);
-            rows.add(new TableRow(cell1, cell2, cell3));
-        }
-        return rows;
     }
 
     public Graph getGraph(String title) {

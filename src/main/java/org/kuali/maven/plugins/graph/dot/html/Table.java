@@ -3,8 +3,6 @@ package org.kuali.maven.plugins.graph.dot.html;
 import java.util.Arrays;
 import java.util.List;
 
-import org.kuali.maven.plugins.graph.dot.html.enums.Align;
-import org.kuali.maven.plugins.graph.dot.html.enums.VAlign;
 
 public class Table implements HtmlTag {
     HtmlUtils htmlUtils = new HtmlUtils();

@@ -63,6 +63,9 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 
 /**
+ * <p>
+ * Abstract mojo for consolidating logic and configuration common to producing graphs
+ * </p>
  *
  */
 @SuppressWarnings("deprecation")

@@ -1,6 +1,5 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-import org.kuali.maven.plugins.graph.dot.html.enums.Scale;
 
 public class Img implements HtmlTag {
     public Img() {
