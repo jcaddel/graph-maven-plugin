@@ -154,8 +154,7 @@ public class GraphHelper {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tokens.size(); i++) {
             if (i != 0) {
-                // sb.append("\\n");
-                sb.append(":");
+                sb.append("\\n");
             }
             sb.append(tokens.get(i));
         }
