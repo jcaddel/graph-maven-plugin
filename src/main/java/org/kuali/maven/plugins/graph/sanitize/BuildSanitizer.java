@@ -54,6 +54,16 @@ import org.springframework.util.Assert;
  * <code>State.DUPLICATE</code> nodes that do not have a match of any kind in the build tree, get set to
  * <code>State.UNKNOWN</code>
  * </p>
+ *
+ * <p>
+ * <code>State.CONFLICT</code> nodes that in reality do have an exact match in the build tree, get set to
+ * <code>State.DUPLICATE</code> and the 'related' artifact is removed from the node.
+ * </p>
+ *
+ * <p>
+ * <code>State.CONFLICT</code> nodes that have no matching artifact in the build tree, get set to
+ * <code>State.UNKNOWN</code> since the data Maven is providing for this dependency is inconsistent.
+ * </p>
  */
 public class BuildSanitizer implements NodeSanitizer<MavenContext> {
     private static final Logger logger = LoggerFactory.getLogger(BuildSanitizer.class);
@@ -153,17 +163,16 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             // This is the normal condition we would expect for conflicts
             // Maven marked it as a conflict, told us what artifact it conflicted with,
             // and we found that artifact in the build tree
-            conflict.setState(State.CONFLICT);
-            conflict.setReplacement(similar.getArtifact());
+            conflict.setReplacement(exactRelated.getArtifact());
             logger.debug("verified conflict {}", conflict.getArtifactIdentifier());
         } else if (similar != null) {
             // This is not normal, but it's ok. Kind of. Maven marked it as a conflict and gave us the artifact
             // it conflicted with. That exact artifact is not participating in the build, but a similar one is.
             // We will accept this, and use the similar artifact instead of the one Maven handed us.
-            conflict.setState(State.CONFLICT);
             conflict.setReplacement(similar.getArtifact());
-            String originalId = TreeHelper.getArtifactId(similar.getArtifact());
-            logger.warn("conflict->conflict {}->{}", replacementId, originalId);
+            String newId = TreeHelper.getArtifactId(similar.getArtifact());
+            String oldId = replacementId;
+            logger.warn("changed replacement {}->{}", oldId, newId);
         } else {
             Assert.isTrue(false, "Invalid state");
         }

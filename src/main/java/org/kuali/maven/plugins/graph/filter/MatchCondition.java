@@ -15,6 +15,9 @@
  */
 package org.kuali.maven.plugins.graph.filter;
 
+/**
+ * Match condition that a <code>FilterChain</code> needs to satisfy to return true
+ */
 public enum MatchCondition {
     ALL, ANY;
 }
