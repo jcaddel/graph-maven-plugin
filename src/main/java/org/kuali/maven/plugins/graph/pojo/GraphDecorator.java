@@ -15,8 +15,6 @@
  */
 package org.kuali.maven.plugins.graph.pojo;
 
-import org.kuali.maven.plugins.graph.dot.html.Table;
-
 public class GraphDecorator {
 
     String label = "";
