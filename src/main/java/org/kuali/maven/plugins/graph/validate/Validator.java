@@ -15,6 +15,13 @@
  */
 package org.kuali.maven.plugins.graph.validate;
 
+/**
+ * <p>
+ * Perform validation on a specific type of object.
+ * </p>
+ *
+ * @param <T>
+ */
 public interface Validator<T> {
 
     void validate(T object);

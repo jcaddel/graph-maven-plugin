@@ -7,6 +7,11 @@ import org.kuali.maven.plugins.graph.pojo.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>
+ * Perform validation on nodes Maven has marked as <code>State.CONFLICT</state>
+ * </p>
+ */
 public class ConflictDependencyNodeValidator extends OmittedDependencyNodeValidator {
     private static final Logger logger = LoggerFactory.getLogger(ConflictDependencyNodeValidator.class);
 

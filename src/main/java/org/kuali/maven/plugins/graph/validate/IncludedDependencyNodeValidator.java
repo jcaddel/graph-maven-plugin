@@ -10,6 +10,20 @@ import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.springframework.util.Assert;
 
+/**
+ * <p>
+ * Perform validation on nodes that Maven has marked as participating in the build.
+ * </p>
+ *
+ * <p>
+ * This validates that the set of dependencies in the build are unique with respect to
+ * [groupId]:[artifactId]:[type]:[classifier].
+ * </p>
+ *
+ * <p>
+ * In layman's terms, this guarantees that only one version of any given jar file will be used during a build.
+ * </p>
+ */
 public class IncludedDependencyNodeValidator extends DependencyNodeValidator {
 
     public IncludedDependencyNodeValidator() {

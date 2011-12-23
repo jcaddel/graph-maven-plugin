@@ -10,6 +10,14 @@ import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.springframework.util.Assert;
 
+/**
+ * <p>
+ * Abstraction for validation logic that is common to all dependency nodes in the tree regardless of what
+ * <code>State</code> they are marked with.
+ * </p>
+ *
+ * @author jeffcaddel
+ */
 public abstract class DependencyNodeValidator implements NodeValidator<MavenContext> {
     TreeHelper helper = new TreeHelper();
     State state;

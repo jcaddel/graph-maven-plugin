@@ -17,6 +17,13 @@ package org.kuali.maven.plugins.graph.validate;
 
 import org.kuali.maven.plugins.graph.tree.Node;
 
+/**
+ * <p>
+ * Perform validation on a tree whose nodes contain a specific type of object.
+ * </p>
+ *
+ * @param <T>
+ */
 public interface NodeValidator<T> extends Validator<Node<T>> {
 
 }

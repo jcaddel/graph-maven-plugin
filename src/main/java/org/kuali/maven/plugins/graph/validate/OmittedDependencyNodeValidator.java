@@ -6,6 +6,11 @@ import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.springframework.util.Assert;
 
+/**
+ * <p>
+ * Abstraction for performing validation on nodes that have been excluded from participating in the build.
+ * </p>
+ */
 public abstract class OmittedDependencyNodeValidator extends DependencyNodeValidator {
 
     public OmittedDependencyNodeValidator(State state) {
