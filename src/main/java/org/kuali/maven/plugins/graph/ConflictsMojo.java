@@ -19,8 +19,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kuali.maven.plugins.graph.dot.edge.CondensedEdgeHandler;
-import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
+import org.kuali.maven.plugins.graph.dot.CondensedEdgeHandler;
+import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;

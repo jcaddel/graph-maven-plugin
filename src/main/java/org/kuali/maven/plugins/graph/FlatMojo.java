@@ -17,8 +17,8 @@ package org.kuali.maven.plugins.graph;
 
 import java.io.File;
 
-import org.kuali.maven.plugins.graph.dot.edge.EdgeHandler;
-import org.kuali.maven.plugins.graph.dot.edge.FlatEdgeHandler;
+import org.kuali.maven.plugins.graph.dot.EdgeHandler;
+import org.kuali.maven.plugins.graph.dot.FlatEdgeHandler;
 
 /**
  * <p>

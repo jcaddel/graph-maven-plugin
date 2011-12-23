@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.maven.plugins.graph.dot.edge;
+package org.kuali.maven.plugins.graph.dot;
 
 import java.util.List;
 
