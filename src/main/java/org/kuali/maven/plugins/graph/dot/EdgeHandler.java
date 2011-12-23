@@ -21,6 +21,11 @@ import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
 
+/**
+ * Abstraction for logic that is capable of drawing edges (aka "lines") on a graph.
+ *
+ * @author jeffcaddel
+ */
 public interface EdgeHandler {
 
     List<Edge> getEdges(Node<MavenContext> node);

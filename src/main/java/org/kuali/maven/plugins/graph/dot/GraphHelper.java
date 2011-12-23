@@ -18,6 +18,7 @@ package org.kuali.maven.plugins.graph.dot;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
 import org.codehaus.plexus.util.StringUtils;
 import org.kuali.maven.plugins.graph.dot.html.CellAlign;
 import org.kuali.maven.plugins.graph.dot.html.Font;
@@ -30,10 +31,18 @@ import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
+import org.kuali.maven.plugins.graph.pojo.Hider;
 import org.kuali.maven.plugins.graph.pojo.NameValue;
+import org.kuali.maven.plugins.graph.tree.Helper;
 
+/**
+ * Various utility methods for working with Graph pojo's.
+ *
+ * @author jeffcaddel
+ */
 public class GraphHelper {
     HtmlUtils htmlUtils = new HtmlUtils();
+    public static final String DEFAULT_TYPE = "jar";
 
     protected String getLegendText(NameValue label) {
         StringBuilder sb = new StringBuilder();
@@ -104,4 +113,39 @@ public class GraphHelper {
         return graph;
     }
 
+    protected void add(List<String> list, String s, boolean skip) {
+        if (skip || Helper.isBlank(s)) {
+            return;
+        } else {
+            list.add(s);
+        }
+    }
+
+    public String getLabel(Artifact a) {
+        return getLabel(a, new Hider());
+    }
+
+    public String getLabel(Artifact a, Hider hider) {
+
+        boolean hideType = hider.isHideType() || DEFAULT_TYPE.equalsIgnoreCase(a.getType());
+
+        List<String> labelTokens = new ArrayList<String>();
+        add(labelTokens, a.getGroupId(), hider.isHideGroupId());
+        add(labelTokens, a.getArtifactId(), hider.isHideArtifactId());
+        add(labelTokens, a.getType(), hideType);
+        add(labelTokens, a.getClassifier(), hider.isHideClassifier());
+        add(labelTokens, a.getVersion(), hider.isHideVersion());
+        return getLabel(labelTokens);
+    }
+
+    public String getLabel(List<String> tokens) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tokens.size(); i++) {
+            if (i != 0) {
+                sb.append("\\n");
+            }
+            sb.append(tokens.get(i));
+        }
+        return sb.toString();
+    }
 }

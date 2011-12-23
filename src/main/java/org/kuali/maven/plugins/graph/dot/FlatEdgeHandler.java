@@ -28,7 +28,9 @@ import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
 /**
+ * <p>
  * Draw one parent->child edge for each node in the graph.
+ * </p>
  */
 public class FlatEdgeHandler implements EdgeHandler {
     TreeHelper helper = new TreeHelper();

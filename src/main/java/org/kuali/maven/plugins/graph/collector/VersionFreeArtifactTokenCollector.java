@@ -22,7 +22,7 @@ import org.apache.maven.artifact.Artifact;
 
 /**
  * <p>
- * Provide tokens that identify a Maven Artifact sans version
+ * Provide tokens that identify a Maven Artifact (without taking into consideration the version of the artifact)
  * </p>
  *
  * <pre>

@@ -26,7 +26,7 @@ import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.NodeDecorator;
 
 /**
- * Convert a Graph object into text
+ * Convert a Graph object into text.
  */
 public class StringGenerator {
     HtmlUtils htmlUtil = new HtmlUtils();

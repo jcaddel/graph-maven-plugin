@@ -36,7 +36,6 @@ import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
-import org.kuali.maven.plugins.graph.dot.GraphNodeGenerator;
 import org.kuali.maven.plugins.graph.dot.StringGenerator;
 import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
@@ -64,7 +63,7 @@ import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 
 /**
  * <p>
- * Abstract mojo for consolidating logic and configuration common to producing graphs
+ * Abstraction for mojo's that produce graphs using Graphviz
  * </p>
  *
  */
@@ -325,14 +324,14 @@ public abstract class BaseMojo extends AbstractMojo {
     }
 
     protected void postProcess(Node<MavenContext> node, List<GraphNode> nodes, List<Edge> edges) {
-        GraphNodeGenerator gng = new GraphNodeGenerator();
+        GraphHelper graphHelper = new GraphHelper();
         Hider hider = getHider();
         List<Node<MavenContext>> treeNodes = node.getBreadthFirstList();
         for (Node<MavenContext> element : treeNodes) {
             MavenContext context = element.getObject();
             GraphNode graphNode = context.getGraphNode();
             Artifact artifact = context.getArtifact();
-            String label = gng.getLabel(artifact, hider);
+            String label = graphHelper.getLabel(artifact, hider);
             graphNode.setLabel(label);
         }
     }

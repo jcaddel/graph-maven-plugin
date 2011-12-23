@@ -32,7 +32,7 @@ import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.collector.VersionFreeArtifactTokenCollector;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
-import org.kuali.maven.plugins.graph.dot.GraphNodeGenerator;
+import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
@@ -69,7 +69,7 @@ public class TreeHelper {
     public static final String OPTIONAL = "optional";
     public static final String REQUIRED = "required";
     Counter counter = new Counter();
-    GraphNodeGenerator ng = new GraphNodeGenerator();
+    GraphHelper graphHelper = new GraphHelper();
     Properties properties = getProperties();
 
     /**
@@ -512,7 +512,7 @@ public class TreeHelper {
         Artifact a = dn.getArtifact();
         GraphNode n = new GraphNode();
         n.setId(counter.increment());
-        n.setLabel(ng.getLabel(a));
+        n.setLabel(graphHelper.getLabel(a));
         String fillcolor = dn.getParent() == null ? ROOT_FILL_COLOR : n.getFillcolor();
         n.setFillcolor(fillcolor);
         return n;
