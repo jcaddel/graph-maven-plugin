@@ -56,6 +56,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
 
+/**
+ * <p>
+ * Various helper methods for working with trees.
+ * </p>
+ *
+ * @author jeffcaddel
+ */
 public class TreeHelper {
     private static final Logger logger = LoggerFactory.getLogger(TreeHelper.class);
     public static final String ROOT_FILL_COLOR = "#dddddd";
@@ -65,6 +72,27 @@ public class TreeHelper {
     GraphNodeGenerator ng = new GraphNodeGenerator();
     Properties properties = getProperties();
 
+    /**
+     * <p>
+     * Logic for including nodes in a tree only if they match a filter.
+     * </p>
+     *
+     * <p>
+     * Any node where <code>filter.isMatch()</code> returns false, is hidden from view.
+     * </p>
+     *
+     * <p>
+     * The root node is never hidden, even if <code>filter.isMatch()</code> returns false on the root node.
+     * </p>
+     *
+     * <p>
+     * Any node where <code>filter.isMatch()</code> returns true, is displayed. Additionally, any nodes in the path from
+     * that node back to the root node are displayed.
+     * </p>
+     *
+     * @param node
+     * @param filter
+     */
     public void include(Node<MavenContext> node, NodeFilter<MavenContext> filter) {
         if (!filter.isMatch(node) && !node.isRoot()) {
             hide(node);
@@ -76,6 +104,11 @@ public class TreeHelper {
         }
     }
 
+    /**
+     * <p>
+     * Display every node in path from this node back to the root.
+     * </p>
+     */
     public void showPath(Node<MavenContext> node) {
         Node<MavenContext>[] path = node.getPath();
         for (Node<MavenContext> pathNode : path) {
@@ -83,6 +116,27 @@ public class TreeHelper {
         }
     }
 
+    /**
+     * <p>
+     * Logic for excluding nodes from a tree if they match a filter.
+     * </p>
+     *
+     * <p>
+     * Any node where <code>filter.isMatch()</code> returns true, is hidden from view. The entire sub-tree rooted at
+     * that node is also hidden from view.
+     * </p>
+     *
+     * <p>
+     * The root node is never hidden, even if <code>filter.isMatch()</code> returns true on the root node.
+     * </p>
+     *
+     * <p>
+     * Any node where <code>filter.isMatch()</code> returns true, is left untouched.
+     * </p>
+     *
+     * @param node
+     * @param filter
+     */
     public void exclude(Node<MavenContext> node, NodeFilter<MavenContext> filter) {
         if (filter.isMatch(node) && !node.isRoot()) {
             logger.debug("hiding tree at level=" + node.getLevel());
@@ -93,6 +147,13 @@ public class TreeHelper {
         }
     }
 
+    /**
+     * <p>
+     * Hide this node, and every node in the sub-tree below this node.
+     * </p>
+     *
+     * @param node
+     */
     public void hideTree(Node<MavenContext> node) {
         hide(node);
         for (Node<MavenContext> child : node.getChildren()) {
@@ -100,14 +161,42 @@ public class TreeHelper {
         }
     }
 
+    /**
+     * <p>
+     * Convenience method setting the hidden flag to false on the graph node contained inside the
+     * <code>MavenContext</code>.
+     * <p>
+     *
+     * @param node
+     */
     public void show(Node<MavenContext> node) {
         node.getObject().getGraphNode().setHidden(false);
     }
 
+    /**
+     * <p>
+     * Convenience method setting the hidden flag to true on the graph node contained inside the
+     * <code>MavenContext</code>.
+     * <p>
+     *
+     * @param node
+     */
     public void hide(Node<MavenContext> node) {
         node.getObject().getGraphNode().setHidden(true);
     }
 
+    /**
+     * <p>
+     * Logic for altering a tree via removal of nodes that do not match the filter criteria.
+     * <p>
+     *
+     * <p>
+     * If the root node does not match the filter criteria, all of it's children are removed. Otherwise, the node and
+     * all of its children are both removed.
+     * </p>
+     *
+     * @param node
+     */
     public <T> void prune(Node<T> node, NodeFilter<T> filter) {
         if (!filter.isMatch(node)) {
             if (node.isRoot()) {
@@ -124,6 +213,16 @@ public class TreeHelper {
         }
     }
 
+    /**
+     * <p>
+     * Convenience method for generating a new MavenContext object from a <code>GrapNode</code> and a
+     * <code>DependencyNode</code>.
+     * </p>
+     *
+     * @param gn
+     * @param dn
+     * @return
+     */
     protected MavenContext getMavenContext(GraphNode gn, DependencyNode dn) {
         int id = gn.getId();
         String artifactIdentifier = getArtifactId(dn.getArtifact());
@@ -137,6 +236,14 @@ public class TreeHelper {
         return context;
     }
 
+    /**
+     * <p>
+     * Given a Maven <code>DependencyNode</code> tree return a type safe <code>Node</code> tree.
+     * </p>
+     *
+     * @param dependencyNode
+     * @return
+     */
     public Node<MavenContext> getTree(DependencyNode dependencyNode) {
         GraphNode gn = getGraphNode(dependencyNode);
         MavenContext context = getMavenContext(gn, dependencyNode);
@@ -149,6 +256,13 @@ public class TreeHelper {
         return node;
     }
 
+    /**
+     * <p>
+     * Validate the dependency tree
+     * </p>
+     *
+     * @param node
+     */
     public void validate(Node<MavenContext> node) {
         List<NodeValidator<MavenContext>> validators = getValidators(node);
         for (NodeValidator<MavenContext> validator : validators) {
@@ -157,6 +271,13 @@ public class TreeHelper {
         logger.debug("Validation complete");
     }
 
+    /**
+     * <p>
+     * Sanitize the dependency tree.
+     * </p>
+     *
+     * @param node
+     */
     public void sanitize(Node<MavenContext> node) {
         // Flatten the tree into a list
         List<Node<MavenContext>> nodes = node.getBreadthFirstList();
@@ -178,16 +299,51 @@ public class TreeHelper {
         }
     }
 
+    /**
+     * <p>
+     * Convenience method for obtaining a <code>State</code> object from the <code>int</code> supplied by Maven in the
+     * embedded <code>DependencyNode</code>
+     * </p>
+     *
+     * @param node
+     * @return
+     */
     public State getState(Node<MavenContext> node) {
         return State.getState(node.getObject().getDependencyNode().getState());
     }
 
+    /**
+     * <p>
+     * Return true, if and only if, the two artifacts are an exact match of each other.
+     * </p>
+     *
+     * <p>
+     * More precisely, return true if [groupId]:[artfifactId]:[type]:[classifier]:[version] are an exact match.
+     * </p>
+     *
+     * @param a1
+     * @param a2
+     * @return
+     */
     public boolean equals(Artifact a1, Artifact a2) {
         String id1 = getArtifactId(a1);
         String id2 = getArtifactId(a2);
         return id1.equals(id2);
     }
 
+    /**
+     * <p>
+     * Return true, if and only if, the two artifacts are the same except for version.
+     * </p>
+     *
+     * <p>
+     * More precisely, return true if [groupId]:[artfifactId]:[type]:[classifier] are an exact match.
+     * </p>
+     *
+     * @param a1
+     * @param a2
+     * @return
+     */
     public boolean similar(Artifact a1, Artifact a2) {
         String n1 = getPartialArtifactId(a1);
         String n2 = getPartialArtifactId(a2);
