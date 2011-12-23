@@ -137,7 +137,7 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Set to true to retain the .dot file used to draw the graph
+     * Set to true to retain the .dot text file Graphviz uses to draw the graph
      * </p>
      *
      * @parameter expression="${graph.keepDotFile}" default-value="false"
@@ -277,13 +277,13 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * By default, criteria used in filtering the dependency tree is appended to the graph title. Set this to false to
-     * show the title without criteria.
+     * By default, the criteria used to filter the dependency tree are shown on the graph. Set this to false to prevent
+     * filter criteria from being shown.
      * </p>
      *
-     * @parameter expression="${graph.showFiltersInTitle}" default-value="true"
+     * @parameter expression="${graph.showFilters}" default-value="true"
      */
-    private boolean showFiltersInTitle;
+    private boolean showFilters;
 
     /**
      * <p>
@@ -308,7 +308,7 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * Restricts the depth of the dependency tree. To show only the dependencies of the current project, set this to 1.
-     * To show the dependencies of the current project and its direct dependencies, set this to 2.
+     * To show the dependencies of the current project and their direct dependencies, set this to 2.
      *
      * @parameter expression="${graph.depth}" default-value="-1"
      */
@@ -546,12 +546,12 @@ public abstract class BaseMojo extends AbstractMojo {
         this.hideGroupId = hideGroupId;
     }
 
-    public boolean isShowFiltersInTitle() {
-        return showFiltersInTitle;
+    public boolean isShowFilters() {
+        return showFilters;
     }
 
-    public void setShowFiltersInTitle(boolean showFiltersInTitle) {
-        this.showFiltersInTitle = showFiltersInTitle;
+    public void setShowFilters(boolean showFiltersInTitle) {
+        this.showFilters = showFiltersInTitle;
     }
 
     public boolean isVerbose() {
