@@ -24,6 +24,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+/**
+ * General-purpose node for working with tree data structures. Every node in the tree contains a reference to the same
+ * type of object.
+ *
+ * @author jeffcaddel
+ *
+ * @param <T>
+ */
 public class Node<T> extends DefaultMutableTreeNode {
 
     private static final long serialVersionUID = -4552044477560333925L;

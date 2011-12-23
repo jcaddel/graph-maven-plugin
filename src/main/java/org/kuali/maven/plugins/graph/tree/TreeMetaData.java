@@ -17,6 +17,13 @@ package org.kuali.maven.plugins.graph.tree;
 
 import org.apache.commons.collections15.list.SetUniqueList;
 
+/**
+ * <p>
+ * Metadata about a Maven dependency tree
+ * </p>
+ *
+ * @author jeffcaddel
+ */
 public class TreeMetaData {
     int size;
 

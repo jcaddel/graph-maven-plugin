@@ -17,6 +17,13 @@ package org.kuali.maven.plugins.graph.tree;
 
 import java.util.HashMap;
 
+/**
+ * <p>
+ * Very simple utility class for tracking occurrences of a string.
+ * </p>
+ *
+ * @author jeffcaddel
+ */
 public class Tracker extends HashMap<String, Integer> {
 
     private static final long serialVersionUID = -2649198262211508724L;

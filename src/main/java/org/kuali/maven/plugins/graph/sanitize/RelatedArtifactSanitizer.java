@@ -94,7 +94,7 @@ public class RelatedArtifactSanitizer implements NodeSanitizer<MavenContext> {
             context.setState(DUPLICATE);
             context.setReplacement(null);
         } else if (similar) {
-            // The main artifact and related artifact are NOT exactly the same, they are different versions
+            // The main artifact and related artifact are NOT exactly the same, but they differ only by version
             if (state == DUPLICATE) {
                 // Maven told us this was a DUPLICATE, yet the related artifact is a different version
                 // We are going to assume the duplicate flag is a mistake and re-flag this as a conflict

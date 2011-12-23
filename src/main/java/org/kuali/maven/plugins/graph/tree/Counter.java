@@ -15,6 +15,8 @@
  */
 package org.kuali.maven.plugins.graph.tree;
 
+import org.springframework.util.Assert;
+
 /**
  * <p>
  * Thread safe counter.
@@ -34,11 +36,8 @@ public class Counter implements Comparable<Counter> {
     }
 
     public synchronized int increment() {
-        if (count == Integer.MAX_VALUE) {
-            throw new RuntimeException("Maximum counter value exceeded");
-        } else {
-            return count++;
-        }
+        Assert.isTrue(count < Integer.MAX_VALUE, "Maximum counter value exceeded");
+        return count++;
     }
 
     public synchronized int getCount() {
