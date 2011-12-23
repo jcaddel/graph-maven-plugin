@@ -1,5 +1,6 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,6 +13,10 @@ public class TableRow implements HtmlTag {
 
     public TableRow(TableCell cell) {
         this(Collections.singletonList(cell));
+    }
+
+    public TableRow(TableCell... cells) {
+        this(Arrays.asList(cells));
     }
 
     public TableRow(List<TableCell> cells) {

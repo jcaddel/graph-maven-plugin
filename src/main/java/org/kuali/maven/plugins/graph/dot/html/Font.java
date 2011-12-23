@@ -15,11 +15,11 @@ public class Font implements HtmlTag {
     }
 
     public Font(String content, String color) {
-        this(content, color, null);
+        this(content, color, null, null);
     }
 
     public Font(String color, Integer pointSize) {
-        this(color, null, pointSize);
+        this(null, color, null, pointSize);
     }
 
     public Font(String content, String color, Integer pointSize) {

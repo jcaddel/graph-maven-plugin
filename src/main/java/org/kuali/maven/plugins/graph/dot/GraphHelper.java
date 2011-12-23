@@ -18,6 +18,7 @@ package org.kuali.maven.plugins.graph.dot;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.kuali.maven.plugins.graph.dot.html.Font;
 import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
 import org.kuali.maven.plugins.graph.dot.html.Table;
@@ -34,23 +35,59 @@ import org.kuali.maven.plugins.graph.pojo.NameValue;
 public class GraphHelper {
     HtmlUtils htmlUtils = new HtmlUtils();
 
+    protected String getLegendText(NameValue label) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(StringUtils.leftPad(label.getName(), 10, " "));
+        sb.append(" = ");
+        sb.append(label.getValue());
+        return sb.toString();
+    }
+
+    protected TableRow getLegendRow(NameValue label, Font font) {
+        font.setContent(getLegendText(label));
+        TableCell cell = new TableCell(htmlUtils.toHtml(font));
+        cell.setAlign(CellAlign.LEFT);
+        return new TableRow(cell);
+    }
+
+    protected List<TableRow> getLegendRows(List<NameValue> labels) {
+        Font font = new Font("black", 8);
+        font.setFace("Courier New");
+        font.setContent(" ");
+        List<TableRow> rows = new ArrayList<TableRow>();
+        // Add a blank row for spacing
+        rows.add(new TableRow(new TableCell(htmlUtils.toHtml(font))));
+        for (NameValue label : labels) {
+            rows.add(getLegendRow(label, font));
+        }
+        // Add a blank row for spacing
+        font.setContent(" ");
+        rows.add(new TableRow(new TableCell(htmlUtils.toHtml(font))));
+        return rows;
+    }
+
     public Table getTitle(String title, List<NameValue> labels) {
-        TableRow titleRow = new TableRow(new TableCell(title));
-        List<TableRow> rows = getTableRows(labels);
+        TableCell titleCell = new TableCell(title);
+        TableRow titleRow = new TableRow(titleCell);
+        List<TableRow> rows = new ArrayList<TableRow>(getLegendRows(labels));
         rows.add(0, titleRow);
         Table table = new Table(rows);
         table.setBorder(0);
+        table.setCellpadding(0);
+        table.setCellspacing(0);
         return table;
     }
 
     protected List<TableRow> getTableRows(List<NameValue> labels) {
         List<TableRow> rows = new ArrayList<TableRow>();
         for (NameValue label : labels) {
-            String legend = label.getName() + " " + label.getValue();
-            Font font = new Font(legend, "cornflowerblue", 8);
-            TableCell cell = new TableCell(htmlUtils.toHtml(font));
-            cell.setAlign(CellAlign.LEFT);
-            rows.add(new TableRow(cell));
+            TableCell cell1 = new TableCell(label.getName());
+            cell1.setWidth("15");
+            cell1.setAlign(CellAlign.RIGHT);
+            TableCell cell2 = new TableCell("=");
+            TableCell cell3 = new TableCell(label.getValue());
+            cell3.setAlign(CellAlign.LEFT);
+            rows.add(new TableRow(cell1, cell2, cell3));
         }
         return rows;
     }
