@@ -72,6 +72,7 @@ public class GraphHelper {
 
     protected List<TableRow> getLegendRows(List<NameValue> labels) {
         Font font = new Font("black", 8);
+        // Needs to be a fixed width font
         font.setFace("Courier");
         font.setContent(" ");
         List<TableRow> rows = new ArrayList<TableRow>();
@@ -108,11 +109,6 @@ public class GraphHelper {
     }
 
     public Graph getGraph(String title, Direction direction, List<GraphNode> nodes, List<Edge> edges) {
-        GraphDecorator decorator = new GraphDecorator(title, direction.name());
-        return getGraph(decorator, nodes, edges);
-    }
-
-    public Graph getGraph(Table title, Direction direction, List<GraphNode> nodes, List<Edge> edges) {
         GraphDecorator decorator = new GraphDecorator(title, direction.name());
         return getGraph(decorator, nodes, edges);
     }

@@ -45,22 +45,17 @@ public class StringGenerator {
         return sb.toString();
     }
 
-    public String getLabel(GraphDecorator decorator) {
-        if (decorator.getLabelTable() != null) {
-            return "<" + htmlUtil.toHtml(decorator.getLabelTable()) + ">";
-        } else {
-            return '"' + decorator.getLabel() + '"';
-        }
-    }
-
     public String getString(GraphDecorator decorator) {
         if (decorator == null) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
         sb.append("  graph [");
-        String label = getLabel(decorator);
-        sb.append(" label=" + label + "");
+        // This is not enclosed in double quotes because it might be html
+        // Graphviz needs html enclosed with the "<" and ">" symbols instead of double quotes
+        // We are depending on the layer above us to correctly enclose the label
+        // with either quotes or <>
+        sb.append(" label=" + decorator.getLabel() + "");
         sb.append(" labeljust=\"" + decorator.getLabeljust() + "\"");
         sb.append(" labelloc=\"" + decorator.getLabelloc() + "\"");
         sb.append(" fontsize=\"" + decorator.getFontsize() + "\"");

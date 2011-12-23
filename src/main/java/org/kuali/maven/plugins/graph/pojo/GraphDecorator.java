@@ -20,7 +20,6 @@ import org.kuali.maven.plugins.graph.dot.html.Table;
 public class GraphDecorator {
 
     String label = "";
-    Table labelTable;
     String labeljust = "l";
     String labelloc = "t";
     String fontsize = "18";
@@ -36,12 +35,6 @@ public class GraphDecorator {
     public GraphDecorator(String label, String rankdir) {
         super();
         this.label = label;
-        this.rankdir = rankdir;
-    }
-
-    public GraphDecorator(Table labelTable, String rankdir) {
-        super();
-        this.labelTable = labelTable;
         this.rankdir = rankdir;
     }
 
@@ -107,13 +100,5 @@ public class GraphDecorator {
 
     public void setNodesep(String nodesep) {
         this.nodesep = nodesep;
-    }
-
-    public Table getLabelTable() {
-        return labelTable;
-    }
-
-    public void setLabelTable(Table labelTable) {
-        this.labelTable = labelTable;
     }
 }
