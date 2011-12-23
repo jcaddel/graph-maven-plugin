@@ -2,13 +2,28 @@ package org.kuali.maven.plugins.graph.dot.html;
 
 import org.kuali.maven.plugins.graph.dot.html.enums.Scale;
 
-public class Img extends SimpleElement {
+public class Img implements HtmlTag {
+    public Img() {
+        this(null, null);
+    }
+
+    public Img(Scale scale, String src) {
+        super();
+        this.scale = scale;
+        this.src = src;
+    }
+
     Scale scale;
     String src;
 
     @Override
     public String getName() {
         return "img";
+    }
+
+    @Override
+    public String getContent() {
+        return null;
     }
 
     public Scale getScale() {

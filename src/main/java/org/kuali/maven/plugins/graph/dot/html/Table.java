@@ -6,7 +6,9 @@ import java.util.List;
 import org.kuali.maven.plugins.graph.dot.html.enums.Align;
 import org.kuali.maven.plugins.graph.dot.html.enums.VAlign;
 
-public class Table implements HtmlElement {
+public class Table implements HtmlTag {
+    HtmlUtils htmlUtils = new HtmlUtils();
+
     public Table() {
         super();
     }
@@ -17,7 +19,7 @@ public class Table implements HtmlElement {
 
     public Table(List<TableRow> rows) {
         super();
-        this.tableRows = rows;
+        this.rows = rows;
     }
 
     @Override
@@ -26,8 +28,8 @@ public class Table implements HtmlElement {
     }
 
     @Override
-    public List<? extends HtmlElement> getElements() {
-        return tableRows;
+    public String getContent() {
+        return htmlUtils.toHtml(rows);
     }
 
     Align align;
@@ -43,7 +45,7 @@ public class Table implements HtmlElement {
     String href;
     String id;
     String port;
-    Integer rows;
+    Integer rowCount;
     String style;
     String target;
     String title;
@@ -51,7 +53,7 @@ public class Table implements HtmlElement {
     VAlign valign;
     String width;
 
-    List<TableRow> tableRows;
+    List<TableRow> rows;
 
     public Align getAlign() {
         return align;
@@ -157,12 +159,12 @@ public class Table implements HtmlElement {
         this.port = port;
     }
 
-    public Integer getRows() {
-        return rows;
+    public Integer getRowCount() {
+        return rowCount;
     }
 
-    public void setRows(Integer rows) {
-        this.rows = rows;
+    public void setRowCount(Integer rows) {
+        this.rowCount = rows;
     }
 
     public String getStyle() {
@@ -213,12 +215,12 @@ public class Table implements HtmlElement {
         this.width = width;
     }
 
-    public List<TableRow> getTableRows() {
-        return tableRows;
+    public List<TableRow> getRows() {
+        return rows;
     }
 
-    public void setTableRows(List<TableRow> tableRows) {
-        this.tableRows = tableRows;
+    public void setRows(List<TableRow> tableRows) {
+        this.rows = tableRows;
     }
 
 }

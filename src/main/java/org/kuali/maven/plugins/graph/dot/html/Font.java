@@ -1,33 +1,34 @@
 package org.kuali.maven.plugins.graph.dot.html;
 
-import java.util.Collections;
-import java.util.List;
-
-public class Font implements HtmlElement {
+public class Font implements HtmlTag {
     String color;
     String face;
-    String pointSize;
-    Text text;
+    Integer pointSize;
+    String content;
 
     public Font() {
-        this(null);
+        this(null, null, null, null);
     }
 
-    public Font(Text text) {
-        this(text, null, null);
+    public Font(String content) {
+        this(content, null, null, null);
     }
 
-    public Font(Text text, String color, String pointSize) {
-        this(text, color, null, pointSize);
+    public Font(String content, String color) {
+        this(content, color, null);
     }
 
-    public Font(String color, String face, String pointSize) {
-        this(null, color, face, pointSize);
+    public Font(String color, Integer pointSize) {
+        this(color, null, pointSize);
     }
 
-    public Font(Text text, String color, String face, String pointSize) {
+    public Font(String content, String color, Integer pointSize) {
+        this(content, color, null, pointSize);
+    }
+
+    public Font(String content, String color, String face, Integer pointSize) {
         super();
-        this.text = text;
+        this.content = content;
         this.color = color;
         this.face = face;
         this.pointSize = pointSize;
@@ -36,11 +37,6 @@ public class Font implements HtmlElement {
     @Override
     public String getName() {
         return "font";
-    }
-
-    @Override
-    public List<? extends HtmlElement> getElements() {
-        return Collections.singletonList(text);
     }
 
     public String getColor() {
@@ -59,20 +55,20 @@ public class Font implements HtmlElement {
         this.face = face;
     }
 
-    public String getPointSize() {
+    public Integer getPointSize() {
         return pointSize;
     }
 
-    public void setPointSize(String pointSize) {
+    public void setPointSize(Integer pointSize) {
         this.pointSize = pointSize;
     }
 
-    public Text getText() {
-        return text;
+    @Override
+    public String getContent() {
+        return content;
     }
 
-    public void setText(Text text) {
-        this.text = text;
+    public void setContent(String content) {
+        this.content = content;
     }
-
 }

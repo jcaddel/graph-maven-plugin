@@ -47,7 +47,7 @@ public class StringGenerator {
 
     public String getLabel(GraphDecorator decorator) {
         if (decorator.getLabelTable() != null) {
-            return "< " + htmlUtil.toHtml(decorator.getLabelTable()) + " >";
+            return "<" + htmlUtil.toHtml(decorator.getLabelTable()) + ">";
         } else {
             return '"' + decorator.getLabel() + '"';
         }

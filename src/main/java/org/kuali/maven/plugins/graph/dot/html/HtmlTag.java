@@ -1,4 +1,4 @@
-package org.kuali.maven.plugins.graph.dot.html.copy;
+package org.kuali.maven.plugins.graph.dot.html;
 
 
 public interface HtmlTag {

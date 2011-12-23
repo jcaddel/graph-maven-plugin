@@ -3,17 +3,8 @@ package org.kuali.maven.plugins.graph.dot.html;
 import java.util.Collections;
 import java.util.List;
 
-public class TableRow implements HtmlElement {
-
-    @Override
-    public String getName() {
-        return "tr";
-    }
-
-    @Override
-    public List<? extends HtmlElement> getElements() {
-        return cells;
-    }
+public class TableRow implements HtmlTag {
+    HtmlUtils htmlUtils = new HtmlUtils();
 
     public TableRow() {
         super();
@@ -26,6 +17,16 @@ public class TableRow implements HtmlElement {
     public TableRow(List<TableCell> cells) {
         super();
         this.cells = cells;
+    }
+
+    @Override
+    public String getName() {
+        return "tr";
+    }
+
+    @Override
+    public String getContent() {
+        return htmlUtils.toHtml(cells);
     }
 
     List<TableCell> cells;

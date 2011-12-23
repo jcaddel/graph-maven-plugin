@@ -19,12 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.html.Font;
-import org.kuali.maven.plugins.graph.dot.html.Label;
+import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
 import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.dot.html.TableCell;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
-import org.kuali.maven.plugins.graph.dot.html.Text;
-import org.kuali.maven.plugins.graph.dot.html.TextItem;
 import org.kuali.maven.plugins.graph.dot.html.enums.CellAlign;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.Edge;
@@ -34,9 +32,10 @@ import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.NameValue;
 
 public class GraphHelper {
+    HtmlUtils htmlUtils = new HtmlUtils();
 
     public Table getTitle(String title, List<NameValue> labels) {
-        TableRow titleRow = new TableRow(new TableCell(new Label(new Text(new TextItem(title)))));
+        TableRow titleRow = new TableRow(new TableCell(title));
         List<TableRow> rows = getTableRows(labels);
         rows.add(0, titleRow);
         Table table = new Table(rows);
@@ -47,10 +46,9 @@ public class GraphHelper {
     protected List<TableRow> getTableRows(List<NameValue> labels) {
         List<TableRow> rows = new ArrayList<TableRow>();
         for (NameValue label : labels) {
-            String name = label.getName();
-            String value = label.getValue();
-            Font font = new Font(new Text(new TextItem(name + " " + value)), "cornflowerblue", "8");
-            TableCell cell = new TableCell(new Label(new Text(new TextItem(font))));
+            String legend = label.getName() + " " + label.getValue();
+            Font font = new Font(legend, "cornflowerblue", 8);
+            TableCell cell = new TableCell(htmlUtils.toHtml(font));
             cell.setAlign(CellAlign.LEFT);
             rows.add(new TableRow(cell));
         }
