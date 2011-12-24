@@ -103,13 +103,15 @@ public class Dot {
         if (context.isExecuteDot()) {
             Commandline commandline = getCommandLine(context);
             execute(commandline, context);
+            logger.info(context.getGraph().getPath());
+        } else {
+            logger.info("Skip executing 'dot'");
         }
         if (!context.isKeepDotFile()) {
             context.getDotFile().delete();
         } else {
             logger.info(context.getDotFile().getPath());
         }
-        logger.info(context.getGraph().getPath());
     }
 
     protected File createDotFile(File graph, String content) {
