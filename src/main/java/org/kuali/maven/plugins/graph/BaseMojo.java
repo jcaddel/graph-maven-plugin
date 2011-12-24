@@ -282,7 +282,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * If false, artifact group id's are not displayed.
      * </p>
      *
-     * @parameter expression="${graph.hideGroupIds}" default-value="true"
+     * @parameter expression="${graph.showGroupIds}" default-value="true"
      */
     private boolean showGroupIds;
 
@@ -320,7 +320,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * value.
      * </p>
      *
-     * @parameter expression="${graph.failIfDotFails}" default-value="false"
+     * @parameter expression="${graph.ignoreDotFailure}" default-value="false"
      */
     private boolean ignoreDotFailure;
 
