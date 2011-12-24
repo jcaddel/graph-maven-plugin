@@ -156,6 +156,15 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
+     * If true, mojo execution is skipped.
+     * </p>
+     *
+     * @parameter expression="${graph.skip}" default-value="false"
+     */
+    private boolean skip;
+
+    /**
+     * <p>
      * Comma delimited list of patterns for including artifacts. The pattern syntax has the form -
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
      * </p>
@@ -306,6 +315,10 @@ public abstract class BaseMojo extends AbstractMojo {
 
     @Override
     public void execute() {
+        if (skip) {
+            getLog().info("Skipping execution");
+            return;
+        }
         String content = getDotFileContent(getGraphTitle(), direction);
         Dot dot = new Dot();
         DotContext context = dot.getDotContext(getFile(), content, keepDotFile);
@@ -587,6 +600,14 @@ public abstract class BaseMojo extends AbstractMojo {
 
     public void setShowTitle(boolean showTitle) {
         this.showTitle = showTitle;
+    }
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
     }
 
 }

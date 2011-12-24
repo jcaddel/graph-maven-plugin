@@ -89,7 +89,7 @@ public class HtmlUtils {
         Map<String, ?> attributeMap = getAttributes(tag);
         String attributes = toHtml(attributeMap);
 
-        if (content == null || content.length() == 0) {
+        if (content == null) {
             return "<" + name + attributes + "/>";
         } else {
             return "<" + name + attributes + ">" + content + "</" + name + ">";
