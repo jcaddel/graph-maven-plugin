@@ -279,12 +279,12 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * If true, artifact group id's are not displayed.
+     * If false, artifact group id's are not displayed.
      * </p>
      *
-     * @parameter expression="${graph.hideGroupIds}" default-value="false"
+     * @parameter expression="${graph.hideGroupIds}" default-value="true"
      */
-    private boolean hideGroupIds;
+    private boolean showGroupIds;
 
     /**
      * <p>
@@ -441,7 +441,7 @@ public abstract class BaseMojo extends AbstractMojo {
 
     protected Hider getHider() {
         Hider hider = new Hider();
-        hider.setHideGroupId(hideGroupIds);
+        hider.setHideGroupId(!showGroupIds);
         return hider;
     }
 
@@ -590,12 +590,12 @@ public abstract class BaseMojo extends AbstractMojo {
         return treeBuilder;
     }
 
-    public boolean isHideGroupIds() {
-        return hideGroupIds;
+    public boolean isShowGroupIds() {
+        return showGroupIds;
     }
 
-    public void setHideGroupIds(boolean hideGroupId) {
-        this.hideGroupIds = hideGroupId;
+    public void setShowGroupIds(boolean hideGroupId) {
+        this.showGroupIds = hideGroupId;
     }
 
     public boolean isShowLegend() {
