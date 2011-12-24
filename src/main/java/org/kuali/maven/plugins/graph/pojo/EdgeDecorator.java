@@ -16,7 +16,7 @@
 package org.kuali.maven.plugins.graph.pojo;
 
 public class EdgeDecorator {
-    String fontsize = "8";
+    String fontsize = "10";
     String fontname = "Helvetica";
 
     public String getFontsize() {

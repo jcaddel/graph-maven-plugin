@@ -19,7 +19,7 @@ public class GraphNode {
     int id;
     boolean hidden;
     String label = "";
-    String fontsize = "8";
+    String fontsize = "10";
     String color = "black";
     String fontcolor = "black";
     String fillcolor = "white";
