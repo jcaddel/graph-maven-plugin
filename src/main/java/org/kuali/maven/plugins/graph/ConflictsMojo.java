@@ -48,6 +48,7 @@ public class ConflictsMojo extends BaseMojo {
     /**
      * The file the graph will be written to
      *
+     * @required
      * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/conflicts.png"
      */
     private File file;

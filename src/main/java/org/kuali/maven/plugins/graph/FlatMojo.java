@@ -37,6 +37,7 @@ public class FlatMojo extends BaseMojo {
     /**
      * The file the graph will be written to
      *
+     * @required
      * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/flat.png"
      */
     private File file;

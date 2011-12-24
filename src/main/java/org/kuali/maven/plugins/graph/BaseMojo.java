@@ -272,6 +272,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * and right to left, respectively.
      * </p>
      *
+     * @required
      * @parameter expression="${graph.direction}" default-value="TB"
      */
     private Direction direction;
