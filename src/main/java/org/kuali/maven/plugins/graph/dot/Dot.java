@@ -86,7 +86,7 @@ public class Dot {
                 }
             } else {
                 // Log the name of the image that was created
-                logger.info(context.getGraph().getPath());
+                logger.debug(context.getGraph().getPath());
             }
             return exitValue;
         } catch (CommandLineException e) {
@@ -112,7 +112,7 @@ public class Dot {
         if (!context.isKeepDotFile()) {
             context.getDotFile().delete();
         } else {
-            logger.info(context.getDotFile().getPath());
+            logger.debug(context.getDotFile().getPath());
         }
     }
 

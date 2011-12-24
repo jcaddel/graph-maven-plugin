@@ -284,7 +284,7 @@ public class TreeHelper {
 
         int included = getList(node, State.INCLUDED).size();
 
-        logger.info("Sanitizing metadata for " + nodes.size() + " dependency nodes (" + included
+        logger.debug("Sanitizing metadata for " + nodes.size() + " dependency nodes (" + included
                 + " unique artifacts in the build)");
 
         // Go through the tree and clean up nodes that are not included in the build
