@@ -17,7 +17,7 @@ package org.kuali.maven.plugins.graph.pojo;
 
 public class NodeDecorator {
     String fontsize = "8";
-    String fontname = "SanSerif";
+    String fontname = "SanHelvetica";
     String shape = "rectangle";
 
     public String getFontsize() {

@@ -21,7 +21,7 @@ public class GraphDecorator {
     String labeljust = "l";
     String labelloc = "t";
     String fontsize = "18";
-    String fontname = "Serif";
+    String fontname = "Helvetica";
     String ranksep = "1";
     String rankdir = Direction.DEFAULT_DIRECTION.name();
     String nodesep = ".05";
