@@ -1,0 +1,16 @@
+digraph dependencies {
+
+  graph [ label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td>Dependency Graph for Maven Graph Plugin</td></tr><tr><td><font color="black" face="Courier" point-size="10"> </font></td></tr><tr><td align="LEFT"><font color="black" face="Courier" point-size="10">includes = org.kuali.*</font></td></tr><tr><td><font color="black" face="Courier" point-size="10"> </font></td></tr></table>> labeljust="l" labelloc="t" fontsize="18" fontname="Helvetica" ranksep="1" rankdir="TB" nodesep=".05" ];
+  node [ fontsize="10" fontname="Helvetica" shape="rectangle" ];
+  edge [ fontsize="10" fontname="Helvetica" ];
+
+  "0" [
+    fontsize="10"
+    label="org.kuali.maven.plugins\ngraph-maven-plugin\nmaven-plugin\n1.0.5-SNAPSHOT"
+    color="black"
+    fontcolor="black"
+    fillcolor="#dddddd"
+    style="solid,filled"
+  ];
+
+}

@@ -1,0 +1,1142 @@
+digraph dependencies {
+
+  graph [ label=<<table border="0" cellpadding="0" cellspacing="0"><tr><td>Dependency Graph for Maven Graph Plugin</td></tr><tr><td><font color="black" face="Courier" point-size="10"> </font></td></tr><tr><td align="LEFT"><font color="black" face="Courier" point-size="10">show = compile</font></td></tr><tr><td><font color="black" face="Courier" point-size="10"> </font></td></tr></table>> labeljust="l" labelloc="t" fontsize="18" fontname="Helvetica" ranksep="1" rankdir="TB" nodesep=".05" ];
+  node [ fontsize="10" fontname="Helvetica" shape="rectangle" ];
+  edge [ fontsize="10" fontname="Helvetica" ];
+
+  "0" [
+    fontsize="10"
+    label="org.kuali.maven.plugins\ngraph-maven-plugin\nmaven-plugin\n1.0.5-SNAPSHOT"
+    color="black"
+    fontcolor="black"
+    fillcolor="#dddddd"
+    style="solid,filled"
+  ];
+  "3" [
+    fontsize="10"
+    label="commons-lang\ncommons-lang\n2.6"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "4" [
+    fontsize="10"
+    label="commons-io\ncommons-io\n2.1"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "5" [
+    fontsize="10"
+    label="net.sourceforge.collections\ncollections-generic\n4.01"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "6" [
+    fontsize="10"
+    label="commons-beanutils\ncommons-beanutils\n1.8.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "7" [
+    fontsize="10"
+    label="org.springframework\nspring-core\n3.1.0.RELEASE"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "8" [
+    fontsize="10"
+    label="org.springframework\nspring-asm\n3.1.0.RELEASE"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "9" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-compat\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "10" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-model\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "12" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-model-builder\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "17" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-settings\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "19" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-artifact\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "21" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-core\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "24" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-settings-builder\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "30" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-repository-metadata\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "33" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-plugin-api\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "38" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-aether-provider\n3.0.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "43" [
+    fontsize="10"
+    label="org.sonatype.aether\naether-spi\n1.11"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "49" [
+    fontsize="10"
+    label="org.sonatype.aether\naether-impl\n1.11"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "53" [
+    fontsize="10"
+    label="org.sonatype.aether\naether-api\n1.11"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "54" [
+    fontsize="10"
+    label="org.sonatype.aether\naether-util\n1.11"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "59" [
+    fontsize="10"
+    label="org.codehaus.plexus\nplexus-classworlds\n2.4"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "61" [
+    fontsize="10"
+    label="org.sonatype.plexus\nplexus-sec-dispatcher\n1.3"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "62" [
+    fontsize="10"
+    label="org.codehaus.plexus\nplexus-utils\n1.5.5"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    fillcolor="#EACFA4"
+    style="solid,filled"
+  ];
+  "63" [
+    fontsize="10"
+    label="org.sonatype.plexus\nplexus-cipher\n1.4"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "64" [
+    fontsize="10"
+    label="org.codehaus.plexus\nplexus-utils\n2.0.6"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "65" [
+    fontsize="10"
+    label="org.codehaus.plexus\nplexus-interpolation\n1.14"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "66" [
+    fontsize="10"
+    label="org.sonatype.sisu\nsisu-inject-plexus\n2.1.1"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "70" [
+    fontsize="10"
+    label="org.sonatype.sisu\nsisu-inject-bean\n2.1.1"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "71" [
+    fontsize="10"
+    label="org.sonatype.sisu\nsisu-guice\nno_aop\n2.9.4"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "72" [
+    fontsize="10"
+    label="org.codehaus.plexus\nplexus-component-annotations\n1.5.5"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "73" [
+    fontsize="10"
+    label="org.apache.maven.wagon\nwagon-provider-api\n1.0-beta-7"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "75" [
+    fontsize="10"
+    label="org.apache.maven.shared\nmaven-dependency-tree\n1.2"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "76" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-project\n2.0.8"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "77" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-settings\n2.0.8"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    fillcolor="#EACFA4"
+    style="solid,filled"
+  ];
+  "78" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-profile\n2.0.8"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "79" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-model\n2.0.8"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    fillcolor="#EACFA4"
+    style="solid,filled"
+  ];
+  "83" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-artifact-manager\n2.0.8"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "84" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-repository-metadata\n2.0.8"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    fillcolor="#EACFA4"
+    style="solid,filled"
+  ];
+  "86" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-artifact\n2.0.8"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    fillcolor="#EACFA4"
+    style="solid,filled"
+  ];
+  "88" [
+    fontsize="10"
+    label="org.apache.maven.wagon\nwagon-provider-api\n1.0-beta-2"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    fillcolor="#EACFA4"
+    style="solid,filled"
+  ];
+  "89" [
+    fontsize="10"
+    label="org.apache.maven\nmaven-plugin-registry\n2.0.8"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "94" [
+    fontsize="10"
+    label="org.codehaus.plexus\nplexus-container-default\n1.0-alpha-9-stable-1"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "95" [
+    fontsize="10"
+    label="junit\njunit\n3.8.1"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    fillcolor="#EACFA4"
+    style="solid,filled"
+  ];
+  "97" [
+    fontsize="10"
+    label="classworlds\nclassworlds\n1.1-alpha-2"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "98" [
+    fontsize="10"
+    label="org.slf4j\njcl-over-slf4j\n1.6.4"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "99" [
+    fontsize="10"
+    label="org.slf4j\nslf4j-api\n1.6.4"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "100" [
+    fontsize="10"
+    label="org.slf4j\nslf4j-log4j12\n1.6.4"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+  "102" [
+    fontsize="10"
+    label="log4j\nlog4j\n1.2.16"
+    color="black"
+    fontcolor="black"
+    fillcolor="white"
+    style="solid,filled"
+  ];
+
+  "0" -> "3" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "0" -> "4" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "0" -> "5" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "0" -> "6" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "0" -> "7" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "7" -> "8" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "0" -> "9" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "10" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "10" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "12" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "12" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "12" -> "65" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "12" -> "72" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "12" -> "10" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "17" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "17" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "19" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "19" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "21" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "10" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "17" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "24" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "24" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "24" -> "65" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "24" -> "72" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "24" -> "17" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "24" -> "61" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "30" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "30" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "19" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "33" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "33" -> "10" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "33" -> "19" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "33" -> "66" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "12" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "38" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "10" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "12" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "30" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "53" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "43" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "43" -> "53" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "54" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "49" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "72" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "38" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "49" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "49" -> "53" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "49" -> "43" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "49" -> "54" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "53" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "54" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "54" -> "53" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "66" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "65" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "59" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "72" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "21" -> "61" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "62" -> "64" [
+    label="replacement"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "61" -> "62" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "61" -> "63" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "64" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "65" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "66" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "66" -> "72" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "66" -> "59" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "66" -> "62" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "66" -> "70" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "70" -> "71" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "72" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "9" -> "73" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "73" -> "62" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "0" -> "75" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "75" -> "76" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "77" -> "17" [
+    label="replacement"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "76" -> "77" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "76" -> "78" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "79" -> "10" [
+    label="replacement"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "78" -> "79" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "78" -> "62" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "78" -> "94" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "76" -> "79" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "76" -> "83" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "84" -> "30" [
+    label="replacement"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "83" -> "84" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "83" -> "62" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "86" -> "19" [
+    label="replacement"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "83" -> "86" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "83" -> "94" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "88" -> "73" [
+    label="replacement"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "83" -> "88" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "76" -> "89" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "89" -> "62" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "89" -> "94" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "76" -> "62" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "76" -> "86" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "76" -> "94" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "94" -> "95" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "94" -> "62" [
+    label="conflict"
+    style="solid"
+    color="#F8161C"
+    fontcolor="#F8161C"
+    weight="1.0"
+  ];
+  "94" -> "97" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "0" -> "98" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "98" -> "99" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "0" -> "100" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "100" -> "99" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+  "100" -> "102" [
+    label=""
+    style="solid"
+    color="black"
+    fontcolor="black"
+    weight="1.0"
+  ];
+}
