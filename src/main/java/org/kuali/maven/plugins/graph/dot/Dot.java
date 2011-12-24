@@ -80,9 +80,9 @@ public class Dot {
             int exitValue = CommandLineUtils.executeCommandLine(commandLine, stdout, stderr);
             if (exitValue != 0) {
                 if (context.isIgnoreDotFailure()) {
-                    throw new GraphException(getErrorMessage(context, exitValue));
-                } else {
                     logger.info("Ignoring failure of the 'dot' binary");
+                } else {
+                    throw new GraphException(getErrorMessage(context, exitValue));
                 }
             }
             return exitValue;
