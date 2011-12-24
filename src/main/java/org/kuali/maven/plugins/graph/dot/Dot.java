@@ -85,6 +85,7 @@ public class Dot {
                     throw new GraphException(getErrorMessage(context, exitValue));
                 }
             } else {
+                // Log the name of the image that was created
                 logger.info(context.getGraph().getPath());
             }
             return exitValue;
