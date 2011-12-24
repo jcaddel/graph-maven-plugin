@@ -84,6 +84,8 @@ public class Dot {
                 } else {
                     throw new GraphException(getErrorMessage(context, exitValue));
                 }
+            } else {
+                logger.info(context.getGraph().getPath());
             }
             return exitValue;
         } catch (CommandLineException e) {
@@ -103,7 +105,6 @@ public class Dot {
         if (context.isExecuteDot()) {
             Commandline commandline = getCommandLine(context);
             execute(commandline, context);
-            logger.info(context.getGraph().getPath());
         } else {
             logger.info("Skip executing 'dot'");
         }
