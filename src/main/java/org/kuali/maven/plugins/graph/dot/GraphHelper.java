@@ -71,7 +71,7 @@ public class GraphHelper {
     }
 
     protected List<TableRow> getLegendRows(List<NameValue> labels) {
-        Font font = new Font("black", 8);
+        Font font = new Font("black", 10);
         // Needs to be a fixed width font
         font.setFace("Courier");
         font.setContent(" ");
