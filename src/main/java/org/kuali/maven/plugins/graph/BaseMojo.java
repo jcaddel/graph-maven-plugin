@@ -306,6 +306,25 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
+     * Set this to false to skip executing the "dot" binary that produces dependency graphs
+     * </p>
+     *
+     * @parameter expression="${graph.executeDot}" default-value="true"
+     */
+    private boolean executeDot;
+
+    /**
+     * <p>
+     * Set this to true to prevent the overall Maven build from failing if the "dot" binary returns a non-zero exit
+     * value.
+     * </p>
+     *
+     * @parameter expression="${graph.failIfDotFails}" default-value="false"
+     */
+    private boolean ignoreDotFailure;
+
+    /**
+     * <p>
      * Set this to true to enable verbose mode.
      * </p>
      *
@@ -321,7 +340,7 @@ public abstract class BaseMojo extends AbstractMojo {
         }
         String content = getDotFileContent(getGraphTitle(), direction);
         Dot dot = new Dot();
-        DotContext context = dot.getDotContext(getFile(), content, keepDotFile);
+        DotContext context = dot.getDotContext(getFile(), content, keepDotFile, executeDot, ignoreDotFailure);
         dot.execute(context);
     }
 
@@ -608,6 +627,22 @@ public abstract class BaseMojo extends AbstractMojo {
 
     public void setSkip(boolean skip) {
         this.skip = skip;
+    }
+
+    public boolean isExecuteDot() {
+        return executeDot;
+    }
+
+    public void setExecuteDot(boolean executeDot) {
+        this.executeDot = executeDot;
+    }
+
+    public boolean isIgnoreDotFailure() {
+        return ignoreDotFailure;
+    }
+
+    public void setIgnoreDotFailure(boolean failIfDotFails) {
+        this.ignoreDotFailure = failIfDotFails;
     }
 
 }

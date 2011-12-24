@@ -18,6 +18,14 @@ package org.kuali.maven.plugins.graph.pojo;
 import java.io.File;
 
 public class DotContext {
+    String executable = "dot";
+    String type;
+    File dotFile;
+    File graph;
+    boolean keepDotFile;
+    boolean executeDot;
+    boolean ignoreDotFailure;
+
     public boolean isKeepDotFile() {
         return keepDotFile;
     }
@@ -25,12 +33,6 @@ public class DotContext {
     public void setKeepDotFile(boolean keepDotFile) {
         this.keepDotFile = keepDotFile;
     }
-
-    String executable = "dot";
-    String type;
-    File dotFile;
-    File graph;
-    boolean keepDotFile;
 
     public String getExecutable() {
         return executable;
@@ -62,5 +64,21 @@ public class DotContext {
 
     public void setGraph(File graph) {
         this.graph = graph;
+    }
+
+    public boolean isExecuteDot() {
+        return executeDot;
+    }
+
+    public void setExecuteDot(boolean executeDot) {
+        this.executeDot = executeDot;
+    }
+
+    public boolean isIgnoreDotFailure() {
+        return ignoreDotFailure;
+    }
+
+    public void setIgnoreDotFailure(boolean failIfDotFails) {
+        this.ignoreDotFailure = failIfDotFails;
     }
 }

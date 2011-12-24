@@ -38,7 +38,8 @@ import org.slf4j.LoggerFactory;
 public class Dot {
     private static final Logger logger = LoggerFactory.getLogger(Dot.class);
 
-    public DotContext getDotContext(File graph, String content, boolean keepDotFile) {
+    public DotContext getDotContext(File graph, String content, boolean keepDotFile, boolean executeDot,
+            boolean ignoreDotFailure) {
         File dotFile = createDotFile(graph, content);
         String type = getType(graph);
 
@@ -47,6 +48,8 @@ public class Dot {
         context.setDotFile(dotFile);
         context.setType(type);
         context.setKeepDotFile(keepDotFile);
+        context.setExecuteDot(executeDot);
+        context.setIgnoreDotFailure(ignoreDotFailure);
         return context;
     }
 
@@ -76,7 +79,11 @@ public class Dot {
             StreamConsumer stderr = new DefaultConsumer();
             int exitValue = CommandLineUtils.executeCommandLine(commandLine, stdout, stderr);
             if (exitValue != 0) {
-                throw new GraphException(getErrorMessage(context, exitValue));
+                if (context.isIgnoreDotFailure()) {
+                    throw new GraphException(getErrorMessage(context, exitValue));
+                } else {
+                    logger.info("Ignoring failure of the 'dot' binary");
+                }
             }
             return exitValue;
         } catch (CommandLineException e) {
@@ -93,8 +100,10 @@ public class Dot {
     }
 
     public void execute(DotContext context) {
-        Commandline commandline = getCommandLine(context);
-        execute(commandline, context);
+        if (context.isExecuteDot()) {
+            Commandline commandline = getCommandLine(context);
+            execute(commandline, context);
+        }
         if (!context.isKeepDotFile()) {
             context.getDotFile().delete();
         } else {
