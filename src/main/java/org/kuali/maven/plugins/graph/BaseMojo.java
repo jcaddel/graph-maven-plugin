@@ -269,22 +269,31 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Set this to true to hide artifact group id's. Can be useful for producing denser graphs.
+     * If true, artifact group id's are not displayed.
      * </p>
      *
-     * @parameter expression="${graph.hideGroupId}" default-value="false"
+     * @parameter expression="${graph.hideGroupIds}" default-value="false"
      */
-    private boolean hideGroupId;
+    private boolean hideGroupIds;
 
     /**
      * <p>
-     * By default, the criteria used to filter the dependency tree are shown on the graph. Set this to false to prevent
+     * By default, the criteria used to filter the dependency tree are shown as a legend. Set this to false to prevent
      * filter criteria from being shown.
      * </p>
      *
-     * @parameter expression="${graph.showFilters}" default-value="true"
+     * @parameter expression="${graph.showLegend}" default-value="true"
      */
-    private boolean showFilters;
+    private boolean showLegend;
+
+    /**
+     * <p>
+     * Set this to false to render the graph without a title.
+     * </p>
+     *
+     * @parameter expression="${graph.showTitle}" default-value="true"
+     */
+    private boolean showTitle;
 
     /**
      * <p>
@@ -360,7 +369,10 @@ public abstract class BaseMojo extends AbstractMojo {
     }
 
     protected String getGraphTitle() {
-        if (!showFilters) {
+        if (!showTitle) {
+            title = "";
+        }
+        if (!showLegend) {
             return '"' + title + '"';
         } else {
             HtmlUtils htmlUtils = new HtmlUtils();
@@ -396,7 +408,7 @@ public abstract class BaseMojo extends AbstractMojo {
 
     protected Hider getHider() {
         Hider hider = new Hider();
-        hider.setHideGroupId(hideGroupId);
+        hider.setHideGroupId(hideGroupIds);
         return hider;
     }
 
@@ -545,20 +557,20 @@ public abstract class BaseMojo extends AbstractMojo {
         return treeBuilder;
     }
 
-    public boolean isHideGroupId() {
-        return hideGroupId;
+    public boolean isHideGroupIds() {
+        return hideGroupIds;
     }
 
-    public void setHideGroupId(boolean hideGroupId) {
-        this.hideGroupId = hideGroupId;
+    public void setHideGroupIds(boolean hideGroupId) {
+        this.hideGroupIds = hideGroupId;
     }
 
-    public boolean isShowFilters() {
-        return showFilters;
+    public boolean isShowLegend() {
+        return showLegend;
     }
 
-    public void setShowFilters(boolean showFiltersInTitle) {
-        this.showFilters = showFiltersInTitle;
+    public void setShowLegend(boolean showFiltersInTitle) {
+        this.showLegend = showFiltersInTitle;
     }
 
     public boolean isVerbose() {
@@ -567,6 +579,14 @@ public abstract class BaseMojo extends AbstractMojo {
 
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
+    }
+
+    public boolean isShowTitle() {
+        return showTitle;
+    }
+
+    public void setShowTitle(boolean showTitle) {
+        this.showTitle = showTitle;
     }
 
 }
