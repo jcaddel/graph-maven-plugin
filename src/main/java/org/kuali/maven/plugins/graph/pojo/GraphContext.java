@@ -28,8 +28,8 @@ import org.kuali.maven.plugins.graph.tree.PreProcessor;
 public class GraphContext {
     String executable = "dot";
     EdgeHandler edgeHandler;
-    List<PreProcessor> preProcessors;
-    List<PostProcessor> postProcessors;
+    List<? extends PreProcessor> preProcessors;
+    List<? extends PostProcessor> postProcessors;
     String title;
     boolean keepDotFile;
     boolean transitive;
@@ -66,22 +66,6 @@ public class GraphContext {
 
     public void setEdgeHandler(EdgeHandler edgeHandler) {
         this.edgeHandler = edgeHandler;
-    }
-
-    public List<PreProcessor> getPreProcessors() {
-        return preProcessors;
-    }
-
-    public void setPreProcessors(List<PreProcessor> preProcessors) {
-        this.preProcessors = preProcessors;
-    }
-
-    public List<PostProcessor> getPostProcessors() {
-        return postProcessors;
-    }
-
-    public void setPostProcessors(List<PostProcessor> postProcessors) {
-        this.postProcessors = postProcessors;
     }
 
     public String getTitle() {
@@ -250,6 +234,22 @@ public class GraphContext {
 
     public void setLayout(LayoutStyle style) {
         this.layout = style;
+    }
+
+    public List<? extends PreProcessor> getPreProcessors() {
+        return preProcessors;
+    }
+
+    public void setPreProcessors(List<? extends PreProcessor> preProcessors) {
+        this.preProcessors = preProcessors;
+    }
+
+    public List<? extends PostProcessor> getPostProcessors() {
+        return postProcessors;
+    }
+
+    public void setPostProcessors(List<? extends PostProcessor> postProcessors) {
+        this.postProcessors = postProcessors;
     }
 
 }
