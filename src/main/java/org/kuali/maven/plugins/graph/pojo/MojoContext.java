@@ -31,8 +31,11 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
  */
 @SuppressWarnings("deprecation")
 public class MojoContext {
+
     private MavenProject project;
+
     private ArtifactRepository localRepository;
+
     private ArtifactResolver artifactResolver;
 
     private ArtifactFactory artifactFactory;
