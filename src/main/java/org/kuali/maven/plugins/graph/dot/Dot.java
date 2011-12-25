@@ -27,7 +27,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.DefaultConsumer;
 import org.codehaus.plexus.util.cli.StreamConsumer;
-import org.kuali.maven.plugins.graph.pojo.DotContext;
+import org.kuali.maven.plugins.graph.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,30 +38,22 @@ import org.slf4j.LoggerFactory;
 public class Dot {
     private static final Logger logger = LoggerFactory.getLogger(Dot.class);
 
-    public DotContext getDotContext(File graph, String content, boolean keepDotFile, boolean executeDot,
-            boolean ignoreDotFailure) {
-        File dotFile = createDotFile(graph, content);
-        String type = getType(graph);
-
-        DotContext context = new DotContext();
-        context.setGraph(graph);
-        context.setDotFile(dotFile);
-        context.setType(type);
-        context.setKeepDotFile(keepDotFile);
-        context.setExecuteDot(executeDot);
-        context.setIgnoreDotFailure(ignoreDotFailure);
-        return context;
+    public void fillInContext(GraphContext gc) {
+        File dotFile = createDotFile(gc.getFile(), gc.getContent());
+        String type = getType(gc.getFile());
+        gc.setDotFile(dotFile);
+        gc.setType(type);
     }
 
-    protected String[] getArgs(DotContext context) {
+    protected String[] getArgs(GraphContext context) {
         List<String> args = new ArrayList<String>();
         args.add("-T" + context.getType());
-        args.add("-o" + context.getGraph().getAbsolutePath());
+        args.add("-o" + context.getFile().getAbsolutePath());
         args.add(context.getDotFile().getAbsolutePath());
         return args.toArray(new String[args.size()]);
     }
 
-    protected Commandline getCommandLine(DotContext context) {
+    protected Commandline getCommandLine(GraphContext context) {
         Commandline commandline = new Commandline();
         try {
             commandline.addSystemEnvironment();
@@ -73,20 +65,20 @@ public class Dot {
         return commandline;
     }
 
-    protected int execute(Commandline commandLine, DotContext context) {
+    protected int execute(Commandline commandLine, GraphContext context) {
         try {
             StreamConsumer stdout = new DefaultConsumer();
             StreamConsumer stderr = new DefaultConsumer();
             int exitValue = CommandLineUtils.executeCommandLine(commandLine, stdout, stderr);
             if (exitValue != 0) {
                 if (context.isIgnoreDotFailure()) {
-                    logger.info("Ignoring failure of the 'dot' binary");
+                    logger.info("Ignoring failure of the 'dot' binary. Exit value=" + exitValue);
                 } else {
                     throw new GraphException(getErrorMessage(context, exitValue));
                 }
             } else {
                 // Log the name of the image that was created
-                logger.debug(context.getGraph().getPath());
+                logger.debug(context.getFile().getPath());
             }
             return exitValue;
         } catch (CommandLineException e) {
@@ -94,7 +86,7 @@ public class Dot {
         }
     }
 
-    protected String getErrorMessage(DotContext context, int exitValue) {
+    protected String getErrorMessage(GraphContext context, int exitValue) {
         StringBuilder sb = new StringBuilder();
         sb.append("Execution of the '" + context.getExecutable() + "' command failed.");
         sb.append(" Exit value: '" + exitValue + "'");
@@ -102,7 +94,7 @@ public class Dot {
         return sb.toString();
     }
 
-    public void execute(DotContext context) {
+    public void execute(GraphContext context) {
         if (context.isExecuteDot()) {
             Commandline commandline = getCommandLine(context);
             execute(commandline, context);

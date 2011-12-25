@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
 import org.codehaus.plexus.util.StringUtils;
+import org.kuali.maven.plugins.graph.GraphContext;
 import org.kuali.maven.plugins.graph.dot.html.CellAlign;
 import org.kuali.maven.plugins.graph.dot.html.Font;
 import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
@@ -43,6 +44,42 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 public class GraphHelper {
     HtmlUtils htmlUtils = new HtmlUtils();
     public static final String DEFAULT_TYPE = "jar";
+
+    public String getGraphTitle(GraphContext context) {
+        if (!context.isShowTitle()) {
+            return "";
+        }
+        if (!context.isShowLegend()) {
+            return '"' + context.getTitle() + '"';
+        } else {
+            HtmlUtils htmlUtils = new HtmlUtils();
+            List<NameValue> labels = getLegendLabels(context);
+            Table table = getTitle(context.getTitle(), labels);
+            return "<" + htmlUtils.toHtml(table) + ">";
+        }
+    }
+
+    protected List<NameValue> getLegendLabels(GraphContext context) {
+        List<NameValue> labels = new ArrayList<NameValue>();
+        addLabel("includes", context.getIncludes(), labels);
+        addLabel("excludes", context.getExcludes(), labels);
+        addLabel("show", context.getShow(), labels);
+        addLabel("hide", context.getHide(), labels);
+        if (!context.isTransitive()) {
+            addLabel("transitive", context.isTransitive() + "", labels);
+        }
+        if (context.getDepth() != -1) {
+            addLabel("depth", context.getDepth() + "", labels);
+        }
+        return labels;
+    }
+
+    protected void addLabel(String name, String value, List<NameValue> labels) {
+        if (!Helper.isBlank(value)) {
+            NameValue nv = new NameValue(name, value);
+            labels.add(nv);
+        }
+    }
 
     protected String getLegendText(NameValue label, int padding) {
         StringBuilder sb = new StringBuilder();

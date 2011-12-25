@@ -37,8 +37,6 @@ import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.dot.StringGenerator;
-import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
-import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.DepthFilter;
 import org.kuali.maven.plugins.graph.filter.Filter;
@@ -49,14 +47,12 @@ import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.filter.NodeFilterChain;
 import org.kuali.maven.plugins.graph.filter.ReverseNodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Direction;
-import org.kuali.maven.plugins.graph.pojo.DotContext;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.Hider;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
-import org.kuali.maven.plugins.graph.pojo.NameValue;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
@@ -335,17 +331,27 @@ public abstract class BaseMojo extends AbstractMojo {
 
     @Override
     public void execute() {
+        MojoContext mojoContext = new MojoContext();
+        GraphContext graphContext = new GraphContext();
+        Helper.copyProperties(mojoContext, this);
+        Helper.copyProperties(graphContext, this);
+
         if (skip) {
             getLog().info("Skipping execution");
             return;
         }
-        String content = getDotFileContent(getGraphTitle(), direction);
+
+        GraphHelper gh = new GraphHelper();
+        String title = gh.getGraphTitle(graphContext);
+        String content = getDotFileContent(mojoContext, graphContext);
+        graphContext.setTitle(title);
+        graphContext.setContent(content);
         Dot dot = new Dot();
-        DotContext context = dot.getDotContext(getFile(), content, keepDotFile, executeDot, ignoreDotFailure);
-        dot.execute(context);
+        dot.fillInContext(graphContext);
+        dot.execute(graphContext);
     }
 
-    protected abstract File getFile();
+    public abstract File getFile();
 
     protected abstract EdgeHandler getEdgeHandler();
 
@@ -379,44 +385,7 @@ public abstract class BaseMojo extends AbstractMojo {
         }
     }
 
-    protected List<NameValue> getLegendLabels() {
-        List<NameValue> labels = new ArrayList<NameValue>();
-        addLabel("includes", includes, labels);
-        addLabel("excludes", excludes, labels);
-        addLabel("show", show, labels);
-        addLabel("hide", hide, labels);
-        if (!transitive) {
-            addLabel("transitive", transitive + "", labels);
-        }
-        if (depth != -1) {
-            addLabel("depth", depth + "", labels);
-        }
-        return labels;
-    }
-
-    protected void addLabel(String name, String value, List<NameValue> labels) {
-        if (!Helper.isBlank(value)) {
-            NameValue nv = new NameValue(name, value);
-            labels.add(nv);
-        }
-    }
-
-    protected String getGraphTitle() {
-        if (!showTitle) {
-            title = "";
-        }
-        if (!showLegend) {
-            return '"' + title + '"';
-        } else {
-            HtmlUtils htmlUtils = new HtmlUtils();
-            GraphHelper gh = new GraphHelper();
-            List<NameValue> labels = getLegendLabels();
-            Table table = gh.getTitle(title, labels);
-            return "<" + htmlUtils.toHtml(table) + ">";
-        }
-    }
-
-    protected String getDotFileContent(String title, Direction direction) {
+    protected String getDotFileContent(MojoContext mojoContext, GraphContext graphContext) {
         DependencyNode mavenTree = getMavenTree();
         Node<MavenContext> nodeTree = helper.getTree(mavenTree);
         preProcess(nodeTree);

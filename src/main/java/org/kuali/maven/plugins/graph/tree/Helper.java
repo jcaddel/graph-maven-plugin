@@ -26,7 +26,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections15.list.SetUniqueList;
 import org.apache.commons.collections15.map.ListOrderedMap;
-import org.kuali.maven.plugins.graph.pojo.GraphException;
 
 /**
  * <p>
@@ -37,11 +36,19 @@ public class Helper {
     public static final String COMMA = ",";
     public static final String EMPTY_STRING = "";
 
+    public static final void copyProperties(Object dest, Object orig) {
+        try {
+            PropertyUtils.copyProperties(dest, orig);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     public static final <T> Object getProperty(T bean, String property) {
         try {
             return PropertyUtils.getProperty(bean, property);
         } catch (Exception e) {
-            throw new GraphException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -74,7 +81,7 @@ public class Helper {
             }
             return orderedMap;
         } catch (Exception e) {
-            throw new GraphException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 
