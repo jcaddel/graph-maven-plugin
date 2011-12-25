@@ -20,15 +20,15 @@ import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.pojo.Direction;
-import org.kuali.maven.plugins.graph.tree.TreeProcessor;
+import org.kuali.maven.plugins.graph.tree.Processor;
 
 /**
  *
  */
 public class GraphContext {
     EdgeHandler edgeHandler;
-    List<TreeProcessor> preProcessors;
-    List<TreeProcessor> postProcessors;
+    List<Processor> preProcessors;
+    List<Processor> postProcessors;
     String executable = "dot";
     private String title;
     private boolean keepDotFile;
@@ -219,19 +219,19 @@ public class GraphContext {
         this.executable = executable;
     }
 
-    public List<TreeProcessor> getPreProcessors() {
+    public List<Processor> getPreProcessors() {
         return preProcessors;
     }
 
-    public void setPreProcessors(List<TreeProcessor> preProcessors) {
+    public void setPreProcessors(List<Processor> preProcessors) {
         this.preProcessors = preProcessors;
     }
 
-    public List<TreeProcessor> getPostProcessors() {
+    public List<Processor> getPostProcessors() {
         return postProcessors;
     }
 
-    public void setPostProcessors(List<TreeProcessor> postProcessors) {
+    public void setPostProcessors(List<Processor> postProcessors) {
         this.postProcessors = postProcessors;
     }
 

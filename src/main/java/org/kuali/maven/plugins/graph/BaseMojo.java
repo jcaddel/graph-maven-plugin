@@ -25,14 +25,10 @@ import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
-import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
-import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.filter.Filters;
 import org.kuali.maven.plugins.graph.pojo.Direction;
-import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
-import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
 /**
@@ -308,26 +304,10 @@ public abstract class BaseMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        MojoContext mojoContext = new MojoContext();
-        GraphContext graphContext = new GraphContext();
-        Helper.copyProperties(mojoContext, this);
-        Helper.copyProperties(graphContext, this);
-
-        if (skip) {
-            getLog().info("Skipping execution");
-            return;
-        }
-
+        MojoContext mc = Helper.copyProperties(MojoContext.class, this);
+        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
         MojoHelper mh = new MojoHelper();
-
-        GraphHelper gh = new GraphHelper();
-        String title = gh.getGraphTitle(graphContext);
-        String content = mh.getDotFileContent(mojoContext, graphContext);
-        graphContext.setTitle(title);
-        graphContext.setContent(content);
-        Dot dot = new Dot();
-        dot.fillInContext(graphContext);
-        dot.execute(graphContext);
+        mh.execute(mc, gc);
     }
 
     public abstract File getFile();

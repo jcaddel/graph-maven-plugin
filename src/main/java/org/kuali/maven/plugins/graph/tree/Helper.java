@@ -36,9 +36,11 @@ public class Helper {
     public static final String COMMA = ",";
     public static final String EMPTY_STRING = "";
 
-    public static final void copyProperties(Object dest, Object orig) {
+    public static final <T> T copyProperties(Class<T> c, Object orig) {
         try {
+            T dest = c.newInstance();
             PropertyUtils.copyProperties(dest, orig);
+            return dest;
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

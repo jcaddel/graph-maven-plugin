@@ -10,6 +10,7 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.MavenContextTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
+import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.dot.StringGenerator;
@@ -28,12 +29,36 @@ import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
+import org.kuali.maven.plugins.graph.tree.Processor;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.kuali.maven.plugins.graph.tree.TreeMetaData;
-import org.kuali.maven.plugins.graph.tree.TreeProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MojoHelper {
+    private static final Logger logger = LoggerFactory.getLogger(MojoHelper.class);
     Filters filters = new Filters();
+
+    public void execute(MojoContext mc, GraphContext gc) {
+        if (mc.isSkip()) {
+            logger.info("Skipping execution");
+            return;
+        }
+
+        try {
+            GraphHelper gh = new GraphHelper();
+            String title = gh.getGraphTitle(gc);
+            String content = getDotFileContent(mc, gc);
+            gc.setTitle(title);
+            gc.setContent(content);
+            Dot dot = new Dot();
+            dot.fillInContext(gc);
+            dot.execute(gc);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public DependencyNode getMavenTree(MojoContext c) {
         try {
@@ -48,23 +73,23 @@ public class MojoHelper {
     public String getDotFileContent(MojoContext mc, GraphContext gc) {
         TreeHelper helper = new TreeHelper();
         DependencyNode mavenTree = getMavenTree(mc);
-        Node<MavenContext> nodeTree = helper.getTree(mavenTree);
-        for (TreeProcessor processor : gc.getPreProcessors()) {
-            processor.process(gc, nodeTree, null, null);
+        Node<MavenContext> tree = helper.getTree(mavenTree);
+        for (Processor processor : gc.getPreProcessors()) {
+            processor.process(gc, tree, null, null);
         }
-        helper.validate(nodeTree);
-        helper.sanitize(nodeTree);
+        helper.validate(tree);
+        helper.sanitize(tree);
         if (mc.isVerbose()) {
-            TreeMetaData md = helper.getMetaData(nodeTree);
+            TreeMetaData md = helper.getMetaData(tree);
             helper.show(md);
         }
-        helper.include(nodeTree, getIncludeFilter(gc));
-        helper.exclude(nodeTree, getExcludeFilter(gc));
-        List<GraphNode> nodes = helper.getGraphNodes(nodeTree);
+        helper.include(tree, getIncludeFilter(gc));
+        helper.exclude(tree, getExcludeFilter(gc));
+        List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = gc.getEdgeHandler();
-        List<Edge> edges = helper.getEdges(nodeTree, handler);
-        for (TreeProcessor processor : gc.getPostProcessors()) {
-            processor.process(gc, nodeTree, nodes, edges);
+        List<Edge> edges = helper.getEdges(tree, handler);
+        for (Processor processor : gc.getPostProcessors()) {
+            processor.process(gc, tree, nodes, edges);
         }
         if (mc.isVerbose()) {
             helper.show(nodes, edges);

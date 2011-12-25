@@ -42,53 +42,80 @@ public class MojoContext {
     private ArtifactCollector artifactCollector;
 
     private DependencyTreeBuilder treeBuilder;
+
     boolean verbose;
+
+    boolean skip;
+
     public MavenProject getProject() {
         return project;
     }
+
     public void setProject(MavenProject project) {
         this.project = project;
     }
+
     public ArtifactRepository getLocalRepository() {
         return localRepository;
     }
+
     public void setLocalRepository(ArtifactRepository localRepository) {
         this.localRepository = localRepository;
     }
+
     public ArtifactResolver getArtifactResolver() {
         return artifactResolver;
     }
+
     public void setArtifactResolver(ArtifactResolver artifactResolver) {
         this.artifactResolver = artifactResolver;
     }
+
     public ArtifactFactory getArtifactFactory() {
         return artifactFactory;
     }
+
     public void setArtifactFactory(ArtifactFactory artifactFactory) {
         this.artifactFactory = artifactFactory;
     }
+
     public ArtifactMetadataSource getArtifactMetadataSource() {
         return artifactMetadataSource;
     }
+
     public void setArtifactMetadataSource(ArtifactMetadataSource artifactMetadataSource) {
         this.artifactMetadataSource = artifactMetadataSource;
     }
+
     public ArtifactCollector getArtifactCollector() {
         return artifactCollector;
     }
+
     public void setArtifactCollector(ArtifactCollector artifactCollector) {
         this.artifactCollector = artifactCollector;
     }
+
     public DependencyTreeBuilder getTreeBuilder() {
         return treeBuilder;
     }
+
     public void setTreeBuilder(DependencyTreeBuilder treeBuilder) {
         this.treeBuilder = treeBuilder;
     }
+
     public boolean isVerbose() {
         return verbose;
     }
+
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
+    }
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
     }
 }

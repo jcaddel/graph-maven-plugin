@@ -10,7 +10,7 @@ import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
 
-public class ConflictsProcessor implements TreeProcessor {
+public class ConflictsProcessor implements Processor {
 
     @Override
     public void process(GraphContext context, Node<MavenContext> node, List<GraphNode> nodes, List<Edge> edges) {
