@@ -53,8 +53,9 @@ public class MojoHelper {
             gc.setEdgeHandler(edgeHandler);
             GraphHelper gh = new GraphHelper();
             String title = gh.getGraphTitle(gc);
-            String content = getDotFileContent(mc, gc);
             gc.setTitle(title);
+            logger.info("title=" + title);
+            String content = getDotFileContent(mc, gc);
             gc.setContent(content);
             Dot dot = new Dot();
             dot.fillInContext(gc);
