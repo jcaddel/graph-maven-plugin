@@ -18,14 +18,6 @@ package org.kuali.maven.plugins.graph;
 import java.io.File;
 
 /**
- * <p>
- * This mojo lays out the dependency graph in condensed mode.
- * </p>
- *
- * <p>
- * Each dependency appears on the graph once. Graphviz algorithms present the connections between the dependencies as a
- * directed hierarchical graph.
- * </p>
  *
  * @goal dependencies
  * @requiresDependencyResolution compile|test|runtime

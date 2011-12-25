@@ -54,7 +54,6 @@ public class MojoHelper {
             GraphHelper gh = new GraphHelper();
             String title = gh.getGraphTitle(gc);
             gc.setTitle(title);
-            logger.info("title=" + title);
             String content = getDotFileContent(mc, gc);
             gc.setContent(content);
             Dot dot = new Dot();
@@ -65,14 +64,14 @@ public class MojoHelper {
         }
     }
 
-    protected EdgeHandler getEdgeHandler(LayoutStyle style) {
-        switch (style) {
+    protected EdgeHandler getEdgeHandler(LayoutStyle layout) {
+        switch (layout) {
         case CONDENSED:
             return new CondensedEdgeHandler();
         case FLAT:
             return new FlatEdgeHandler();
         default:
-            throw new IllegalArgumentException("Unknown style " + style);
+            throw new IllegalArgumentException("Unknown layout " + layout);
         }
     }
 
