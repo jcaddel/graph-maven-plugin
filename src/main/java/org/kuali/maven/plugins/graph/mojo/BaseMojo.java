@@ -148,7 +148,7 @@ public abstract class BaseMojo extends AbstractMojo {
      *
      * <p>
      * For artifacts that are used frequently (eg commons-logging), <code>CONDENSED</code> mode makes it possible to
-     * quickly trace through the tree and figure out why an artifact is being included in the build.
+     * quickly examine the tree and figure out why an artifact is being included in the build.
      * </p>
      *
      * <p>
