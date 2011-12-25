@@ -49,7 +49,7 @@ public class MojoHelper {
         }
 
         try {
-            EdgeHandler edgeHandler = getEdgeHandler(gc.getStyle());
+            EdgeHandler edgeHandler = getEdgeHandler(gc.getLayout());
             gc.setEdgeHandler(edgeHandler);
             GraphHelper gh = new GraphHelper();
             String title = gh.getGraphTitle(gc);

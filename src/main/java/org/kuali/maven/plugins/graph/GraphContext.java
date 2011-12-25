@@ -51,7 +51,7 @@ public class GraphContext {
     String content;
     File dotFile;
     String type;
-    LayoutStyle style;
+    LayoutStyle layout;
 
     public String getExecutable() {
         return executable;
@@ -245,12 +245,12 @@ public class GraphContext {
         this.type = type;
     }
 
-    public LayoutStyle getStyle() {
-        return style;
+    public LayoutStyle getLayout() {
+        return layout;
     }
 
-    public void setStyle(LayoutStyle style) {
-        this.style = style;
+    public void setLayout(LayoutStyle style) {
+        this.layout = style;
     }
 
 }
