@@ -16,6 +16,8 @@
 package org.kuali.maven.plugins.graph;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
@@ -25,11 +27,10 @@ import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
-import org.kuali.maven.plugins.graph.dot.EdgeHandler;
-import org.kuali.maven.plugins.graph.filter.Filters;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.tree.Helper;
-import org.kuali.maven.plugins.graph.tree.TreeHelper;
+import org.kuali.maven.plugins.graph.tree.PostProcessor;
+import org.kuali.maven.plugins.graph.tree.PreProcessor;
 
 /**
  * <p>
@@ -39,8 +40,6 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
  */
 @SuppressWarnings("deprecation")
 public abstract class BaseMojo extends AbstractMojo {
-    Filters filters = new Filters();
-    TreeHelper helper = new TreeHelper();
 
     /**
      * @required
@@ -302,6 +301,9 @@ public abstract class BaseMojo extends AbstractMojo {
      */
     private boolean verbose;
 
+    List<PreProcessor> preProcessors = new ArrayList<PreProcessor>();
+    List<PostProcessor> postProcessors = new ArrayList<PostProcessor>();
+
     @Override
     public void execute() {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
@@ -311,8 +313,6 @@ public abstract class BaseMojo extends AbstractMojo {
     }
 
     public abstract File getFile();
-
-    protected abstract EdgeHandler getEdgeHandler();
 
     /**
      * Restricts the depth of the dependency tree. To show only the dependencies of the current project, set this to 1.
@@ -476,6 +476,22 @@ public abstract class BaseMojo extends AbstractMojo {
 
     public void setIgnoreDotFailure(boolean failIfDotFails) {
         this.ignoreDotFailure = failIfDotFails;
+    }
+
+    public List<PreProcessor> getPreProcessors() {
+        return preProcessors;
+    }
+
+    public void setPreProcessors(List<PreProcessor> preProcessors) {
+        this.preProcessors = preProcessors;
+    }
+
+    public List<PostProcessor> getPostProcessors() {
+        return postProcessors;
+    }
+
+    public void setPostProcessors(List<PostProcessor> postProcessors) {
+        this.postProcessors = postProcessors;
     }
 
 }

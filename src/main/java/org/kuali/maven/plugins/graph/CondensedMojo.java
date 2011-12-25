@@ -17,9 +17,6 @@ package org.kuali.maven.plugins.graph;
 
 import java.io.File;
 
-import org.kuali.maven.plugins.graph.dot.CondensedEdgeHandler;
-import org.kuali.maven.plugins.graph.dot.EdgeHandler;
-
 /**
  * <p>
  * This mojo lays out the dependency graph in condensed mode.
@@ -44,11 +41,6 @@ public class CondensedMojo extends BaseMojo {
      * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/condensed.png"
      */
     private File file;
-
-    @Override
-    protected EdgeHandler getEdgeHandler() {
-        return new CondensedEdgeHandler();
-    }
 
     @Override
     public File getFile() {

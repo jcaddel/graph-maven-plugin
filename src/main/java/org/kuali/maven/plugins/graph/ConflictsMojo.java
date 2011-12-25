@@ -17,9 +17,6 @@ package org.kuali.maven.plugins.graph;
 
 import java.io.File;
 
-import org.kuali.maven.plugins.graph.dot.CondensedEdgeHandler;
-import org.kuali.maven.plugins.graph.dot.EdgeHandler;
-
 /**
  * <p>
  * This mojo displays any dependencies where conflict resolution has taken place.
@@ -52,11 +49,6 @@ public class ConflictsMojo extends BaseMojo {
     private String conflictsFilter;
 
     @Override
-    protected EdgeHandler getEdgeHandler() {
-        return new CondensedEdgeHandler();
-    }
-
-    @Override
     public File getFile() {
         return file;
     }
@@ -70,7 +62,6 @@ public class ConflictsMojo extends BaseMojo {
         setShow(getShow() == null ? conflictsFilter : getShow() + "," + conflictsFilter);
         super.execute();
     }
-
 
     public String getConflictsFilter() {
         return conflictsFilter;

@@ -10,8 +10,10 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.MavenContextTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
+import org.kuali.maven.plugins.graph.dot.CondensedEdgeHandler;
 import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
+import org.kuali.maven.plugins.graph.dot.FlatEdgeHandler;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.dot.StringGenerator;
 import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
@@ -29,7 +31,8 @@ import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
-import org.kuali.maven.plugins.graph.tree.Processor;
+import org.kuali.maven.plugins.graph.tree.PostProcessor;
+import org.kuali.maven.plugins.graph.tree.PreProcessor;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 import org.slf4j.Logger;
@@ -46,6 +49,8 @@ public class MojoHelper {
         }
 
         try {
+            EdgeHandler edgeHandler = getEdgeHandler(gc.getStyle());
+            gc.setEdgeHandler(edgeHandler);
             GraphHelper gh = new GraphHelper();
             String title = gh.getGraphTitle(gc);
             String content = getDotFileContent(mc, gc);
@@ -57,7 +62,17 @@ public class MojoHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    protected EdgeHandler getEdgeHandler(Style style) {
+        switch (style) {
+        case CONDENSED:
+            return new CondensedEdgeHandler();
+        case FLAT:
+            return new FlatEdgeHandler();
+        default:
+            throw new IllegalArgumentException("Unknown style " + style);
+        }
     }
 
     public DependencyNode getMavenTree(MojoContext c) {
@@ -74,8 +89,8 @@ public class MojoHelper {
         TreeHelper helper = new TreeHelper();
         DependencyNode mavenTree = getMavenTree(mc);
         Node<MavenContext> tree = helper.getTree(mavenTree);
-        for (Processor processor : gc.getPreProcessors()) {
-            processor.process(gc, tree, null, null);
+        for (PreProcessor processor : gc.getPreProcessors()) {
+            processor.process(gc, tree);
         }
         helper.validate(tree);
         helper.sanitize(tree);
@@ -88,8 +103,8 @@ public class MojoHelper {
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = gc.getEdgeHandler();
         List<Edge> edges = helper.getEdges(tree, handler);
-        for (Processor processor : gc.getPostProcessors()) {
-            processor.process(gc, tree, nodes, edges);
+        for (PostProcessor processor : gc.getPostProcessors()) {
+            processor.process(gc, tree, edges, nodes);
         }
         if (mc.isVerbose()) {
             helper.show(nodes, edges);

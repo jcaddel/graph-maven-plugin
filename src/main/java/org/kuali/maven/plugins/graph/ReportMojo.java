@@ -6,8 +6,6 @@ import java.util.Locale;
 import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
-import org.kuali.maven.plugins.graph.dot.CondensedEdgeHandler;
-import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 
 /**
@@ -17,11 +15,6 @@ import org.kuali.maven.plugins.graph.pojo.Scope;
 public class ReportMojo extends BaseMojo implements MavenReport {
 
     private File file;
-
-    @Override
-    protected EdgeHandler getEdgeHandler() {
-        return new CondensedEdgeHandler();
-    }
 
     /**
      * Output folder where the main page of the report will be generated. Note that this parameter is only relevant if

@@ -17,9 +17,6 @@ package org.kuali.maven.plugins.graph;
 
 import java.io.File;
 
-import org.kuali.maven.plugins.graph.dot.EdgeHandler;
-import org.kuali.maven.plugins.graph.dot.FlatEdgeHandler;
-
 /**
  * <p>
  * This mojo lays out the dependency graph in the same order they are defined in the pom's.
@@ -41,11 +38,6 @@ public class FlatMojo extends BaseMojo {
      * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/flat.png"
      */
     private File file;
-
-    @Override
-    protected EdgeHandler getEdgeHandler() {
-        return new FlatEdgeHandler();
-    }
 
     @Override
     public File getFile() {

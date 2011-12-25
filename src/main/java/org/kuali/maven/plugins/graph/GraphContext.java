@@ -20,16 +20,17 @@ import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.pojo.Direction;
-import org.kuali.maven.plugins.graph.tree.Processor;
+import org.kuali.maven.plugins.graph.tree.PostProcessor;
+import org.kuali.maven.plugins.graph.tree.PreProcessor;
 
 /**
  *
  */
 public class GraphContext {
-    EdgeHandler edgeHandler;
-    List<Processor> preProcessors;
-    List<Processor> postProcessors;
     String executable = "dot";
+    EdgeHandler edgeHandler;
+    List<PreProcessor> preProcessors;
+    List<PostProcessor> postProcessors;
     private String title;
     private boolean keepDotFile;
     private boolean transitive;
@@ -50,6 +51,39 @@ public class GraphContext {
     String content;
     File dotFile;
     String type;
+    Style style;
+
+    public String getExecutable() {
+        return executable;
+    }
+
+    public void setExecutable(String executable) {
+        this.executable = executable;
+    }
+
+    public EdgeHandler getEdgeHandler() {
+        return edgeHandler;
+    }
+
+    public void setEdgeHandler(EdgeHandler edgeHandler) {
+        this.edgeHandler = edgeHandler;
+    }
+
+    public List<PreProcessor> getPreProcessors() {
+        return preProcessors;
+    }
+
+    public void setPreProcessors(List<PreProcessor> preProcessors) {
+        this.preProcessors = preProcessors;
+    }
+
+    public List<PostProcessor> getPostProcessors() {
+        return postProcessors;
+    }
+
+    public void setPostProcessors(List<PostProcessor> postProcessors) {
+        this.postProcessors = postProcessors;
+    }
 
     public String getTitle() {
         return title;
@@ -211,36 +245,12 @@ public class GraphContext {
         this.type = type;
     }
 
-    public String getExecutable() {
-        return executable;
+    public Style getStyle() {
+        return style;
     }
 
-    public void setExecutable(String executable) {
-        this.executable = executable;
-    }
-
-    public List<Processor> getPreProcessors() {
-        return preProcessors;
-    }
-
-    public void setPreProcessors(List<Processor> preProcessors) {
-        this.preProcessors = preProcessors;
-    }
-
-    public List<Processor> getPostProcessors() {
-        return postProcessors;
-    }
-
-    public void setPostProcessors(List<Processor> postProcessors) {
-        this.postProcessors = postProcessors;
-    }
-
-    public EdgeHandler getEdgeHandler() {
-        return edgeHandler;
-    }
-
-    public void setEdgeHandler(EdgeHandler edgeHandler) {
-        this.edgeHandler = edgeHandler;
+    public void setStyle(Style style) {
+        this.style = style;
     }
 
 }
