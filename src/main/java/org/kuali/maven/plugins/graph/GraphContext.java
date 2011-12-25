@@ -16,13 +16,19 @@
 package org.kuali.maven.plugins.graph;
 
 import java.io.File;
+import java.util.List;
 
+import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.pojo.Direction;
+import org.kuali.maven.plugins.graph.tree.TreeProcessor;
 
 /**
  *
  */
 public class GraphContext {
+    EdgeHandler edgeHandler;
+    List<TreeProcessor> preProcessors;
+    List<TreeProcessor> postProcessors;
     String executable = "dot";
     private String title;
     private boolean keepDotFile;
@@ -211,6 +217,30 @@ public class GraphContext {
 
     public void setExecutable(String executable) {
         this.executable = executable;
+    }
+
+    public List<TreeProcessor> getPreProcessors() {
+        return preProcessors;
+    }
+
+    public void setPreProcessors(List<TreeProcessor> preProcessors) {
+        this.preProcessors = preProcessors;
+    }
+
+    public List<TreeProcessor> getPostProcessors() {
+        return postProcessors;
+    }
+
+    public void setPostProcessors(List<TreeProcessor> postProcessors) {
+        this.postProcessors = postProcessors;
+    }
+
+    public EdgeHandler getEdgeHandler() {
+        return edgeHandler;
+    }
+
+    public void setEdgeHandler(EdgeHandler edgeHandler) {
+        this.edgeHandler = edgeHandler;
     }
 
 }

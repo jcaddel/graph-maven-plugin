@@ -3,16 +3,17 @@ package org.kuali.maven.plugins.graph.tree;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.maven.plugins.graph.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
 
-public class ConflictsPostProcessor implements PostProcessor {
+public class ConflictsProcessor implements TreeProcessor {
 
     @Override
-    public void postProcess(Node<MavenContext> node, List<GraphNode> nodes, List<Edge> edges) {
+    public void process(GraphContext context, Node<MavenContext> node, List<GraphNode> nodes, List<Edge> edges) {
         TreeHelper helper = new TreeHelper();
         List<MavenContext> contexts = getContexts(node);
         List<Edge> conflictEdges = getEdges(contexts, edges);

@@ -46,17 +46,16 @@ public class GraphHelper {
     public static final String DEFAULT_TYPE = "jar";
 
     public String getGraphTitle(GraphContext context) {
-        if (!context.isShowTitle()) {
-            return "";
-        }
+        String title = context.isShowTitle() ? context.getTitle() : "";
+
         if (!context.isShowLegend()) {
-            return '"' + context.getTitle() + '"';
-        } else {
-            HtmlUtils htmlUtils = new HtmlUtils();
-            List<NameValue> labels = getLegendLabels(context);
-            Table table = getTitle(context.getTitle(), labels);
-            return "<" + htmlUtils.toHtml(table) + ">";
+            return '"' + title + '"';
         }
+
+        HtmlUtils htmlUtils = new HtmlUtils();
+        List<NameValue> labels = getLegendLabels(context);
+        Table table = getTitle(title, labels);
+        return "<" + htmlUtils.toHtml(table) + ">";
     }
 
     protected List<NameValue> getLegendLabels(GraphContext context) {

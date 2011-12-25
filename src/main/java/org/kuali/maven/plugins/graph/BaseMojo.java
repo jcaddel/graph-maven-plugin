@@ -16,10 +16,7 @@
 package org.kuali.maven.plugins.graph;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -27,36 +24,16 @@ import org.apache.maven.artifact.resolver.ArtifactCollector;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
-import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
-import org.kuali.maven.plugins.graph.collector.MavenContextTokenCollector;
-import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.dot.Dot;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
-import org.kuali.maven.plugins.graph.dot.StringGenerator;
-import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
-import org.kuali.maven.plugins.graph.filter.DepthFilter;
-import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.Filters;
-import org.kuali.maven.plugins.graph.filter.MatchCondition;
-import org.kuali.maven.plugins.graph.filter.MavenContextFilterWrapper;
-import org.kuali.maven.plugins.graph.filter.NodeFilter;
-import org.kuali.maven.plugins.graph.filter.NodeFilterChain;
-import org.kuali.maven.plugins.graph.filter.ReverseNodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Direction;
-import org.kuali.maven.plugins.graph.pojo.Edge;
-import org.kuali.maven.plugins.graph.pojo.Graph;
-import org.kuali.maven.plugins.graph.pojo.GraphException;
-import org.kuali.maven.plugins.graph.pojo.GraphNode;
-import org.kuali.maven.plugins.graph.pojo.Hider;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
-import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 
 /**
  * <p>
@@ -341,9 +318,11 @@ public abstract class BaseMojo extends AbstractMojo {
             return;
         }
 
+        MojoHelper mh = new MojoHelper();
+
         GraphHelper gh = new GraphHelper();
         String title = gh.getGraphTitle(graphContext);
-        String content = getDotFileContent(mojoContext, graphContext);
+        String content = mh.getDotFileContent(mojoContext, graphContext);
         graphContext.setTitle(title);
         graphContext.setContent(content);
         Dot dot = new Dot();
@@ -362,102 +341,6 @@ public abstract class BaseMojo extends AbstractMojo {
      * @parameter expression="${graph.depth}" default-value="-1"
      */
     private int depth;
-
-    protected DepthFilter<MavenContext> getDepthFilter() {
-        int maxDepth = transitive ? DepthFilter.INFINITE : 1;
-        maxDepth = depth >= 0 ? depth : maxDepth;
-        return new DepthFilter<MavenContext>(maxDepth);
-    }
-
-    protected void preProcess(Node<MavenContext> node) {
-    }
-
-    protected void postProcess(Node<MavenContext> node, List<GraphNode> nodes, List<Edge> edges) {
-        GraphHelper graphHelper = new GraphHelper();
-        Hider hider = getHider();
-        List<Node<MavenContext>> treeNodes = node.getBreadthFirstList();
-        for (Node<MavenContext> element : treeNodes) {
-            MavenContext context = element.getObject();
-            GraphNode graphNode = context.getGraphNode();
-            Artifact artifact = context.getArtifact();
-            String label = graphHelper.getLabel(artifact, hider);
-            graphNode.setLabel(label);
-        }
-    }
-
-    protected String getDotFileContent(MojoContext mojoContext, GraphContext graphContext) {
-        DependencyNode mavenTree = getMavenTree();
-        Node<MavenContext> nodeTree = helper.getTree(mavenTree);
-        preProcess(nodeTree);
-        helper.validate(nodeTree);
-        helper.sanitize(nodeTree);
-        if (verbose) {
-            TreeMetaData md = helper.getMetaData(nodeTree);
-            helper.show(md);
-        }
-        helper.include(nodeTree, getIncludeFilter());
-        helper.exclude(nodeTree, getExcludeFilter());
-        List<GraphNode> nodes = helper.getGraphNodes(nodeTree);
-        EdgeHandler handler = getEdgeHandler();
-        List<Edge> edges = helper.getEdges(nodeTree, handler);
-        postProcess(nodeTree, nodes, edges);
-        if (verbose) {
-            helper.show(nodes, edges);
-        }
-        Graph graph = new GraphHelper().getGraph(title, direction, nodes, edges);
-        return new StringGenerator().getString(graph);
-    }
-
-    protected Hider getHider() {
-        Hider hider = new Hider();
-        hider.setHideGroupId(!showGroupIds);
-        return hider;
-    }
-
-    protected NodeFilter<MavenContext> getShowFilter() {
-        TokenCollector<MavenContext> collector = new MavenContextTokenCollector();
-        Filter<MavenContext> filter = filters.getIncludePatternFilter(getShow(), collector);
-        return new MavenContextFilterWrapper(filter);
-    }
-
-    protected NodeFilter<MavenContext> getHideFilter() {
-        TokenCollector<MavenContext> collector = new MavenContextTokenCollector();
-        Filter<MavenContext> filter = filters.getExcludePatternFilter(getHide(), collector);
-        return new MavenContextFilterWrapper(filter);
-    }
-
-    protected NodeFilter<MavenContext> getIncludeFilter() {
-        TokenCollector<Artifact> collector = new ArtifactIdTokenCollector();
-        Filter<Artifact> filter = filters.getIncludePatternFilter(getIncludes(), collector);
-        ArtifactFilterWrapper artifactFilter = new ArtifactFilterWrapper(filter);
-        List<NodeFilter<MavenContext>> filters = new ArrayList<NodeFilter<MavenContext>>();
-        NodeFilter<MavenContext> artifactQualifierFilter = getShowFilter();
-        filters.add(artifactQualifierFilter);
-        filters.add(artifactFilter);
-        return new NodeFilterChain<MavenContext>(filters, MatchCondition.ALL, true);
-    }
-
-    protected NodeFilter<MavenContext> getExcludeFilter() {
-        TokenCollector<Artifact> collector = new ArtifactIdTokenCollector();
-        Filter<Artifact> filter = filters.getExcludePatternFilter(getExcludes(), collector);
-        ArtifactFilterWrapper artifactFilter = new ArtifactFilterWrapper(filter);
-        ReverseNodeFilter<MavenContext> depthFilter = new ReverseNodeFilter<MavenContext>(getDepthFilter());
-        NodeFilter<MavenContext> artifactQualifierFilter = getHideFilter();
-        List<NodeFilter<MavenContext>> filters = new ArrayList<NodeFilter<MavenContext>>();
-        filters.add(artifactQualifierFilter);
-        filters.add(artifactFilter);
-        filters.add(depthFilter);
-        return new NodeFilterChain<MavenContext>(filters, MatchCondition.ANY, false);
-    }
-
-    protected DependencyNode getMavenTree() {
-        try {
-            return getTreeBuilder().buildDependencyTree(project, localRepository, artifactFactory,
-                    artifactMetadataSource, null, artifactCollector);
-        } catch (DependencyTreeBuilderException e) {
-            throw new GraphException(e);
-        }
-    }
 
     public String getIncludes() {
         return includes;
