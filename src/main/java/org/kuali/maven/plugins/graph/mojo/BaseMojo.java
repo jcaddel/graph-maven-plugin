@@ -143,8 +143,12 @@ public abstract class BaseMojo extends AbstractMojo {
      *
      * <p>
      * In <code>CONDENSED</code> mode, each dependency appears on the graph only once. Graphviz algorithms present the
-     * connections between the dependencies as a directed hierarchical graph. This makes it possible to determine the
-     * exactly how a given artifact came to be included in the build.
+     * connections between the dependencies as a directed hierarchical graph.
+     * </p>
+     *
+     * <p>
+     * For artifacts that are used frequently (eg commons-logging), <code>CONDENSED</code> mode makes it possible to
+     * quickly trace through the tree and figure out why an artifact is being included in the build.
      * </p>
      *
      * <p>

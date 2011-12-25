@@ -68,7 +68,7 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
             handleConflict(node, edges);
             return;
         default:
-            throw new GraphException("Unknown state " + node.getObject().getState());
+            throw new IllegalArgumentException("Unknown state " + node.getObject().getState());
         }
     }
 
@@ -96,7 +96,7 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
             edges.add(edge);
         } else {
             // Hide ourself since contextToUse represents the same artifact
-            context.getGraphNode().setHidden(true);
+            helper.hide(node);
         }
 
         // Draw an edge from our parent to contextToUse
