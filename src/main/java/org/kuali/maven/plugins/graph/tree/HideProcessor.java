@@ -3,8 +3,8 @@ package org.kuali.maven.plugins.graph.tree;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
-import org.kuali.maven.plugins.graph.GraphContext;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
+import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.Hider;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;

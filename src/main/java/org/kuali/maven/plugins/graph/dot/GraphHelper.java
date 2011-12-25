@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
 import org.codehaus.plexus.util.StringUtils;
-import org.kuali.maven.plugins.graph.GraphContext;
 import org.kuali.maven.plugins.graph.dot.html.CellAlign;
 import org.kuali.maven.plugins.graph.dot.html.Font;
 import org.kuali.maven.plugins.graph.dot.html.HtmlUtils;
@@ -30,6 +29,7 @@ import org.kuali.maven.plugins.graph.dot.html.TableRow;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
+import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.Hider;

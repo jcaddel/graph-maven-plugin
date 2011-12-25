@@ -27,7 +27,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.DefaultConsumer;
 import org.codehaus.plexus.util.cli.StreamConsumer;
-import org.kuali.maven.plugins.graph.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

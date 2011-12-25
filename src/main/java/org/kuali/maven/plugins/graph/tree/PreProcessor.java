@@ -1,6 +1,6 @@
 package org.kuali.maven.plugins.graph.tree;
 
-import org.kuali.maven.plugins.graph.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 
 public interface PreProcessor {
