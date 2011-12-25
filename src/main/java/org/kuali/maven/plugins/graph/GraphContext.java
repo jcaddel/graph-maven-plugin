@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.pojo.Direction;
+import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
 import org.kuali.maven.plugins.graph.tree.PostProcessor;
 import org.kuali.maven.plugins.graph.tree.PreProcessor;
 

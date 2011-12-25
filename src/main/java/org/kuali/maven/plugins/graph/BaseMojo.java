@@ -17,6 +17,7 @@ package org.kuali.maven.plugins.graph;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.factory.ArtifactFactory;
@@ -28,7 +29,9 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.kuali.maven.plugins.graph.pojo.Direction;
+import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
 import org.kuali.maven.plugins.graph.tree.Helper;
+import org.kuali.maven.plugins.graph.tree.HideProcessor;
 import org.kuali.maven.plugins.graph.tree.PostProcessor;
 import org.kuali.maven.plugins.graph.tree.PreProcessor;
 
@@ -215,10 +218,10 @@ public abstract class BaseMojo extends AbstractMojo {
      * If not provided, no dependencies are hidden.
      * </p>
      *
-     * <pre>
-     * Scopes: compile,provided,runtime,test,system,import
+     * <p>
+     * Scopes: compile,provided,runtime,test,system,import<br/>
      * States: normal,conflict,cyclic,duplicate
-     * </pre>
+     * </p>
      *
      * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
@@ -231,8 +234,8 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Comma delimited list of dependency patterns used for showing artifacts. The pattern syntax has the form -
-     * [scope]:[optional|required]:[state]
+     * Comma delimited list of dependency patterns used for showing artifacts.<br/>
+     * The pattern syntax has the form - [scope]:[optional|required]:[state]
      * </p>
      *
      * <p>
@@ -240,10 +243,9 @@ public abstract class BaseMojo extends AbstractMojo {
      * it, and all of the dependencies in the direct path from it back to the root of the dependency tree are displayed.
      * </p>
      *
-     * <pre>
-     * Scopes: compile,provided,runtime,test,system,import
-     * States: normal,conflict,cyclic,duplicate
-     * </pre>
+     * <p>
+     * Scopes: compile,provided,runtime,test,system,import States: normal,conflict,cyclic,duplicate
+     * </p>
      *
      * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
@@ -295,7 +297,7 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Set this to false to skip executing the "dot" binary that produces dependency graphs
+     * Set this to false to skip executing the "dot" binary that produces an image from the .dot text file
      * </p>
      *
      * @parameter expression="${graph.executeDot}" default-value="true"
@@ -321,8 +323,8 @@ public abstract class BaseMojo extends AbstractMojo {
      */
     private boolean verbose;
 
-    List<PreProcessor> preProcessors = new ArrayList<PreProcessor>();
-    List<PostProcessor> postProcessors = new ArrayList<PostProcessor>();
+    List<? extends PreProcessor> preProcessors = Collections.singletonList(new HideProcessor());
+    List<? extends PostProcessor> postProcessors = new ArrayList<PostProcessor>();
 
     @Override
     public void execute() {
@@ -498,28 +500,28 @@ public abstract class BaseMojo extends AbstractMojo {
         this.ignoreDotFailure = failIfDotFails;
     }
 
-    public List<PreProcessor> getPreProcessors() {
-        return preProcessors;
-    }
-
-    public void setPreProcessors(List<PreProcessor> preProcessors) {
-        this.preProcessors = preProcessors;
-    }
-
-    public List<PostProcessor> getPostProcessors() {
-        return postProcessors;
-    }
-
-    public void setPostProcessors(List<PostProcessor> postProcessors) {
-        this.postProcessors = postProcessors;
-    }
-
     public LayoutStyle getLayout() {
         return layout;
     }
 
     public void setLayout(LayoutStyle layout) {
         this.layout = layout;
+    }
+
+    public List<? extends PreProcessor> getPreProcessors() {
+        return preProcessors;
+    }
+
+    public void setPreProcessors(List<? extends PreProcessor> preProcessors) {
+        this.preProcessors = preProcessors;
+    }
+
+    public List<? extends PostProcessor> getPostProcessors() {
+        return postProcessors;
+    }
+
+    public void setPostProcessors(List<? extends PostProcessor> postProcessors) {
+        this.postProcessors = postProcessors;
     }
 
 }
