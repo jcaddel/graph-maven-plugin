@@ -1,4 +1,4 @@
-package org.kuali.maven.plugins.graph;
+package org.kuali.maven.plugins.graph.mojo;
 
 import java.util.ArrayList;
 import java.util.List;
