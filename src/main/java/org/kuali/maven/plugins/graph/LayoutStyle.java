@@ -1,5 +1,5 @@
 package org.kuali.maven.plugins.graph;
 
-public enum Style {
+public enum LayoutStyle {
     FLAT, CONDENSED;
 }

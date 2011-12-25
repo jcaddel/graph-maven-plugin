@@ -133,6 +133,26 @@ public abstract class BaseMojo extends AbstractMojo {
 
     /**
      * <p>
+     * The style for the graph layout. Valid options are <code>CONDENSED</code> and <code>FLAT</code>
+     * </p>
+     *
+     * <p>
+     * In <code>CONDENSED</code> mode, each dependency appears on the graph only once. Graphviz algorithms present the
+     * connections between the dependencies as a directed hierarchical graph. This makes it possible to determine the
+     * exactly how a given artifact came to be included in the build.
+     * </p>
+     *
+     * <p>
+     * In <code>FLAT</code> mode, dependencies are displayed exactly how they are defined in the pom's. This style can
+     * make it easier to comprehend the dependency tree but the graph will have more nodes on it.
+     * </p>
+     *
+     * @parameter expression="${graph.layout}" default-value="CONDENSED"
+     */
+    private LayoutStyle layout;
+
+    /**
+     * <p>
      * Comma delimited list of patterns for including artifacts. The pattern syntax has the form -
      * [groupId]:[artifactId]:[type]:[classifier]:[version]
      * </p>
@@ -492,6 +512,14 @@ public abstract class BaseMojo extends AbstractMojo {
 
     public void setPostProcessors(List<PostProcessor> postProcessors) {
         this.postProcessors = postProcessors;
+    }
+
+    public LayoutStyle getLayout() {
+        return layout;
+    }
+
+    public void setLayout(LayoutStyle layout) {
+        this.layout = layout;
     }
 
 }

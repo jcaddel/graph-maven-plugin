@@ -27,10 +27,10 @@ import java.io.File;
  * directed hierarchical graph.
  * </p>
  *
- * @goal condensed
+ * @goal dependencies
  * @requiresDependencyResolution compile|test|runtime
  */
-public class CondensedMojo extends BaseMojo {
+public class DependenciesMojo extends BaseMojo {
 
     /**
      * <p>
@@ -38,7 +38,7 @@ public class CondensedMojo extends BaseMojo {
      * </p>
      *
      * @required
-     * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/condensed.png"
+     * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/dependencies.png"
      */
     private File file;
 

@@ -64,7 +64,7 @@ public class MojoHelper {
         }
     }
 
-    protected EdgeHandler getEdgeHandler(Style style) {
+    protected EdgeHandler getEdgeHandler(LayoutStyle style) {
         switch (style) {
         case CONDENSED:
             return new CondensedEdgeHandler();
