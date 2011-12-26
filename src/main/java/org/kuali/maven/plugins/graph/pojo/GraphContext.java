@@ -16,9 +16,13 @@
 package org.kuali.maven.plugins.graph.pojo;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.kuali.maven.plugins.graph.dot.CondensedEdgeHandler;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
+import org.kuali.maven.plugins.graph.tree.HideProcessor;
 import org.kuali.maven.plugins.graph.tree.PostProcessor;
 import org.kuali.maven.plugins.graph.tree.PreProcessor;
 
@@ -26,11 +30,14 @@ import org.kuali.maven.plugins.graph.tree.PreProcessor;
  *
  */
 public class GraphContext {
+    public static final List<? extends PreProcessor> DEFAULT_PRE_PROCESSORS = Collections
+            .singletonList(new HideProcessor());
+
     String executable = "dot";
-    EdgeHandler edgeHandler;
-    List<? extends PreProcessor> preProcessors;
-    List<? extends PostProcessor> postProcessors;
-    String title;
+    EdgeHandler edgeHandler = new CondensedEdgeHandler();
+    List<? extends PreProcessor> preProcessors = new ArrayList<PreProcessor>(DEFAULT_PRE_PROCESSORS);
+    List<? extends PostProcessor> postProcessors = new ArrayList<PostProcessor>();
+    String title = "Dependency Graph";
     boolean keepDotFile = false;
     boolean transitive = true;
     boolean skip = false;

@@ -15,8 +15,11 @@
  */
 package org.kuali.maven.plugins.graph.mojo;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
+import java.util.List;
+
+import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.MojoContext;
+import org.kuali.maven.plugins.graph.tree.Helper;
 
 /**
  *
@@ -25,9 +28,16 @@ import org.apache.maven.plugin.MojoFailureException;
  */
 public class MultiMojo extends BaseMavenMojo {
 
+    /**
+     * @parameter
+     */
+    List<GraphContext> descriptors;
+
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        getLog().info("Hello world");
+    public void execute() {
+        MojoContext mc = Helper.copyProperties(MojoContext.class, this);
+        MojoHelper helper = new MojoHelper();
+        helper.execute(mc, descriptors);
     }
 
 }

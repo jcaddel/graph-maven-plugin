@@ -131,7 +131,7 @@ public class TreeHelper {
      * </p>
      *
      * <p>
-     * Any node where <code>filter.isMatch()</code> returns true, is left untouched.
+     * Any node where <code>filter.isMatch()</code> returns false, is left untouched.
      * </p>
      *
      * @param node

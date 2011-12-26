@@ -33,6 +33,7 @@ import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
+import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.PostProcessor;
 import org.kuali.maven.plugins.graph.tree.PreProcessor;
@@ -44,6 +45,21 @@ import org.slf4j.LoggerFactory;
 public class MojoHelper {
     private static final Logger logger = LoggerFactory.getLogger(MojoHelper.class);
     Filters filters = new Filters();
+
+    public void execute(MojoContext mc, List<GraphContext> descriptors) {
+        if (mc.isSkip()) {
+            logger.info("Skipping execution");
+            return;
+        }
+        if (Helper.isEmpty(descriptors)) {
+            logger.debug("No descriptors");
+            return;
+        }
+
+        for (GraphContext descriptor : descriptors) {
+            execute(mc, descriptor);
+        }
+    }
 
     public void execute(MojoContext mc, GraphContext gc) {
         if (mc.isSkip()) {

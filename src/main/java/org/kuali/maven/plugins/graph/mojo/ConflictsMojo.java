@@ -16,12 +16,13 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
+import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
+import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.tree.ConflictsProcessor;
-import org.kuali.maven.plugins.graph.tree.PostProcessor;
+import org.kuali.maven.plugins.graph.tree.Helper;
 
 /**
  * <p>
@@ -67,10 +68,13 @@ public class ConflictsMojo extends BaseGraphMojo {
     public void execute() {
         setShow(getShow() == null ? conflictsFilter : getShow() + "," + conflictsFilter);
         setLayout(LayoutStyle.CONDENSED);
-        List<PostProcessor> pps = new ArrayList<PostProcessor>(getPostProcessors());
-        pps.add(new ConflictsProcessor());
-        setPostProcessors(pps);
-        super.execute();
+
+        MojoContext mc = Helper.copyProperties(MojoContext.class, this);
+        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
+        gc.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
+
+        MojoHelper mh = new MojoHelper();
+        mh.execute(mc, gc);
     }
 
     public String getConflictsFilter() {

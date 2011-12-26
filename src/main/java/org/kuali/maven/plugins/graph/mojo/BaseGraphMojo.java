@@ -16,8 +16,6 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.pojo.Direction;
@@ -25,7 +23,6 @@ import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
-import org.kuali.maven.plugins.graph.tree.HideProcessor;
 import org.kuali.maven.plugins.graph.tree.PostProcessor;
 import org.kuali.maven.plugins.graph.tree.PreProcessor;
 
@@ -248,9 +245,6 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
      */
     private boolean ignoreDotFailure;
 
-    List<? extends PreProcessor> preProcessors = Collections.singletonList(new HideProcessor());
-    List<? extends PostProcessor> postProcessors = new ArrayList<PostProcessor>();
-
     @Override
     public void execute() {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
@@ -387,22 +381,6 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     public void setLayout(LayoutStyle layout) {
         this.layout = layout;
-    }
-
-    public List<? extends PreProcessor> getPreProcessors() {
-        return preProcessors;
-    }
-
-    public void setPreProcessors(List<? extends PreProcessor> preProcessors) {
-        this.preProcessors = preProcessors;
-    }
-
-    public List<? extends PostProcessor> getPostProcessors() {
-        return postProcessors;
-    }
-
-    public void setPostProcessors(List<? extends PostProcessor> postProcessors) {
-        this.postProcessors = postProcessors;
     }
 
 }
