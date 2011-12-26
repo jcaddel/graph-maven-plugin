@@ -38,7 +38,7 @@ import org.kuali.maven.plugins.graph.tree.Helper;
  * @goal conflicts
  * @requiresDependencyResolution compile|test|runtime
  */
-public class ConflictsMojo extends BaseGraphMojo {
+public class ConflictsMojo extends FilteredGraphMojo {
 
     /**
      * The file the graph will be written to

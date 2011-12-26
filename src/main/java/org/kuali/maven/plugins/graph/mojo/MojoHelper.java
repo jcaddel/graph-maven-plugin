@@ -81,7 +81,7 @@ public class MojoHelper {
             descriptorsToUse.addAll(getDefaultDescriptors(gc));
         }
         Counter counter = new Counter(1);
-        logger.info(gc.getType());
+        logger.debug("global type={}", gc.getType());
         for (GraphContext descriptor : descriptors) {
             Helper.copyPropertiesIfNull(descriptor, gc);
             if (descriptor.getCategory() == null) {
