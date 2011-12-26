@@ -52,37 +52,49 @@ public class MojoHelper {
     private static final Logger logger = LoggerFactory.getLogger(MojoHelper.class);
     Filters filters = new Filters();
 
-    public void execute(MojoContext mc, List<GraphContext> descriptors) {
-        if (mc.isSkip()) {
-            logger.info("Skipping execution");
-            return;
-        }
-        List<GraphContext> descriptorsToUse = getDescriptorsToUse(mc, descriptors);
-        if (Helper.isEmpty(descriptorsToUse)) {
-            logger.info("No descriptors");
-            return;
-        }
+    public void execute(MojoContext mc, GraphContext gc, List<GraphContext> descriptors) {
+        try {
+            if (mc.isSkip()) {
+                logger.info("Skipping execution");
+                return;
+            }
+            List<GraphContext> descriptorsToUse = getDescriptorsToUse(mc, gc, descriptors);
+            if (Helper.isEmpty(descriptorsToUse)) {
+                logger.info("No descriptors");
+                return;
+            }
 
-        for (GraphContext descriptor : descriptorsToUse) {
-            execute(mc, descriptor);
+            for (GraphContext descriptor : descriptorsToUse) {
+                execute(mc, descriptor);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    protected List<GraphContext> getDescriptorsToUse(MojoContext mc, List<GraphContext> descriptors) {
+    protected List<GraphContext> getDescriptorsToUse(MojoContext mc, GraphContext gc, List<GraphContext> descriptors) {
         List<GraphContext> descriptorsToUse = new ArrayList<GraphContext>();
         if (descriptors == null) {
             descriptors = new ArrayList<GraphContext>();
         }
         if (mc.isUseDefaultDescriptors()) {
-            descriptorsToUse.addAll(getDefaultDescriptors());
+            descriptorsToUse.addAll(getDefaultDescriptors(gc));
         }
         Counter counter = new Counter(1);
+        logger.info(gc.getType());
         for (GraphContext descriptor : descriptors) {
+            Helper.copyPropertiesIfNull(descriptor, gc);
             if (descriptor.getCategory() == null) {
                 descriptor.setCategory("other");
             }
             if (descriptor.getLabel() == null) {
                 descriptor.setLabel(counter.increment() + "");
+            }
+            if (descriptor.getTransitive() == null) {
+                descriptor.setTransitive(true);
+            }
+            if (descriptor.getLayout() == null) {
+                descriptor.setLayout(LayoutStyle.CONDENSED);
             }
         }
         Helper.addAll(descriptorsToUse, descriptors);
@@ -102,39 +114,51 @@ public class MojoHelper {
         return mc.getOutputDir().getAbsolutePath() + FS + category + FS + label + "." + type;
     }
 
-    protected List<GraphContext> getDefaultDescriptors() {
+    protected List<GraphContext> getDefaultDescriptors(GraphContext gc) {
+        LayoutStyle layout = LayoutStyle.CONDENSED;
         List<GraphContext> descriptors = new ArrayList<GraphContext>();
-        GraphContext allDirect = new GraphContext();
+        GraphContext allDirect = Helper.copyProperties(GraphContext.class, gc);
         allDirect.setTransitive(false);
         allDirect.setCategory("direct");
         allDirect.setLabel("all");
+        allDirect.setLayout(layout);
         descriptors.add(allDirect);
         for (Scope scope : Scope.values()) {
-            descriptors.add(getGraphContext(scope, false));
+            descriptors.add(getGraphContext(scope, false, layout, gc));
         }
-        GraphContext allTransitive = new GraphContext();
+        GraphContext allTransitive = Helper.copyProperties(GraphContext.class, gc);
         allTransitive.setTransitive(true);
         allTransitive.setCategory("transitive");
         allTransitive.setLabel("all");
+        allTransitive.setLayout(layout);
         descriptors.add(allTransitive);
         for (Scope scope : Scope.values()) {
-            descriptors.add(getGraphContext(scope, true));
+            descriptors.add(getGraphContext(scope, true, layout, gc));
         }
-        GraphContext conflicts = new GraphContext();
+        for (Scope scope : Scope.values()) {
+            descriptors.add(getGraphContext(scope, true, LayoutStyle.FLAT, gc));
+        }
+        GraphContext conflicts = Helper.copyProperties(GraphContext.class, gc);
         conflicts.setShow("::conflict");
         conflicts.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
         conflicts.setCategory("other");
         conflicts.setLabel("conflicts");
+        conflicts.setLayout(layout);
+        conflicts.setTransitive(true);
         descriptors.add(conflicts);
         return descriptors;
     }
 
-    protected GraphContext getGraphContext(Scope scope, boolean transitive) {
-        GraphContext gc = new GraphContext();
-        gc.setShow(scope.toString());
+    protected GraphContext getGraphContext(Scope scope, boolean transitive, LayoutStyle layout, GraphContext context) {
+        GraphContext gc = Helper.copyProperties(GraphContext.class, context);
         gc.setTransitive(transitive);
         gc.setCategory(transitive ? "transitive" : "direct");
-        gc.setLabel(scope.toString());
+        String label = scope.toString();
+        if (LayoutStyle.CONDENSED != layout) {
+            label = label + "-" + layout.toString().toLowerCase();
+        }
+        gc.setLabel(label);
+        gc.setLayout(layout);
         return gc;
     }
 
@@ -145,6 +169,7 @@ public class MojoHelper {
         }
 
         try {
+            logger.info(gc.getFile().getPath());
             EdgeHandler edgeHandler = getEdgeHandler(gc.getLayout());
             gc.setEdgeHandler(edgeHandler);
             GraphHelper gh = new GraphHelper();
@@ -156,7 +181,7 @@ public class MojoHelper {
             dot.fillInContext(gc);
             dot.execute(gc);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new GraphException(e);
         }
     }
 
@@ -246,8 +271,8 @@ public class MojoHelper {
     }
 
     protected DepthFilter<MavenContext> getDepthFilter(GraphContext gc) {
-        int maxDepth = gc.isTransitive() ? DepthFilter.INFINITE : 1;
-        maxDepth = gc.getDepth() >= 0 ? gc.getDepth() : maxDepth;
+        int maxDepth = gc.getTransitive() ? DepthFilter.INFINITE : 1;
+        maxDepth = (gc.getDepth() != null && gc.getDepth() >= 0) ? gc.getDepth() : maxDepth;
         return new DepthFilter<MavenContext>(maxDepth);
     }
 

@@ -26,6 +26,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections15.list.SetUniqueList;
 import org.apache.commons.collections15.map.ListOrderedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -33,8 +35,43 @@ import org.apache.commons.collections15.map.ListOrderedMap;
  * </p>
  */
 public class Helper {
+    private static final Logger logger = LoggerFactory.getLogger(Helper.class);
     public static final String COMMA = ",";
     public static final String EMPTY_STRING = "";
+
+    /**
+     * Copy properties from "orig" to "dest" where the property from "orig" is not null, and the property from "dest" is
+     * null
+     */
+    public static final <T> void copyPropertiesIfNull(T dest, T orig) {
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, ?> description = PropertyUtils.describe(orig);
+            for (String name : description.keySet()) {
+                copyPropertyIfNull(dest, name, orig);
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * If the property from "orig" is not null and that property from
+     * "dest is null, copy the property from "orig" to "dest"
+     */
+    public static final void copyPropertyIfNull(Object dest, String name, Object orig) {
+        try {
+            Object oldValue = PropertyUtils.getProperty(dest, name);
+            if (oldValue != null) {
+                return;
+            }
+            Object newValue = PropertyUtils.getProperty(orig, name);
+            logger.trace("name={} value={}", name, newValue);
+            PropertyUtils.setProperty(dest, name, newValue);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
 
     public static final <T> T copyProperties(Class<T> c, Object orig) {
         try {

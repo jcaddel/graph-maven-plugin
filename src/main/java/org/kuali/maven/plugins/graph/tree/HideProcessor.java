@@ -27,7 +27,7 @@ public class HideProcessor implements PreProcessor {
 
     protected Hider getHider(GraphContext gc) {
         Hider hider = new Hider();
-        hider.setHideGroupId(!gc.isShowGroupIds());
+        hider.setHideGroupId(!gc.getShowGroupIds());
         return hider;
     }
 

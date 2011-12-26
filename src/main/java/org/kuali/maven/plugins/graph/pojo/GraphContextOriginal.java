@@ -29,7 +29,7 @@ import org.kuali.maven.plugins.graph.tree.PreProcessor;
 /**
  *
  */
-public class GraphContext {
+public class GraphContextOriginal {
     public static final List<? extends PreProcessor> DEFAULT_PRE_PROCESSORS = Collections
             .singletonList(new HideProcessor());
 
@@ -37,25 +37,25 @@ public class GraphContext {
     EdgeHandler edgeHandler = new CondensedEdgeHandler();
     List<? extends PreProcessor> preProcessors = new ArrayList<PreProcessor>(DEFAULT_PRE_PROCESSORS);
     List<? extends PostProcessor> postProcessors = new ArrayList<PostProcessor>();
-    String title;
-    Boolean keepDotFile;
-    Boolean transitive;
+    String title = "Dependency Graph";
+    Boolean keepDotFile = false;
+    Boolean transitive = true;
     String includes;
     String excludes;
     String hide;
     String show;
-    Direction direction;
-    Boolean showGroupIds;
-    Boolean showLegend;
-    Boolean showTitle;
-    Boolean executeDot;
-    Boolean ignoreDotFailure;
-    Integer depth;
+    Direction direction = Direction.TB;
+    Boolean showGroupIds = true;
+    Boolean showLegend = true;
+    Boolean showTitle = true;
+    Boolean executeDot = true;
+    Boolean ignoreDotFailure = false;
+    Integer depth = -1;
     File file;
     String content;
     File dotFile;
-    String type;
-    LayoutStyle layout;
+    String type = "png";
+    LayoutStyle layout = LayoutStyle.CONDENSED;
     String label;
     String category;
 

@@ -28,7 +28,7 @@ import org.kuali.maven.plugins.graph.tree.Helper;
  * @goal multi
  * @requiresDependencyResolution compile|test|runtime
  */
-public class MultiMojo extends BaseMavenMojo {
+public class MultiMojo extends FBaseGraphMojo2 {
 
     /**
      * <p>
@@ -51,6 +51,16 @@ public class MultiMojo extends BaseMavenMojo {
 
     /**
      * <p>
+     * The type of image files to produce
+     * </p>
+     *
+     * @parameter expression="${graph.type}" default-value="png"
+     * @required
+     */
+    String type;
+
+    /**
+     * <p>
      * If true, the default set of graphs is generated in addition to those provided in the <code>descriptors</code>
      * list.
      * </p>
@@ -63,8 +73,9 @@ public class MultiMojo extends BaseMavenMojo {
     @Override
     public void execute() {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
+        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
         MojoHelper helper = new MojoHelper();
-        helper.execute(mc, descriptors);
+        helper.execute(mc, gc, descriptors);
     }
 
     public List<GraphContext> getDescriptors() {
@@ -89,6 +100,14 @@ public class MultiMojo extends BaseMavenMojo {
 
     public void setUseDefaultDescriptors(boolean useDefaultDescriptors) {
         this.useDefaultDescriptors = useDefaultDescriptors;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

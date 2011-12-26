@@ -71,10 +71,10 @@ public class Dot {
             StreamConsumer stderr = new DefaultConsumer();
             int exitValue = CommandLineUtils.executeCommandLine(commandLine, stdout, stderr);
             if (exitValue != 0) {
-                if (context.isIgnoreDotFailure()) {
+                if (context.getIgnoreDotFailure()) {
                     logger.info("Ignoring failure of the 'dot' binary. Exit value=" + exitValue);
                 } else {
-                    throw new GraphException(getErrorMessage(context, exitValue));
+                    throw new GraphException(getErrorMessage(context, commandLine, exitValue));
                 }
             } else {
                 // Log the name of the image that was created
@@ -86,22 +86,28 @@ public class Dot {
         }
     }
 
-    protected String getErrorMessage(GraphContext context, int exitValue) {
+    protected String getErrorMessage(GraphContext context, Commandline commandLine, int exitValue) {
+        String[] args = commandLine.getArguments();
+        String executable = commandLine.getExecutable();
+        String s = executable;
+        for (String arg : args) {
+            s = s + " " + arg;
+        }
         StringBuilder sb = new StringBuilder();
-        sb.append("Execution of the '" + context.getExecutable() + "' command failed.");
+        sb.append("Failed execution '" + s + "'");
         sb.append(" Exit value: '" + exitValue + "'");
         sb.append(" Is it installed? See: http://www.graphviz.org");
         return sb.toString();
     }
 
     public void execute(GraphContext context) {
-        if (context.isExecuteDot()) {
+        if (context.getExecuteDot()) {
             Commandline commandline = getCommandLine(context);
             execute(commandline, context);
         } else {
             logger.info("Skip executing 'dot'");
         }
-        if (!context.isKeepDotFile()) {
+        if (!context.getKeepDotFile()) {
             context.getDotFile().delete();
         } else {
             logger.debug(context.getDotFile().getPath());

@@ -46,9 +46,9 @@ public class GraphHelper {
     public static final String DEFAULT_TYPE = "jar";
 
     public String getGraphTitle(GraphContext context) {
-        String title = context.isShowTitle() ? context.getTitle() : "";
+        String title = context.getShowTitle() ? context.getTitle() : "";
 
-        if (!context.isShowLegend()) {
+        if (!context.getShowLegend()) {
             return '"' + title + '"';
         }
 
@@ -67,10 +67,10 @@ public class GraphHelper {
         addLabel("excludes", context.getExcludes(), labels);
         addLabel("show", context.getShow(), labels);
         addLabel("hide", context.getHide(), labels);
-        if (!context.isTransitive()) {
-            addLabel("transitive", context.isTransitive() + "", labels);
+        if (!context.getTransitive()) {
+            addLabel("transitive", context.getTransitive() + "", labels);
         }
-        if (context.getDepth() != -1) {
+        if (context.getDepth() != null && context.getDepth() >= 0) {
             addLabel("depth", context.getDepth() + "", labels);
         }
         return labels;

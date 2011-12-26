@@ -21,7 +21,7 @@ public class ConflictsProcessor implements PostProcessor {
         List<MavenContext> contexts = getContexts(node);
         List<Edge> conflictEdges = getEdges(contexts, edges);
 
-        logger.info("conflict edges={}", conflictEdges.size());
+        logger.debug("conflict edges={}", conflictEdges.size());
 
         for (Edge conflictEdge : conflictEdges) {
             conflictEdge.getChild().setHidden(false);
