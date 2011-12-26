@@ -54,24 +54,32 @@ public class MojoHelper {
             logger.info("Skipping execution");
             return;
         }
-        if (Helper.isEmpty(descriptors) && !mc.isUseDefaultDescriptors()) {
+        List<GraphContext> descriptorsToUse = getDescriptorsToUse(mc, descriptors);
+        if (Helper.isEmpty(descriptorsToUse)) {
             logger.info("No descriptors");
             return;
         }
 
+        for (GraphContext descriptor : descriptorsToUse) {
+            execute(mc, descriptor);
+        }
+    }
+
+    protected List<GraphContext> getDescriptorsToUse(MojoContext mc, List<GraphContext> descriptors) {
         List<GraphContext> descriptorsToUse = new ArrayList<GraphContext>();
+        if (descriptors == null) {
+            descriptors = new ArrayList<GraphContext>();
+        }
         if (mc.isUseDefaultDescriptors()) {
             descriptorsToUse.addAll(getDefaultDescriptors());
         }
-        if (!Helper.isEmpty(descriptors)) {
-            Counter counter = new Counter(1);
-            for (GraphContext descriptor : descriptors) {
-                if (descriptor.getCategory() == null) {
-                    descriptor.setCategory("other");
-                }
-                if (descriptor.getLabel() == null) {
-                    descriptor.setLabel(counter.increment() + "");
-                }
+        Counter counter = new Counter(1);
+        for (GraphContext descriptor : descriptors) {
+            if (descriptor.getCategory() == null) {
+                descriptor.setCategory("other");
+            }
+            if (descriptor.getLabel() == null) {
+                descriptor.setLabel(counter.increment() + "");
             }
         }
         Helper.addAll(descriptorsToUse, descriptors);
@@ -82,9 +90,9 @@ public class MojoHelper {
             String filename = mc.getDir().getAbsolutePath() + "/" + category + "-" + label + "." + type;
             File file = new File(filename);
             descriptor.setFile(file);
-            logger.info(file.getPath());
-            execute(mc, descriptor);
+            logger.debug(file.getPath());
         }
+        return descriptorsToUse;
     }
 
     protected List<GraphContext> getDefaultDescriptors() {
