@@ -22,7 +22,7 @@ import java.io.File;
  * @goal dependencies
  * @requiresDependencyResolution compile|test|runtime
  */
-public class DependenciesMojo extends BaseGraphMojo {
+public class DependenciesMojo extends FilteredGraphMojo {
 
     /**
      * <p>
