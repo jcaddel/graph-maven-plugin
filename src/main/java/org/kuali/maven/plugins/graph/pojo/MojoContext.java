@@ -15,6 +15,8 @@
  */
 package org.kuali.maven.plugins.graph.pojo;
 
+import java.io.File;
+
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -46,9 +48,13 @@ public class MojoContext {
 
     private DependencyTreeBuilder treeBuilder;
 
-    boolean verbose;
+    private boolean verbose;
 
-    boolean skip;
+    private boolean skip;
+
+    private File dir;
+
+    private boolean useDefaultDescriptors;
 
     public MavenProject getProject() {
         return project;
@@ -120,5 +126,21 @@ public class MojoContext {
 
     public void setSkip(boolean skip) {
         this.skip = skip;
+    }
+
+    public File getDir() {
+        return dir;
+    }
+
+    public void setDir(File dir) {
+        this.dir = dir;
+    }
+
+    public boolean isUseDefaultDescriptors() {
+        return useDefaultDescriptors;
+    }
+
+    public void setUseDefaultDescriptors(boolean useDefaultDescriptors) {
+        this.useDefaultDescriptors = useDefaultDescriptors;
     }
 }

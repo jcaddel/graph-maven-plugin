@@ -1,5 +1,6 @@
 package org.kuali.maven.plugins.graph.mojo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,8 @@ import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
+import org.kuali.maven.plugins.graph.pojo.Scope;
+import org.kuali.maven.plugins.graph.tree.Counter;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.PostProcessor;
@@ -51,14 +54,67 @@ public class MojoHelper {
             logger.info("Skipping execution");
             return;
         }
-        if (Helper.isEmpty(descriptors)) {
-            logger.debug("No descriptors");
+        if (Helper.isEmpty(descriptors) && !mc.isUseDefaultDescriptors()) {
+            logger.info("No descriptors");
             return;
         }
 
-        for (GraphContext descriptor : descriptors) {
+        List<GraphContext> descriptorsToUse = new ArrayList<GraphContext>();
+        if (mc.isUseDefaultDescriptors()) {
+            descriptorsToUse.addAll(getDefaultDescriptors());
+        }
+        if (!Helper.isEmpty(descriptors)) {
+            Counter counter = new Counter(1);
+            for (GraphContext descriptor : descriptors) {
+                if (descriptor.getCategory() == null) {
+                    descriptor.setCategory("other");
+                }
+                if (descriptor.getLabel() == null) {
+                    descriptor.setLabel(counter.increment() + "");
+                }
+            }
+        }
+        Helper.addAll(descriptorsToUse, descriptors);
+        for (GraphContext descriptor : descriptorsToUse) {
+            String category = descriptor.getCategory();
+            String label = descriptor.getLabel();
+            String type = descriptor.getType();
+            String filename = mc.getDir().getAbsolutePath() + "/" + category + "-" + label + "." + type;
+            File file = new File(filename);
+            descriptor.setFile(file);
+            logger.info(file.getPath());
             execute(mc, descriptor);
         }
+    }
+
+    protected List<GraphContext> getDefaultDescriptors() {
+        List<GraphContext> descriptors = new ArrayList<GraphContext>();
+        GraphContext allDirect = new GraphContext();
+        allDirect.setTransitive(false);
+        allDirect.setCategory("direct");
+        allDirect.setLabel("all");
+        descriptors.add(allDirect);
+        for (Scope scope : Scope.values()) {
+            descriptors.add(getGraphContext(scope, false));
+        }
+        GraphContext allTransitive = new GraphContext();
+        allTransitive.setTransitive(true);
+        allTransitive.setCategory("transitive");
+        allTransitive.setLabel("all");
+        descriptors.add(allTransitive);
+        for (Scope scope : Scope.values()) {
+            descriptors.add(getGraphContext(scope, true));
+        }
+        return descriptors;
+    }
+
+    protected GraphContext getGraphContext(Scope scope, boolean transitive) {
+        GraphContext gc = new GraphContext();
+        gc.setShow(scope.toString());
+        gc.setTransitive(transitive);
+        gc.setCategory(transitive ? "transitive" : "direct");
+        gc.setLabel(scope.toString());
+        return gc;
     }
 
     public void execute(MojoContext mc, GraphContext gc) {

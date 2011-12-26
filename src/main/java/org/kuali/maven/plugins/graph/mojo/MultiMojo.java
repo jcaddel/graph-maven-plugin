@@ -15,6 +15,7 @@
  */
 package org.kuali.maven.plugins.graph.mojo;
 
+import java.io.File;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.pojo.GraphContext;
@@ -22,6 +23,7 @@ import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
 /**
+ * Convenience mojo for generating multiple graphs.
  *
  * @goal multi
  * @requiresDependencyResolution compile|test|runtime
@@ -29,15 +31,64 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 public class MultiMojo extends BaseMavenMojo {
 
     /**
+     * <p>
+     * List of graph descriptors.
+     * </p>
+     *
      * @parameter
      */
     List<GraphContext> descriptors;
+
+    /**
+     * <p>
+     * The directory graphs are generated into.
+     * </p>
+     *
+     * @parameter expression="${graph.dir}" default-value="${project.build.directory}/graph"
+     * @required
+     */
+    File dir;
+
+    /**
+     * <p>
+     * If true, the default set of graphs is generated in addition to those provided in the <code>descriptors</code>
+     * list.
+     * </p>
+     *
+     * @parameter expression="${graph.useDefaultDescriptors}" default-value="true"
+     * @required
+     */
+    boolean useDefaultDescriptors;
 
     @Override
     public void execute() {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         MojoHelper helper = new MojoHelper();
         helper.execute(mc, descriptors);
+    }
+
+    public List<GraphContext> getDescriptors() {
+        return descriptors;
+    }
+
+    public void setDescriptors(List<GraphContext> descriptors) {
+        this.descriptors = descriptors;
+    }
+
+    public File getDir() {
+        return dir;
+    }
+
+    public void setDir(File dir) {
+        this.dir = dir;
+    }
+
+    public boolean isUseDefaultDescriptors() {
+        return useDefaultDescriptors;
+    }
+
+    public void setUseDefaultDescriptors(boolean useDefaultDescriptors) {
+        this.useDefaultDescriptors = useDefaultDescriptors;
     }
 
 }

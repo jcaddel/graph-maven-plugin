@@ -51,13 +51,14 @@ public class GraphContext {
     boolean showTitle = true;
     boolean executeDot = true;
     boolean ignoreDotFailure = false;
-    boolean verbose = false;
     int depth = -1;
     File file;
     String content;
     File dotFile;
-    String type;
+    String type = "png";
     LayoutStyle layout = LayoutStyle.CONDENSED;
+    String label;
+    String category;
 
     public String getExecutable() {
         return executable;
@@ -187,14 +188,6 @@ public class GraphContext {
         this.ignoreDotFailure = ignoreDotFailure;
     }
 
-    public boolean isVerbose() {
-        return verbose;
-    }
-
-    public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
-    }
-
     public int getDepth() {
         return depth;
     }
@@ -257,6 +250,22 @@ public class GraphContext {
 
     public void setPostProcessors(List<? extends PostProcessor> postProcessors) {
         this.postProcessors = postProcessors;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 }
