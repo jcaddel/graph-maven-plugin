@@ -28,7 +28,7 @@ import org.kuali.maven.plugins.graph.tree.Helper;
  * @goal multi
  * @requiresDependencyResolution compile|test|runtime
  */
-public class MultiMojo extends FBaseGraphMojo2 {
+public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>

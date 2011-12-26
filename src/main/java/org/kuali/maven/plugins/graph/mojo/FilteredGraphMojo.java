@@ -28,7 +28,7 @@ import org.kuali.maven.plugins.graph.tree.Helper;
  * </p>
  *
  */
-public abstract class FilteredGraphMojo extends FBaseGraphMojo2 {
+public abstract class FilteredGraphMojo extends BaseGraphMojo {
 
     /**
      * <p>

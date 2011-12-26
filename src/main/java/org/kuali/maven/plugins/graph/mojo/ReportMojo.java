@@ -6,16 +6,13 @@ import java.util.Locale;
 import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
-import org.kuali.maven.plugins.graph.pojo.Scope;
 
 /**
  * @goal report
  * @requiresDependencyResolution compile|test|runtime
  */
 @SuppressWarnings("deprecation")
-public class ReportMojo extends BaseGraphMojo implements MavenReport {
-
-    private File file;
+public class ReportMojo extends MultiMojo implements MavenReport {
 
     /**
      * Output folder where the main page of the report will be generated. Note that this parameter is only relevant if
@@ -27,28 +24,9 @@ public class ReportMojo extends BaseGraphMojo implements MavenReport {
      */
     private File reportOutputDirectory;
 
-    /**
-     * @parameter expression="${graph.imageType}" default-value="png"
-     * @required
-     */
-    private String imageType;
-
     @Override
     public void generate(Sink sink, Locale locale) throws MavenReportException {
-        scopes(false);
-        scopes(true);
-    }
-
-    protected void scopes(boolean transitive) {
-        setTransitive(transitive);
-        Scope[] scopes = Scope.values();
-        String dir = transitive ? "transitive" : "direct";
-        for (Scope scope : scopes) {
-            setFile(new File(reportOutputDirectory, "/images/dependencies/" + dir + "/" + scope + "." + imageType));
-            setShow(scope.toString());
-            getLog().info(file.getPath());
-            execute();
-        }
+        setOutputDir(reportOutputDirectory);
     }
 
     @Override
@@ -89,23 +67,6 @@ public class ReportMojo extends BaseGraphMojo implements MavenReport {
     @Override
     public void setReportOutputDirectory(File reportOutputDirectory) {
         this.reportOutputDirectory = reportOutputDirectory;
-    }
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
-    }
-
-    @Override
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
     }
 
 }
