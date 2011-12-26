@@ -52,7 +52,7 @@ import org.springframework.util.Assert;
  *
  * <p>
  * <code>State.DUPLICATE</code> nodes that do not have a match of any kind in the build tree, get set to
- * <code>State.UNKNOWN</code>
+ * <code>State.UNKNOWN</code> since the data Maven is providing for this dependency is inconsistent.
  * </p>
  *
  * <p>
