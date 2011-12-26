@@ -96,6 +96,15 @@ public abstract class BaseMavenMojo extends AbstractMojo {
      */
     private boolean skip;
 
+    /**
+     * <p>
+     * Set to true to enable verbose mode.
+     * </p>
+     *
+     * @parameter expression="${graph.verbose}" default-value="false"
+     */
+    private boolean verbose;
+
     public MavenProject getProject() {
         return project;
     }
@@ -158,6 +167,14 @@ public abstract class BaseMavenMojo extends AbstractMojo {
 
     public void setSkip(boolean skip) {
         this.skip = skip;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
     }
 
 }
