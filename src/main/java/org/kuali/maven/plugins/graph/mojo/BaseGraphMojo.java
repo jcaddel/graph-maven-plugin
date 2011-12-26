@@ -69,8 +69,9 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
      * </p>
      *
      * <p>
-     * For artifacts that are used frequently (eg commons-logging), <code>CONDENSED</code> mode makes it possible to
-     * quickly examine the tree and figure out why an artifact is being included in the build.
+     * For transitive dependencies that are widely used (eg commons-logging), <code>CONDENSED</code> mode makes it
+     * possible to quickly pinpoint what other dependencies are causing the transitive dependency to be included in the
+     * build.
      * </p>
      *
      * <p>
