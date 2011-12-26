@@ -47,7 +47,7 @@ public class MultiMojo extends BaseMavenMojo {
      * @parameter expression="${graph.dir}" default-value="${project.build.directory}/graph"
      * @required
      */
-    File dir;
+    File outputDir;
 
     /**
      * <p>
@@ -75,12 +75,12 @@ public class MultiMojo extends BaseMavenMojo {
         this.descriptors = descriptors;
     }
 
-    public File getDir() {
-        return dir;
+    public File getOutputDir() {
+        return outputDir;
     }
 
-    public void setDir(File dir) {
-        this.dir = dir;
+    public void setOutputDir(File dir) {
+        this.outputDir = dir;
     }
 
     public boolean isUseDefaultDescriptors() {

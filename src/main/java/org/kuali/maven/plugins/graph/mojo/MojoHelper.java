@@ -2,6 +2,7 @@ package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -35,6 +36,7 @@ import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
+import org.kuali.maven.plugins.graph.tree.ConflictsProcessor;
 import org.kuali.maven.plugins.graph.tree.Counter;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
@@ -46,6 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MojoHelper {
+    private static final String FS = System.getProperty("file.separator");
     private static final Logger logger = LoggerFactory.getLogger(MojoHelper.class);
     Filters filters = new Filters();
 
@@ -84,15 +87,19 @@ public class MojoHelper {
         }
         Helper.addAll(descriptorsToUse, descriptors);
         for (GraphContext descriptor : descriptorsToUse) {
-            String category = descriptor.getCategory();
-            String label = descriptor.getLabel();
-            String type = descriptor.getType();
-            String filename = mc.getDir().getAbsolutePath() + "/" + category + "-" + label + "." + type;
+            String filename = getFilename(mc, descriptor);
             File file = new File(filename);
             descriptor.setFile(file);
             logger.debug(file.getPath());
         }
         return descriptorsToUse;
+    }
+
+    protected String getFilename(MojoContext mc, GraphContext gc) {
+        String category = gc.getCategory();
+        String label = gc.getLabel();
+        String type = gc.getType();
+        return mc.getOutputDir().getAbsolutePath() + FS + category + FS + label + "." + type;
     }
 
     protected List<GraphContext> getDefaultDescriptors() {
@@ -113,6 +120,12 @@ public class MojoHelper {
         for (Scope scope : Scope.values()) {
             descriptors.add(getGraphContext(scope, true));
         }
+        GraphContext conflicts = new GraphContext();
+        conflicts.setShow("::conflict");
+        conflicts.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
+        conflicts.setCategory("other");
+        conflicts.setLabel("conflicts");
+        descriptors.add(conflicts);
         return descriptors;
     }
 

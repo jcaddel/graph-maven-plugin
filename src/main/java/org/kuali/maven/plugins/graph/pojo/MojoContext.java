@@ -26,9 +26,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 
 /**
- * <p>
- * Abstraction for mojo's that produce graphs using Graphviz
- * </p>
  *
  */
 @SuppressWarnings("deprecation")
@@ -52,7 +49,7 @@ public class MojoContext {
 
     private boolean skip;
 
-    private File dir;
+    private File outputDir;
 
     private boolean useDefaultDescriptors;
 
@@ -128,12 +125,12 @@ public class MojoContext {
         this.skip = skip;
     }
 
-    public File getDir() {
-        return dir;
+    public File getOutputDir() {
+        return outputDir;
     }
 
-    public void setDir(File dir) {
-        this.dir = dir;
+    public void setOutputDir(File dir) {
+        this.outputDir = dir;
     }
 
     public boolean isUseDefaultDescriptors() {
