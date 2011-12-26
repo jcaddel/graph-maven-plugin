@@ -52,8 +52,11 @@ public class GraphHelper {
             return '"' + title + '"';
         }
 
-        HtmlUtils htmlUtils = new HtmlUtils();
         List<NameValue> labels = getLegendLabels(context);
+        if (Helper.isEmpty(labels)) {
+            return '"' + title + '"';
+        }
+        HtmlUtils htmlUtils = new HtmlUtils();
         Table table = getTitle(title, labels);
         return "<" + htmlUtils.toHtml(table) + ">";
     }
@@ -106,14 +109,16 @@ public class GraphHelper {
         return max;
     }
 
-    protected List<TableRow> getLegendRows(List<NameValue> labels) {
+    protected List<TableRow> getLegendRows(String title, List<NameValue> labels) {
         Font font = new Font("black", 10);
         // Needs to be a fixed width font
         font.setFace("Courier");
         font.setContent(" ");
         List<TableRow> rows = new ArrayList<TableRow>();
-        // Add a blank row for spacing
-        rows.add(new TableRow(new TableCell(htmlUtils.toHtml(font))));
+        // Add a blank row for spacing if there is a title to display
+        if (!StringUtils.isBlank(title)) {
+            rows.add(new TableRow(new TableCell(htmlUtils.toHtml(font))));
+        }
         int padding = getMaxNameLength(labels);
         for (NameValue label : labels) {
             rows.add(getLegendRow(label, font, padding));
@@ -125,10 +130,12 @@ public class GraphHelper {
     }
 
     public Table getTitle(String title, List<NameValue> labels) {
+        List<TableRow> rows = new ArrayList<TableRow>(getLegendRows(title, labels));
         TableCell titleCell = new TableCell(title);
         TableRow titleRow = new TableRow(titleCell);
-        List<TableRow> rows = new ArrayList<TableRow>(getLegendRows(labels));
-        rows.add(0, titleRow);
+        if (!StringUtils.isBlank(title)) {
+            rows.add(0, titleRow);
+        }
         Table table = new Table(rows);
         table.setBorder(0);
         table.setCellpadding(0);

@@ -31,26 +31,26 @@ public class GraphContext {
     List<? extends PreProcessor> preProcessors;
     List<? extends PostProcessor> postProcessors;
     String title;
-    boolean keepDotFile;
-    boolean transitive;
-    boolean skip;
+    boolean keepDotFile = false;
+    boolean transitive = true;
+    boolean skip = false;
     String includes;
     String excludes;
     String hide;
     String show;
-    Direction direction;
-    boolean showGroupIds;
-    boolean showLegend;
-    boolean showTitle;
-    boolean executeDot;
-    boolean ignoreDotFailure;
-    boolean verbose;
-    int depth;
+    Direction direction = Direction.TB;
+    boolean showGroupIds = true;
+    boolean showLegend = true;
+    boolean showTitle = true;
+    boolean executeDot = true;
+    boolean ignoreDotFailure = false;
+    boolean verbose = false;
+    int depth = -1;
     File file;
     String content;
     File dotFile;
     String type;
-    LayoutStyle layout;
+    LayoutStyle layout = LayoutStyle.CONDENSED;
 
     public String getExecutable() {
         return executable;

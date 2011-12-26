@@ -19,10 +19,10 @@ import java.io.File;
 
 /**
  *
- * @goal dependencies
+ * @goal multi
  * @requiresDependencyResolution compile|test|runtime
  */
-public class DependenciesMojo extends BaseGraphMojo {
+public class MultiMojo extends BaseMojo {
 
     /**
      * <p>

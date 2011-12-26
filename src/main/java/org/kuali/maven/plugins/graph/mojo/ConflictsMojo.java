@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
 import org.kuali.maven.plugins.graph.tree.ConflictsProcessor;
 import org.kuali.maven.plugins.graph.tree.PostProcessor;
 
@@ -65,6 +66,7 @@ public class ConflictsMojo extends BaseMojo {
     @Override
     public void execute() {
         setShow(getShow() == null ? conflictsFilter : getShow() + "," + conflictsFilter);
+        setLayout(LayoutStyle.CONDENSED);
         List<PostProcessor> pps = new ArrayList<PostProcessor>(getPostProcessors());
         pps.add(new ConflictsProcessor());
         setPostProcessors(pps);
