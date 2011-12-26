@@ -115,35 +115,29 @@ public class MojoHelper {
     }
 
     protected List<GraphContext> getDefaultDescriptors(GraphContext gc) {
-        LayoutStyle layout = LayoutStyle.CONDENSED;
         List<GraphContext> descriptors = new ArrayList<GraphContext>();
-        GraphContext allDirect = Helper.copyProperties(GraphContext.class, gc);
-        allDirect.setTransitive(false);
-        allDirect.setCategory("direct");
-        allDirect.setLabel("all");
-        allDirect.setLayout(layout);
-        descriptors.add(allDirect);
-        for (Scope scope : Scope.values()) {
-            descriptors.add(getGraphContext(scope, false, layout, gc));
+        for (LayoutStyle layout : LayoutStyle.values()) {
+            descriptors.add(getGraphContext(null, false, layout, gc));
         }
-        GraphContext allTransitive = Helper.copyProperties(GraphContext.class, gc);
-        allTransitive.setTransitive(true);
-        allTransitive.setCategory("transitive");
-        allTransitive.setLabel("all");
-        allTransitive.setLayout(layout);
-        descriptors.add(allTransitive);
-        for (Scope scope : Scope.values()) {
-            descriptors.add(getGraphContext(scope, true, layout, gc));
+        for (LayoutStyle layout : LayoutStyle.values()) {
+            for (Scope scope : Scope.values()) {
+                descriptors.add(getGraphContext(scope, false, layout, gc));
+            }
         }
-        for (Scope scope : Scope.values()) {
-            descriptors.add(getGraphContext(scope, true, LayoutStyle.FLAT, gc));
+        for (LayoutStyle layout : LayoutStyle.values()) {
+            descriptors.add(getGraphContext(null, true, layout, gc));
+        }
+        for (LayoutStyle layout : LayoutStyle.values()) {
+            for (Scope scope : Scope.values()) {
+                descriptors.add(getGraphContext(scope, true, layout, gc));
+            }
         }
         GraphContext conflicts = Helper.copyProperties(GraphContext.class, gc);
         conflicts.setShow("::conflict");
         conflicts.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
         conflicts.setCategory("other");
         conflicts.setLabel("conflicts");
-        conflicts.setLayout(layout);
+        conflicts.setLayout(LayoutStyle.CONDENSED);
         conflicts.setTransitive(true);
         descriptors.add(conflicts);
         return descriptors;
@@ -153,10 +147,12 @@ public class MojoHelper {
         GraphContext gc = Helper.copyProperties(GraphContext.class, context);
         gc.setTransitive(transitive);
         gc.setCategory(transitive ? "transitive" : "direct");
-        String label = scope.toString();
+        String label = scope == null ? "all" : scope.toString();
+        String show = scope == null ? null : scope.toString();
         if (LayoutStyle.CONDENSED != layout) {
             label = label + "-" + layout.toString().toLowerCase();
         }
+        gc.setShow(show);
         gc.setLabel(label);
         gc.setLayout(layout);
         return gc;

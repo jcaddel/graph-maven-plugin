@@ -6,6 +6,9 @@ import java.util.Locale;
 import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
+import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.MojoContext;
+import org.kuali.maven.plugins.graph.tree.Helper;
 
 /**
  * @goal report
@@ -13,6 +16,7 @@ import org.codehaus.doxia.sink.Sink;
  */
 @SuppressWarnings("deprecation")
 public class ReportMojo extends MultiMojo implements MavenReport {
+    private static final String FS = System.getProperty("file.separator");
 
     /**
      * Output folder where the main page of the report will be generated. Note that this parameter is only relevant if
@@ -24,9 +28,21 @@ public class ReportMojo extends MultiMojo implements MavenReport {
      */
     private File reportOutputDirectory;
 
+    /**
+     * Path relative to the output folder where images are created.
+     *
+     * @parameter expression="${graph.imagesPath}" default-value="images/dependencies"
+     * @required
+     */
+    private String imagesPath;
+
     @Override
     public void generate(Sink sink, Locale locale) throws MavenReportException {
-        setOutputDir(reportOutputDirectory);
+        setOutputDir(new File(reportOutputDirectory + FS + imagesPath));
+        MojoContext mc = Helper.copyProperties(MojoContext.class, this);
+        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
+        MojoHelper helper = new MojoHelper();
+        helper.execute(mc, gc, descriptors);
     }
 
     @Override
@@ -67,6 +83,14 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     @Override
     public void setReportOutputDirectory(File reportOutputDirectory) {
         this.reportOutputDirectory = reportOutputDirectory;
+    }
+
+    public String getImagesPath() {
+        return imagesPath;
+    }
+
+    public void setImagesPath(String imagesPath) {
+        this.imagesPath = imagesPath;
     }
 
 }
