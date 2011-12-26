@@ -12,7 +12,8 @@ import org.kuali.maven.plugins.graph.pojo.Scope;
  * @goal report
  * @requiresDependencyResolution compile|test|runtime
  */
-public class ReportMojo extends BaseMojo implements MavenReport {
+@SuppressWarnings("deprecation")
+public class ReportMojo extends BaseGraphMojo implements MavenReport {
 
     private File file;
 
@@ -32,7 +33,6 @@ public class ReportMojo extends BaseMojo implements MavenReport {
      */
     private String imageType;
 
-    @SuppressWarnings("deprecation")
     @Override
     public void generate(Sink sink, Locale locale) throws MavenReportException {
         scopes(false);

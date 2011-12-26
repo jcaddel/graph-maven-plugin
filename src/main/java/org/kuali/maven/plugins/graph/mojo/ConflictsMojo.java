@@ -37,7 +37,7 @@ import org.kuali.maven.plugins.graph.tree.PostProcessor;
  * @goal conflicts
  * @requiresDependencyResolution compile|test|runtime
  */
-public class ConflictsMojo extends BaseMojo {
+public class ConflictsMojo extends BaseGraphMojo {
 
     /**
      * The file the graph will be written to

@@ -15,32 +15,19 @@
  */
 package org.kuali.maven.plugins.graph.mojo;
 
-import java.io.File;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 
 /**
  *
  * @goal multi
  * @requiresDependencyResolution compile|test|runtime
  */
-public class MultiMojo extends BaseMojo {
-
-    /**
-     * <p>
-     * The file the graph will be written to
-     * </p>
-     *
-     * @required
-     * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/dependencies.png"
-     */
-    private File file;
+public class MultiMojo extends BaseMavenMojo {
 
     @Override
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        getLog().info("Hello world");
     }
 
 }
