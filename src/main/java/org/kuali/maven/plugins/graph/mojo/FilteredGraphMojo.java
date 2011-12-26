@@ -24,7 +24,6 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 
 /**
  * <p>
- * Abstraction for mojo's that produce graphs using Graphviz
  * </p>
  *
  */

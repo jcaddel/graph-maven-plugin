@@ -26,7 +26,6 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 
 /**
  * <p>
- * Abstraction for mojo's that produce graphs using Graphviz
  * </p>
  *
  */

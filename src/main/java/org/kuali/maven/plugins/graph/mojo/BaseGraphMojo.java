@@ -19,7 +19,6 @@ import org.kuali.maven.plugins.graph.pojo.Direction;
 
 /**
  * <p>
- * Abstraction for mojo's that produce graphs using Graphviz
  * </p>
  *
  */
