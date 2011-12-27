@@ -15,6 +15,7 @@
  */
 package org.kuali.maven.plugins.graph.dot;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +39,8 @@ public class FlatEdgeHandler implements EdgeHandler {
     @Override
     public List<Edge> getEdges(Node<MavenContext> node) {
         // Return a single edge running from parent to child
+        List<Edge> edges = new ArrayList<Edge>(Collections.singletonList(getEdge(node)));
+        node.getObject().setEdges(edges);
         return Collections.singletonList(getEdge(node));
     }
 

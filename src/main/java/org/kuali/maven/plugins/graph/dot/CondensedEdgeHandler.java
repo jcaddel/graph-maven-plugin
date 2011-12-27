@@ -41,6 +41,8 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
     @Override
     public List<Edge> getEdges(Node<MavenContext> node) {
         List<Edge> edges = new ArrayList<Edge>();
+        // Draw a line from parent to child
+        edges.addAll(super.getEdges(node));
         handleNode(node, edges);
         return edges;
     }
@@ -51,20 +53,22 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
         case INCLUDED:
         case CYCLIC:
         case UNKNOWN:
-            // Just draw a line from parent to child
-            // Styling draws attention to CYCLIC and UNKNOWN nodes
-            edges.addAll(super.getEdges(node));
+            // Nothing further to do. Styling draws attention to CYCLIC and UNKNOWN nodes
             return;
         case DUPLICATE:
-            // Draw a line from our parent to the included node containing our same artifact
+            // Draw a line from our parent to the included node that contains the same artifact
             handleDuplicate(node, edges);
             return;
         case CONFLICT:
-            /**
-             * Draw two lines. One from our parent to the node that has been conflicted out (might be us, might be
-             * another node if the same artifact has been conflicted out twice). Draw a second line from that node to
-             * the node containing the artifact Maven replaced it with.
-             */
+            // Always draw one line. Possibly two.
+            // The first line connects our parent to the node that has been conflicted out
+            // In the case where 2 nodes share the same conflict, this first line may be drawn
+            // from our parent to a different node in the tree.
+
+            // The 2nd line is drawn from the conflicted out node to it's replacement. This 2nd line is only
+            // drawn the first time a conflict is encountered. The 2nd time that same conflict is encountered
+            // the line connecting the conflicted out node, to its replacement, is already drawn. No need to draw it
+            // again.
             handleConflict(node, edges);
             return;
         default:
@@ -75,37 +79,68 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
     protected void handleConflict(Node<MavenContext> node, List<Edge> edges) {
         MavenContext context = node.getObject();
 
+        // This is the id of the artifact Maven is actually going to use
+        // The validator's and sanitizer's guarantee that the replacement artifact will always be
+        // found among the included nodes.
         String replacementArtifactId = TreeHelper.getArtifactId(context.getReplacement());
 
-        // Get the node containing the replacement artifact Maven is actually going to use
+        // Get the node containing the replacement artifact
         Node<MavenContext> replacement = findIncludedNode(node.getRoot(), replacementArtifactId);
 
-        String artifactIdentifier = replacement.getObject().getArtifactIdentifier();
+        // Check to see if this is the first time this conflict has occurred
+        boolean newConflict = conflictsMap.get(replacementArtifactId) == null;
 
-        // Check to see if we've encountered this same conflict before
-        MavenContext contextToUse = conflictsMap.get(artifactIdentifier);
-        if (contextToUse == null) {
-            contextToUse = context;
-            conflictsMap.put(artifactIdentifier, contextToUse);
+        // If so, we need to draw a line from the conflict node to its replacement
+        if (newConflict) {
 
-            // Draw an edge from contextToUse to the replacement
-            GraphNode parent = contextToUse.getGraphNode();
+            // Extract the correct parent/child graph nodes
+            GraphNode parent = context.getGraphNode();
             GraphNode child = replacement.getObject().getGraphNode();
+
+            // Draw an edge saying "replacement" from ourself to the artifact that replaced us
             Edge edge = getEdge(parent, child, false, Scope.DEFAULT_SCOPE, State.CONFLICT);
             edge.setLabel(REPLACEMENT_LABEL);
+
+            // Add the edge to the overall list
             edges.add(edge);
-        } else {
-            // Hide ourself since contextToUse represents the same artifact
-            helper.hide(node);
+
+            // Add the edge to our list
+            context.getEdges().add(edge);
+
+            // Store the conflict in case it happens again
+            conflictsMap.put(replacementArtifactId, context);
         }
 
-        // Draw an edge from our parent to contextToUse
-        GraphNode parent = node.getParent().getObject().getGraphNode();
-        GraphNode child = contextToUse.getGraphNode();
-        Edge edge = getEdge(parent, child, false, Scope.DEFAULT_SCOPE, State.CONFLICT);
+        // Extract the conflictNode from the map
+        MavenContext conflictNode = conflictsMap.get(replacementArtifactId);
 
-        edges.add(edge);
+        // If we are the conflict node, there is already a line drawn from our parent to us
+        boolean conflictNodeIsUs = context.getId() == conflictNode.getId();
 
+        // If not, we need to draw a line from our parent to the conflict node
+        if (!conflictNodeIsUs) {
+
+            // Extract the correct parent/child graph nodes
+            GraphNode parent = node.getParent().getObject().getGraphNode();
+            GraphNode child = conflictNode.getGraphNode();
+
+            // Use our scope and optional settings
+            boolean optional = context.getArtifact().isOptional();
+            Scope scope = Scope.getScope(context.getArtifact().getScope());
+
+            // Draw an edge from our parent to the conflictNode
+            Edge edge = getEdge(parent, child, optional, scope, State.CONFLICT);
+
+            // Add the edge to the parent of the conflict node
+            List<Edge> parentEdges = node.getParent().getObject().getEdges();
+            if (parentEdges == null) {
+                parentEdges = new ArrayList<Edge>();
+            }
+            parentEdges.add(edge);
+
+            // Add it to the list
+            edges.add(edge);
+        }
     }
 
     protected void handleDuplicate(Node<MavenContext> node, List<Edge> edges) {
@@ -128,7 +163,7 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
         edges.add(edge);
 
         // Hide ourself
-        context.getGraphNode().setHidden(true);
+        // context.getGraphNode().setHidden(true);
     }
 
     protected Node<MavenContext> findIncludedNode(Node<MavenContext> root, String artifactId) {

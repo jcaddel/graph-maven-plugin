@@ -37,7 +37,9 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.tree.ConflictsProcessor;
+import org.kuali.maven.plugins.graph.tree.ConflictsProcessor2;
 import org.kuali.maven.plugins.graph.tree.Counter;
+import org.kuali.maven.plugins.graph.tree.DuplicatesProcessor;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.PostProcessor;
@@ -132,14 +134,36 @@ public class MojoHelper {
                 descriptors.add(getGraphContext(scope, true, layout, gc));
             }
         }
-        GraphContext conflicts = Helper.copyProperties(GraphContext.class, gc);
-        conflicts.setShow("::conflict");
-        conflicts.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
-        conflicts.setCategory("other");
-        conflicts.setLabel("conflicts");
-        conflicts.setLayout(LayoutStyle.CONDENSED);
-        conflicts.setTransitive(true);
-        descriptors.add(conflicts);
+        GraphContext conflicts1 = Helper.copyProperties(GraphContext.class, gc);
+        conflicts1.setShow("::conflict");
+        conflicts1.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
+        conflicts1.setCategory("other");
+        conflicts1.setLabel("conflicts");
+        conflicts1.setLayout(LayoutStyle.CONDENSED);
+        conflicts1.setTransitive(true);
+        GraphContext conflicts2 = Helper.copyProperties(GraphContext.class, gc);
+        conflicts2.setShow("::conflict");
+        conflicts2.setCategory("other");
+        conflicts2.setLabel("conflicts-flat");
+        conflicts2.setLayout(LayoutStyle.FLAT);
+        conflicts2.setTransitive(true);
+        descriptors.add(conflicts1);
+        descriptors.add(conflicts2);
+        GraphContext duplicates1 = Helper.copyProperties(GraphContext.class, gc);
+        duplicates1.setShow("::duplicate");
+        duplicates1.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
+        duplicates1.setCategory("other");
+        duplicates1.setLabel("duplicates");
+        duplicates1.setLayout(LayoutStyle.CONDENSED);
+        duplicates1.setTransitive(true);
+        GraphContext duplicates2 = Helper.copyProperties(GraphContext.class, gc);
+        duplicates2.setShow("::duplicate");
+        duplicates2.setCategory("other");
+        duplicates2.setLabel("duplicates-flat");
+        duplicates2.setLayout(LayoutStyle.FLAT);
+        duplicates2.setTransitive(true);
+        descriptors.add(duplicates1);
+        descriptors.add(duplicates2);
         return descriptors;
     }
 
@@ -177,7 +201,7 @@ public class MojoHelper {
             dot.fillInContext(gc);
             dot.execute(gc);
         } catch (Exception e) {
-            throw new GraphException(e);
+            e.printStackTrace();
         }
     }
 
@@ -220,6 +244,12 @@ public class MojoHelper {
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = gc.getEdgeHandler();
         List<Edge> edges = helper.getEdges(tree, handler);
+        if (gc.getLayout() == LayoutStyle.CONDENSED) {
+            List<PostProcessor> pps = new ArrayList<PostProcessor>();
+            pps.add(new DuplicatesProcessor());
+            pps.add(new ConflictsProcessor2());
+            gc.setPostProcessors(pps);
+        }
         for (PostProcessor processor : gc.getPostProcessors()) {
             processor.process(gc, tree, edges, nodes);
         }

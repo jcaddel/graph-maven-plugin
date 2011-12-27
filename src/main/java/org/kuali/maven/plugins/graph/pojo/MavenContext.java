@@ -15,6 +15,8 @@
  */
 package org.kuali.maven.plugins.graph.pojo;
 
+import java.util.List;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 
@@ -25,6 +27,7 @@ public class MavenContext {
     Artifact replacement;
     State state;
     GraphNode graphNode;
+    List<Edge> edges;
     DependencyNode dependencyNode;
 
     public MavenContext() {
@@ -91,5 +94,13 @@ public class MavenContext {
 
     public void setDependencyNode(DependencyNode dependencyNode) {
         this.dependencyNode = dependencyNode;
+    }
+
+    public List<Edge> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(List<Edge> edges) {
+        this.edges = edges;
     }
 }

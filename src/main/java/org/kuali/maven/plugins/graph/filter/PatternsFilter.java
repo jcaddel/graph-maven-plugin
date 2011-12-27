@@ -149,6 +149,11 @@ public class PatternsFilter<T> implements Filter<T> {
             return true;
         }
 
+        // We need a positive match with the pattern
+        if (token == null) {
+            return false;
+        }
+
         // contains wildcard - *foo*
         if (pattern.startsWith(wildcard) && pattern.endsWith(wildcard)) {
             String contains = pattern.substring(1, pattern.length() - 1);

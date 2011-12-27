@@ -20,7 +20,8 @@ public class HideProcessor implements PreProcessor {
             MavenContext mc = element.getObject();
             GraphNode graphNode = mc.getGraphNode();
             Artifact artifact = mc.getArtifact();
-            String label = graphHelper.getLabel(artifact, hider);
+            // String label = graphHelper.getLabel(artifact, hider);
+            String label = graphNode.getId() + "\\n" + artifact.getArtifactId() + "\\n" + artifact.getVersion();
             graphNode.setLabel(label);
         }
     }
