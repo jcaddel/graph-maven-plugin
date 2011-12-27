@@ -52,7 +52,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
 
     @Override
     public String getCategoryName() {
-        return CATEGORY_PROJECT_INFORMATION;
+        return CATEGORY_PROJECT_REPORTS;
     }
 
     @Override
