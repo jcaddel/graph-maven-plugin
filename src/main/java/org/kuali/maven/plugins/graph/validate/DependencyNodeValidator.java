@@ -16,6 +16,11 @@ import org.springframework.util.Assert;
  * <code>State</code> they are marked with.
  * </p>
  *
+ * <p>
+ * Extending classes implement the validateState() method to provide validation for dependency nodes marked with a
+ * specific <code>State</code>
+ * </p>
+ *
  * @author jeffcaddel
  */
 public abstract class DependencyNodeValidator implements NodeValidator<MavenContext> {
@@ -27,7 +32,7 @@ public abstract class DependencyNodeValidator implements NodeValidator<MavenCont
         this.state = state;
     }
 
-    protected abstract void validateNodes(List<DependencyNode> nodes);
+    protected abstract void validateState(List<DependencyNode> nodes);
 
     @Override
     public void validate(Node<MavenContext> node) {
@@ -41,7 +46,7 @@ public abstract class DependencyNodeValidator implements NodeValidator<MavenCont
                 nodes.add(dn);
             }
         }
-        validateNodes(nodes);
+        validateState(nodes);
     }
 
     public State getState() {

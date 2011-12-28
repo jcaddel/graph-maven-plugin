@@ -18,7 +18,7 @@ public abstract class OmittedDependencyNodeValidator extends DependencyNodeValid
     }
 
     @Override
-    protected void validateNodes(List<DependencyNode> nodes) {
+    protected void validateState(List<DependencyNode> nodes) {
         for (DependencyNode node : nodes) {
             Assert.notNull(node.getRelatedArtifact(), state + " nodes must contain related artifacts");
 

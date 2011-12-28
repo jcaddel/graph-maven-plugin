@@ -31,7 +31,7 @@ public class IncludedDependencyNodeValidator extends DependencyNodeValidator {
     }
 
     @Override
-    protected void validateNodes(List<DependencyNode> nodes) {
+    protected void validateState(List<DependencyNode> nodes) {
         Map<String, Artifact> ids = new HashMap<String, Artifact>();
         Map<String, Artifact> partialIds = new HashMap<String, Artifact>();
         for (DependencyNode node : nodes) {

@@ -20,8 +20,8 @@ public class ConflictDependencyNodeValidator extends OmittedDependencyNodeValida
     }
 
     @Override
-    protected void validateNodes(List<DependencyNode> nodes) {
-        super.validateNodes(nodes);
+    protected void validateState(List<DependencyNode> nodes) {
+        super.validateState(nodes);
         for (DependencyNode node : nodes) {
             boolean equal = helper.equals(node.getArtifact(), node.getRelatedArtifact());
             if (equal) {

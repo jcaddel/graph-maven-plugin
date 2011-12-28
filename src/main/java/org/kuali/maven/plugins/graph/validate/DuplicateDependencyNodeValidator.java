@@ -20,8 +20,8 @@ public class DuplicateDependencyNodeValidator extends OmittedDependencyNodeValid
     }
 
     @Override
-    protected void validateNodes(List<DependencyNode> nodes) {
-        super.validateNodes(nodes);
+    protected void validateState(List<DependencyNode> nodes) {
+        super.validateState(nodes);
         for (DependencyNode node : nodes) {
             boolean equal = helper.equals(node.getArtifact(), node.getRelatedArtifact());
             // This really shouldn't happen. It is a confusing way to label nodes in the dependency tree
