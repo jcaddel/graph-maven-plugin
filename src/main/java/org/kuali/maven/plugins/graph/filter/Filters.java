@@ -21,8 +21,9 @@ import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
 /**
- *
- * Utility class for working with <code>Filter's</code>
+ * <p>
+ * Utility class for working with <code>Filter's</code>.
+ * </p>
  */
 public class Filters {
     public <T> Filter<T> getIncludeExcludePatternFilter(String includes, String excludes, TokenCollector<T> collector) {

@@ -140,6 +140,14 @@ public class Helper {
         }
     }
 
+    public static final String toEmpty(Object o) {
+        if (o == null) {
+            return EMPTY_STRING;
+        } else {
+            return toEmpty(o.toString());
+        }
+    }
+
     /**
      * Null safe method for adding all the elements in "from" to "to"
      */

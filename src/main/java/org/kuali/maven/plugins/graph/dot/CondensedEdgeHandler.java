@@ -135,6 +135,7 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
             List<Edge> parentEdges = node.getParent().getObject().getEdges();
             if (parentEdges == null) {
                 parentEdges = new ArrayList<Edge>();
+                node.getParent().getObject().setEdges(parentEdges);
             }
             parentEdges.add(edge);
 

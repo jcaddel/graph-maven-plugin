@@ -2,7 +2,6 @@ package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -22,6 +21,7 @@ import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.DepthFilter;
 import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.Filters;
+import org.kuali.maven.plugins.graph.filter.IncludeExcludeFilter;
 import org.kuali.maven.plugins.graph.filter.MatchCondition;
 import org.kuali.maven.plugins.graph.filter.MavenContextFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
@@ -36,13 +36,13 @@ import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
-import org.kuali.maven.plugins.graph.tree.ConflictsProcessor;
-import org.kuali.maven.plugins.graph.tree.ConflictsProcessor2;
+import org.kuali.maven.plugins.graph.pojo.State;
+import org.kuali.maven.plugins.graph.processor.ConflictsFlatProcessor;
+import org.kuali.maven.plugins.graph.processor.DuplicatesFlatProcessor;
+import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.tree.Counter;
-import org.kuali.maven.plugins.graph.tree.DuplicatesProcessor;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
-import org.kuali.maven.plugins.graph.tree.PostProcessor;
 import org.kuali.maven.plugins.graph.tree.PreProcessor;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.kuali.maven.plugins.graph.tree.TreeMetaData;
@@ -82,6 +82,7 @@ public class MojoHelper {
         if (mc.isUseDefaultDescriptors()) {
             descriptorsToUse.addAll(getDefaultDescriptors(gc));
         }
+        logger.info("descriptor count={}", descriptorsToUse.size());
         Counter counter = new Counter(1);
         logger.debug("global type={}", gc.getType());
         for (GraphContext descriptor : descriptors) {
@@ -118,56 +119,98 @@ public class MojoHelper {
 
     protected List<GraphContext> getDefaultDescriptors(GraphContext gc) {
         List<GraphContext> descriptors = new ArrayList<GraphContext>();
-        for (LayoutStyle layout : LayoutStyle.values()) {
-            descriptors.add(getGraphContext(null, false, layout, gc));
+        descriptors.addAll(getGraphContexts(null, gc));
+        for (Scope scope : Scope.values()) {
+            descriptors.addAll(getGraphContexts(scope, gc));
         }
-        for (LayoutStyle layout : LayoutStyle.values()) {
-            for (Scope scope : Scope.values()) {
-                descriptors.add(getGraphContext(scope, false, layout, gc));
-            }
-        }
-        for (LayoutStyle layout : LayoutStyle.values()) {
-            descriptors.add(getGraphContext(null, true, layout, gc));
-        }
-        for (LayoutStyle layout : LayoutStyle.values()) {
-            for (Scope scope : Scope.values()) {
-                descriptors.add(getGraphContext(scope, true, layout, gc));
-            }
-        }
-        GraphContext conflicts1 = Helper.copyProperties(GraphContext.class, gc);
-        conflicts1.setShow("::conflict");
-        conflicts1.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
-        conflicts1.setCategory("other");
-        conflicts1.setLabel("conflicts");
-        conflicts1.setLayout(LayoutStyle.CONDENSED);
-        conflicts1.setTransitive(true);
-        GraphContext conflicts2 = Helper.copyProperties(GraphContext.class, gc);
-        conflicts2.setShow("::conflict");
-        conflicts2.setCategory("other");
-        conflicts2.setLabel("conflicts-flat");
-        conflicts2.setLayout(LayoutStyle.FLAT);
-        conflicts2.setTransitive(true);
-        descriptors.add(conflicts1);
-        descriptors.add(conflicts2);
-        GraphContext duplicates1 = Helper.copyProperties(GraphContext.class, gc);
-        duplicates1.setShow("::duplicate");
-        duplicates1.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
-        duplicates1.setCategory("other");
-        duplicates1.setLabel("duplicates");
-        duplicates1.setLayout(LayoutStyle.CONDENSED);
-        duplicates1.setTransitive(true);
-        GraphContext duplicates2 = Helper.copyProperties(GraphContext.class, gc);
-        duplicates2.setShow("::duplicate");
-        duplicates2.setCategory("other");
-        duplicates2.setLabel("duplicates-flat");
-        duplicates2.setLayout(LayoutStyle.FLAT);
-        duplicates2.setTransitive(true);
-        descriptors.add(duplicates1);
-        descriptors.add(duplicates2);
         return descriptors;
     }
 
-    protected GraphContext getGraphContext(Scope scope, boolean transitive, LayoutStyle layout, GraphContext context) {
+    protected String getFilter(Scope scope, Boolean optional, State state) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(scope == null ? "" : scope.toString());
+        sb.append(":");
+        sb.append(optional == null ? "" : (optional ? "optional" : "required"));
+        sb.append(":");
+        sb.append(state == null ? "" : state.toString());
+        return sb.toString();
+    }
+
+    protected String getLabel(Boolean optional, State state) {
+        String o = optional == null ? "" : (optional ? "optional-" : "required-");
+        String s = state == null ? "any" : state.toString();
+
+        if (optional == null && state == null) {
+            return "all";
+        }
+
+        if (optional != null && state == null) {
+            return optional ? "optional" : "required";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(o);
+        sb.append(s);
+        return sb.toString();
+    }
+
+    protected List<GraphContext> getGraphContexts(Scope scope, GraphContext context) {
+        List<GraphContext> contexts = new ArrayList<GraphContext>();
+
+        // optional or required
+        List<GraphContext> list1 = getGraphContexts(scope, null, context);
+
+        // optional only
+        List<GraphContext> list2 = getGraphContexts(scope, true, context);
+
+        // required only
+        List<GraphContext> list3 = getGraphContexts(scope, false, context);
+
+        // Add them to the list
+        contexts.addAll(list1);
+        contexts.addAll(list2);
+        contexts.addAll(list3);
+        return contexts;
+    }
+
+    protected List<GraphContext> getGraphContexts(Scope scope, Boolean optional, GraphContext context) {
+        List<GraphContext> contexts = new ArrayList<GraphContext>();
+        String show = getFilter(scope, optional, null);
+
+        // transitive
+        String label1 = getLabel(optional, null);
+        contexts.add(getGraphContext(context, scope, show, label1, true));
+
+        // non-transitive
+        String label2 = getLabel(optional, null);
+        contexts.add(getGraphContext(context, scope, show, label2, false));
+        for (State state : State.values()) {
+            show = getFilter(scope, optional, state);
+
+            // transitive
+            label1 = getLabel(optional, state);
+            contexts.add(getGraphContext(context, scope, show, label1, true));
+
+            // non-transitive
+            label2 = getLabel(optional, state);
+            contexts.add(getGraphContext(context, scope, show, label2, false));
+        }
+        return contexts;
+    }
+
+    protected GraphContext getGraphContext(GraphContext context, Scope scope, String show, String label,
+            boolean transitive) {
+        GraphContext gc = Helper.copyProperties(GraphContext.class, context);
+        gc.setShow(show);
+        gc.setLabel(label);
+        gc.setTransitive(transitive);
+        gc.setLayout(LayoutStyle.FLAT);
+        String category = (transitive ? "transitive" : "direct") + "/" + (scope == null ? "any" : scope.toString());
+        gc.setCategory(category);
+        return gc;
+    }
+
+    protected GraphContext getGraphContext(Scope scope, Boolean transitive, LayoutStyle layout, GraphContext context) {
         GraphContext gc = Helper.copyProperties(GraphContext.class, context);
         gc.setTransitive(transitive);
         gc.setCategory(transitive ? "transitive" : "direct");
@@ -201,7 +244,7 @@ public class MojoHelper {
             dot.fillInContext(gc);
             dot.execute(gc);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new GraphException(e);
         }
     }
 
@@ -239,20 +282,17 @@ public class MojoHelper {
             TreeMetaData md = helper.getMetaData(tree);
             helper.show(md);
         }
-        helper.include(tree, getIncludeFilter(gc));
-        helper.exclude(tree, getExcludeFilter(gc));
+        Filter<Node<MavenContext>> include = getIncludeFilter(gc);
+        Filter<Node<MavenContext>> exclude = getExcludeFilter(gc);
+        Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
+        helper.filter(tree, filter);
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = gc.getEdgeHandler();
         List<Edge> edges = helper.getEdges(tree, handler);
-        if (gc.getLayout() == LayoutStyle.CONDENSED) {
-            List<PostProcessor> pps = new ArrayList<PostProcessor>();
-            pps.add(new DuplicatesProcessor());
-            pps.add(new ConflictsProcessor2());
-            gc.setPostProcessors(pps);
-        }
-        for (PostProcessor processor : gc.getPostProcessors()) {
-            processor.process(gc, tree, edges, nodes);
-        }
+        Processor p1 = new DuplicatesFlatProcessor();
+        Processor p2 = new ConflictsFlatProcessor();
+        p1.process(tree);
+        p2.process(tree);
         if (mc.isVerbose()) {
             helper.show(nodes, edges);
         }

@@ -18,6 +18,7 @@ package org.kuali.maven.plugins.graph.tree;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +29,13 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
+import org.codehaus.plexus.util.StringUtils;
 import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.collector.VersionFreeArtifactTokenCollector;
 import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
+import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
@@ -72,6 +75,29 @@ public class TreeHelper {
     GraphHelper graphHelper = new GraphHelper();
     Properties properties = getProperties();
 
+    public void filter(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
+        List<Node<MavenContext>> displayList = new ArrayList<Node<MavenContext>>();
+        List<Node<MavenContext>> hideList = new ArrayList<Node<MavenContext>>();
+
+        List<Node<MavenContext>> list = node.getBreadthFirstList();
+        for (Node<MavenContext> element : list) {
+            boolean display = filter.isMatch(element) || element.isRoot();
+            if (display) {
+                displayList.add(element);
+            } else {
+                hideList.add(element);
+            }
+        }
+        logger.debug("hide list size={}", hideList.size());
+        logger.debug("display list size={}", displayList.size());
+        for (Node<MavenContext> element : hideList) {
+            hideTree(element);
+        }
+        for (Node<MavenContext> element : displayList) {
+            showPath(element);
+        }
+    }
+
     /**
      * <p>
      * Logic for including nodes in a tree only if they match a filter.
@@ -96,23 +122,13 @@ public class TreeHelper {
     public void include(Node<MavenContext> node, NodeFilter<MavenContext> filter) {
         if (!filter.isMatch(node) && !node.isRoot()) {
             hide(node);
+            logger.debug("i:hiding {}", node.getObject().getArtifactIdentifier());
         } else {
+            logger.debug("i:showing {}", node.getObject().getArtifactIdentifier());
             showPath(node);
         }
         for (Node<MavenContext> child : node.getChildren()) {
             include(child, filter);
-        }
-    }
-
-    /**
-     * <p>
-     * Display every node in path from this node back to the root.
-     * </p>
-     */
-    public void showPath(Node<MavenContext> node) {
-        Node<MavenContext>[] path = node.getPath();
-        for (Node<MavenContext> pathNode : path) {
-            show(pathNode);
         }
     }
 
@@ -139,11 +155,25 @@ public class TreeHelper {
      */
     public void exclude(Node<MavenContext> node, NodeFilter<MavenContext> filter) {
         if (filter.isMatch(node) && !node.isRoot()) {
-            logger.debug("hiding tree at level=" + node.getLevel());
+            logger.debug("e:hiding {}", node.getObject().getArtifactIdentifier());
             hideTree(node);
         }
         for (Node<MavenContext> child : node.getChildren()) {
             exclude(child, filter);
+        }
+    }
+
+    /**
+     * <p>
+     * Display every node in path from this node back to the root.
+     * </p>
+     */
+    public void showPath(Node<MavenContext> node) {
+        Node<MavenContext>[] path = node.getPath();
+        List<Node<MavenContext>> pathList = Arrays.asList(path);
+        Collections.reverse(pathList);
+        for (Node<MavenContext> pathNode : pathList) {
+            show(pathNode);
         }
     }
 
@@ -170,7 +200,12 @@ public class TreeHelper {
      * @param node
      */
     public void show(Node<MavenContext> node) {
-        node.getObject().getGraphNode().setHidden(false);
+        MavenContext context = node.getObject();
+        GraphNode gn = context.getGraphNode();
+        if (gn.isHidden()) {
+            logger.info("showing node {}: {}", lpad(context.getId(), 3), context.getArtifactIdentifier());
+            gn.setHidden(false);
+        }
     }
 
     /**
@@ -182,7 +217,12 @@ public class TreeHelper {
      * @param node
      */
     public void hide(Node<MavenContext> node) {
-        node.getObject().getGraphNode().setHidden(true);
+        MavenContext context = node.getObject();
+        GraphNode gn = node.getObject().getGraphNode();
+        if (!gn.isHidden()) {
+            logger.info(" hiding node {}: {}", lpad(context.getId(), 3), context.getArtifactIdentifier());
+            gn.setHidden(true);
+        }
     }
 
     /**
@@ -398,6 +438,19 @@ public class TreeHelper {
         return false;
     }
 
+    public List<Node<MavenContext>> getNodeList(Node<MavenContext> node, State... states) {
+        Assert.notNull(states, "states are required");
+        List<Node<MavenContext>> contexts = new ArrayList<Node<MavenContext>>();
+        for (Node<MavenContext> element : node.getBreadthFirstList()) {
+            MavenContext context = element.getObject();
+            State elementState = context.getState();
+            if (isMatch(elementState, states)) {
+                contexts.add(element);
+            }
+        }
+        return contexts;
+    }
+
     public List<MavenContext> getList(Node<MavenContext> node, State... states) {
         Assert.notNull(states, "states are required");
         List<MavenContext> contexts = new ArrayList<MavenContext>();
@@ -588,14 +641,14 @@ public class TreeHelper {
             map.remove("class");
             return new ArrayList<String>(map.keySet());
         } catch (Exception e) {
-            throw new GraphException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 
     protected String getStyle(String property, Scope scope, boolean optional, State state) {
         // State styling overrides everything
         String key1 = "state." + state.getValue() + "." + property;
-        // Scope styling overrides "optional" properties
+        // Scope styling overrides "optional" styling
         String key2 = "scope." + scope.getValue() + "." + property;
         // Fall through to styling for the "optional" attribute on a dependency
         String key3 = "optional." + property;
@@ -712,6 +765,11 @@ public class TreeHelper {
     public static String getArtifactId(Artifact a) {
         TokenCollector<Artifact> collector = new ArtifactIdTokenCollector();
         return toIdString(collector.getTokens(a));
+    }
+
+    protected String lpad(Object o, int count) {
+        String s = Helper.toEmpty(o);
+        return StringUtils.leftPad(s, count);
     }
 
 }

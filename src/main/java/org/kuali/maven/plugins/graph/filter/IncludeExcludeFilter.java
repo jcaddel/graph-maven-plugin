@@ -15,6 +15,9 @@
  */
 package org.kuali.maven.plugins.graph.filter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <p>
  * Returns true if an element matches the include filter but not the exclude filter
@@ -30,6 +33,7 @@ package org.kuali.maven.plugins.graph.filter;
  *
  */
 public class IncludeExcludeFilter<T> implements Filter<T> {
+    private static final Logger logger = LoggerFactory.getLogger(IncludeExcludeFilter.class);
     Filter<T> include;
     Filter<T> exclude;
 
@@ -47,6 +51,7 @@ public class IncludeExcludeFilter<T> implements Filter<T> {
     public boolean isMatch(T element) {
         boolean included = include.isMatch(element);
         boolean excluded = exclude.isMatch(element);
+        logger.debug("included={} excluded={}", included, excluded);
         return included && !excluded;
     }
 
