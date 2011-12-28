@@ -36,8 +36,7 @@ public class IncludedDependencyNodeValidator extends DependencyNodeValidator {
         Map<String, Artifact> partialIds = new HashMap<String, Artifact>();
         for (DependencyNode node : nodes) {
             Artifact a = node.getArtifact();
-            boolean isNull = node.getRelatedArtifact() == null;
-            Assert.state(isNull, "Included nodes can't contain related artifacts");
+            Assert.state(node.getRelatedArtifact() == null, "Included nodes can't contain related artifacts");
             String id = TreeHelper.getArtifactId(a);
             String partialId = TreeHelper.getPartialArtifactId(a);
             ids.put(id, a);

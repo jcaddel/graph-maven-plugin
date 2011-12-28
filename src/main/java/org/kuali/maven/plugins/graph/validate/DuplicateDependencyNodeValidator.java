@@ -24,8 +24,9 @@ public class DuplicateDependencyNodeValidator extends OmittedDependencyNodeValid
         super.validateState(nodes);
         for (DependencyNode node : nodes) {
             boolean equal = helper.equals(node.getArtifact(), node.getRelatedArtifact());
-            // This really shouldn't happen. It is a confusing way to label nodes in the dependency tree
             if (!equal) {
+                // This really shouldn't happen. It is a confusing way to label nodes in the dependency tree
+                // This gets cleaned up by the sanitizers, so just log a message here
                 logger.debug("fake dup->" + node.getArtifact());
             }
         }
