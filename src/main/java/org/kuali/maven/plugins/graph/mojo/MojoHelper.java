@@ -39,11 +39,11 @@ import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.processor.ConflictsFlatProcessor;
 import org.kuali.maven.plugins.graph.processor.DuplicatesFlatProcessor;
+import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.tree.Counter;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
-import org.kuali.maven.plugins.graph.tree.PreProcessor;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 import org.slf4j.Logger;
@@ -137,9 +137,6 @@ public class MojoHelper {
     }
 
     protected String getLabel(Boolean optional, State state) {
-        String o = optional == null ? "" : (optional ? "optional-" : "required-");
-        String s = state == null ? "any" : state.toString();
-
         if (optional == null && state == null) {
             return "all";
         }
@@ -147,6 +144,9 @@ public class MojoHelper {
         if (optional != null && state == null) {
             return optional ? "optional" : "required";
         }
+
+        String o = optional == null ? "" : (optional ? "optional-" : "required-");
+        String s = state == null ? "any" : state.toString();
 
         StringBuilder sb = new StringBuilder();
         sb.append(o);
@@ -233,8 +233,6 @@ public class MojoHelper {
 
         try {
             logger.info(gc.getFile().getPath());
-            EdgeHandler edgeHandler = getEdgeHandler(gc.getLayout());
-            gc.setEdgeHandler(edgeHandler);
             GraphHelper gh = new GraphHelper();
             String title = gh.getGraphTitle(gc);
             gc.setTitle(title);
@@ -273,11 +271,10 @@ public class MojoHelper {
         TreeHelper helper = new TreeHelper();
         DependencyNode mavenTree = getMavenTree(mc);
         Node<MavenContext> tree = helper.getTree(mavenTree);
-        for (PreProcessor processor : gc.getPreProcessors()) {
-            processor.process(gc, tree);
-        }
         helper.validate(tree);
         helper.sanitize(tree);
+        Processor processor = new LabelProcessor(gc);
+        processor.process(tree);
         if (mc.isVerbose()) {
             TreeMetaData md = helper.getMetaData(tree);
             helper.show(md);
@@ -286,18 +283,30 @@ public class MojoHelper {
         Filter<Node<MavenContext>> exclude = getExcludeFilter(gc);
         Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
         helper.filter(tree, filter);
-        List<GraphNode> nodes = helper.getGraphNodes(tree);
-        EdgeHandler handler = gc.getEdgeHandler();
-        List<Edge> edges = helper.getEdges(tree, handler);
         Processor p1 = new DuplicatesFlatProcessor();
         Processor p2 = new ConflictsFlatProcessor();
         p1.process(tree);
         p2.process(tree);
+        List<GraphNode> nodes = helper.getGraphNodes(tree);
+        EdgeHandler handler = getEdgeHandler(gc);
+        List<Edge> edges = helper.getEdges(tree, handler);
         if (mc.isVerbose()) {
             helper.show(nodes, edges);
         }
         Graph graph = new GraphHelper().getGraph(gc.getTitle(), gc.getDirection(), nodes, edges);
         return new StringGenerator().getString(graph);
+    }
+
+    protected EdgeHandler getEdgeHandler(GraphContext gc) {
+        LayoutStyle style = gc.getLayout();
+        switch (style) {
+        case CONDENSED:
+            return new CondensedEdgeHandler();
+        case FLAT:
+            return new FlatEdgeHandler();
+        default:
+            throw new IllegalStateException("Unknown style " + style);
+        }
     }
 
     protected NodeFilter<MavenContext> getShowFilter(GraphContext gc) {

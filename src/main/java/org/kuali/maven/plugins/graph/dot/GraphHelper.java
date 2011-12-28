@@ -32,7 +32,7 @@ import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
-import org.kuali.maven.plugins.graph.pojo.Hider;
+import org.kuali.maven.plugins.graph.pojo.LabelContext;
 import org.kuali.maven.plugins.graph.pojo.NameValue;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
@@ -164,28 +164,26 @@ public class GraphHelper {
         return graph;
     }
 
-    protected void add(List<String> list, String s, boolean skip) {
-        if (skip || Helper.isBlank(s)) {
-            return;
-        } else {
+    protected void add(List<String> list, String s, boolean show) {
+        if (show && !Helper.isBlank(s)) {
             list.add(s);
         }
     }
 
     public String getLabel(Artifact a) {
-        return getLabel(a, new Hider());
+        return getLabel(a, new LabelContext());
     }
 
-    public String getLabel(Artifact a, Hider hider) {
+    public String getLabel(Artifact a, LabelContext context) {
 
-        boolean hideType = hider.isHideType() || DEFAULT_TYPE.equalsIgnoreCase(a.getType());
+        boolean showType = context.isShowTypes() && !DEFAULT_TYPE.equalsIgnoreCase(a.getType());
 
         List<String> labelTokens = new ArrayList<String>();
-        add(labelTokens, a.getGroupId(), hider.isHideGroupId());
-        add(labelTokens, a.getArtifactId(), hider.isHideArtifactId());
-        add(labelTokens, a.getType(), hideType);
-        add(labelTokens, a.getClassifier(), hider.isHideClassifier());
-        add(labelTokens, a.getVersion(), hider.isHideVersion());
+        add(labelTokens, a.getGroupId(), context.isShowGroupIds());
+        add(labelTokens, a.getArtifactId(), context.isShowArtifactIds());
+        add(labelTokens, a.getType(), showType);
+        add(labelTokens, a.getClassifier(), context.isShowClassifiers());
+        add(labelTokens, a.getVersion(), context.isShowVersions());
         return getLabel(labelTokens);
     }
 

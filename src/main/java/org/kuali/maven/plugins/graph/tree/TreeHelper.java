@@ -203,7 +203,7 @@ public class TreeHelper {
         MavenContext context = node.getObject();
         GraphNode gn = context.getGraphNode();
         if (gn.isHidden()) {
-            logger.info("showing node {}: {}", lpad(context.getId(), 3), context.getArtifactIdentifier());
+            logger.info("showing node {}: {}", lpad(context.getId(), 4), context.getArtifactIdentifier());
             gn.setHidden(false);
         }
     }
@@ -220,7 +220,7 @@ public class TreeHelper {
         MavenContext context = node.getObject();
         GraphNode gn = node.getObject().getGraphNode();
         if (!gn.isHidden()) {
-            logger.info(" hiding node {}: {}", lpad(context.getId(), 3), context.getArtifactIdentifier());
+            logger.info(" hiding node {}: {}", lpad(context.getId(), 4), context.getArtifactIdentifier());
             gn.setHidden(true);
         }
     }
@@ -573,13 +573,9 @@ public class TreeHelper {
 
     public List<GraphNode> getGraphNodes(Node<MavenContext> node) {
         List<GraphNode> nodes = new ArrayList<GraphNode>();
-        if (node.isRoot()) {
-            nodes.add(node.getObject().getGraphNode());
-        }
-        List<Node<MavenContext>> children = node.getChildren();
-        for (Node<MavenContext> child : children) {
-            nodes.add(child.getObject().getGraphNode());
-            nodes.addAll(getGraphNodes(child));
+        List<Node<MavenContext>> treeNodes = node.getBreadthFirstList();
+        for (Node<MavenContext> treeNode : treeNodes) {
+            nodes.add(treeNode.getObject().getGraphNode());
         }
         return nodes;
     }

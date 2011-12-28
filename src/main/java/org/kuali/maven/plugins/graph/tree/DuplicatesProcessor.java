@@ -11,10 +11,9 @@ import org.kuali.maven.plugins.graph.pojo.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DuplicatesProcessor implements PostProcessor {
+public class DuplicatesProcessor {
     private static final Logger logger = LoggerFactory.getLogger(DuplicatesProcessor.class);
 
-    @Override
     public void process(GraphContext context, Node<MavenContext> node, List<Edge> edges, List<GraphNode> nodes) {
         List<MavenContext> duplicates = getContexts(node, State.DUPLICATE);
         List<MavenContext> included = getContexts(node, State.INCLUDED);

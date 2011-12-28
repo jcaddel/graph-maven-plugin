@@ -16,27 +16,12 @@
 package org.kuali.maven.plugins.graph.pojo;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.kuali.maven.plugins.graph.dot.CondensedEdgeHandler;
-import org.kuali.maven.plugins.graph.dot.EdgeHandler;
-import org.kuali.maven.plugins.graph.tree.HideProcessor;
-import org.kuali.maven.plugins.graph.tree.PostProcessor;
-import org.kuali.maven.plugins.graph.tree.PreProcessor;
 
 /**
  *
  */
 public class GraphContext {
-    public static final List<? extends PreProcessor> DEFAULT_PRE_PROCESSORS = Collections
-            .singletonList(new HideProcessor());
-
     String executable = "dot";
-    EdgeHandler edgeHandler = new CondensedEdgeHandler();
-    List<? extends PreProcessor> preProcessors = new ArrayList<PreProcessor>(DEFAULT_PRE_PROCESSORS);
-    List<? extends PostProcessor> postProcessors = new ArrayList<PostProcessor>();
     String title;
     Boolean keepDotFile;
     Boolean transitive;
@@ -65,30 +50,6 @@ public class GraphContext {
 
     public void setExecutable(String executable) {
         this.executable = executable;
-    }
-
-    public EdgeHandler getEdgeHandler() {
-        return edgeHandler;
-    }
-
-    public void setEdgeHandler(EdgeHandler edgeHandler) {
-        this.edgeHandler = edgeHandler;
-    }
-
-    public List<? extends PreProcessor> getPreProcessors() {
-        return preProcessors;
-    }
-
-    public void setPreProcessors(List<? extends PreProcessor> preProcessors) {
-        this.preProcessors = preProcessors;
-    }
-
-    public List<? extends PostProcessor> getPostProcessors() {
-        return postProcessors;
-    }
-
-    public void setPostProcessors(List<? extends PostProcessor> postProcessors) {
-        this.postProcessors = postProcessors;
     }
 
     public String getTitle() {

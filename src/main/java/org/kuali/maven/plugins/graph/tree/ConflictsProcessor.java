@@ -12,10 +12,9 @@ import org.kuali.maven.plugins.graph.pojo.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConflictsProcessor implements PostProcessor {
+public class ConflictsProcessor {
     private static final Logger logger = LoggerFactory.getLogger(ConflictsProcessor.class);
 
-    @Override
     public void process(GraphContext context, Node<MavenContext> node, List<Edge> edges, List<GraphNode> nodes) {
         TreeHelper helper = new TreeHelper();
         List<MavenContext> contexts = getContexts(node);

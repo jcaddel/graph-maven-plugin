@@ -15,14 +15,6 @@
  */
 package org.kuali.maven.plugins.graph.mojo;
 
-import java.io.File;
-import java.util.Collections;
-
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
-import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
-import org.kuali.maven.plugins.graph.pojo.MojoContext;
-import org.kuali.maven.plugins.graph.tree.ConflictsProcessor;
-import org.kuali.maven.plugins.graph.tree.Helper;
 
 /**
  * <p>
@@ -38,51 +30,6 @@ import org.kuali.maven.plugins.graph.tree.Helper;
  * @goal conflicts
  * @requiresDependencyResolution compile|test|runtime
  */
-public class ConflictsMojo extends FilteredGraphMojo {
-
-    /**
-     * The file the graph will be written to
-     *
-     * @required
-     * @parameter expression="${graph.file}" default-value="${project.build.directory}/graph/conflicts.png"
-     */
-    private File file;
-
-    /**
-     * This filter restricts the display to conflicts only.
-     *
-     * @parameter expression="${graph.conflictsFilter}" default-value="::conflict"
-     */
-    private String conflictsFilter;
-
-    @Override
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    @Override
-    public void execute() {
-        setShow(getShow() == null ? conflictsFilter : getShow() + "," + conflictsFilter);
-        setLayout(LayoutStyle.CONDENSED);
-
-        MojoContext mc = Helper.copyProperties(MojoContext.class, this);
-        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
-        gc.setPostProcessors(Collections.singletonList(new ConflictsProcessor()));
-
-        MojoHelper mh = new MojoHelper();
-        mh.execute(mc, gc);
-    }
-
-    public String getConflictsFilter() {
-        return conflictsFilter;
-    }
-
-    public void setConflictsFilter(String conflictsFilter) {
-        this.conflictsFilter = conflictsFilter;
-    }
+public class ConflictsMojo {
 
 }
