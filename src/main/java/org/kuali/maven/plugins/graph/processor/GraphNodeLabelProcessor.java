@@ -11,14 +11,14 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 
-public class LabelProcessor implements Processor {
+public class GraphNodeLabelProcessor implements Processor {
     GraphContext graphContext;
 
-    public LabelProcessor() {
+    public GraphNodeLabelProcessor() {
         this(null);
     }
 
-    public LabelProcessor(GraphContext graphContext) {
+    public GraphNodeLabelProcessor(GraphContext graphContext) {
         super();
         this.graphContext = graphContext;
     }

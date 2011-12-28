@@ -39,7 +39,7 @@ import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.processor.ConflictsFlatProcessor;
 import org.kuali.maven.plugins.graph.processor.DuplicatesFlatProcessor;
-import org.kuali.maven.plugins.graph.processor.LabelProcessor;
+import org.kuali.maven.plugins.graph.processor.GraphNodeLabelProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.tree.Counter;
 import org.kuali.maven.plugins.graph.tree.Helper;
@@ -273,12 +273,12 @@ public class MojoHelper {
         Node<MavenContext> tree = helper.getTree(mavenTree);
         helper.validate(tree);
         helper.sanitize(tree);
-        Processor processor = new LabelProcessor(gc);
-        processor.process(tree);
         if (mc.isVerbose()) {
             TreeMetaData md = helper.getMetaData(tree);
             helper.show(md);
         }
+        Processor processor = new GraphNodeLabelProcessor(gc);
+        processor.process(tree);
         Filter<Node<MavenContext>> include = getIncludeFilter(gc);
         Filter<Node<MavenContext>> exclude = getExcludeFilter(gc);
         Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
