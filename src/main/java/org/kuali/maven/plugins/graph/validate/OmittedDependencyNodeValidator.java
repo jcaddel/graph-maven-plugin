@@ -8,7 +8,7 @@ import org.springframework.util.Assert;
 
 /**
  * <p>
- * Abstraction for performing validation on nodes that have been excluded from participating in the build.
+ * Abstraction for performing validation on nodes that are in the dependency tree but have been excluded from the build.
  * </p>
  */
 public abstract class OmittedDependencyNodeValidator extends DependencyNodeValidator {
@@ -20,7 +20,7 @@ public abstract class OmittedDependencyNodeValidator extends DependencyNodeValid
     @Override
     protected void validateState(List<DependencyNode> nodes) {
         for (DependencyNode node : nodes) {
-            Assert.notNull(node.getRelatedArtifact(), state + " nodes must contain related artifacts");
+            Assert.state(node.getRelatedArtifact() != null, state + " nodes must contain related artifacts");
 
             boolean similar = helper.similar(node.getArtifact(), node.getRelatedArtifact());
 

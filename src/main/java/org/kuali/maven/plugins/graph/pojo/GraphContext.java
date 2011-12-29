@@ -31,6 +31,7 @@ public class GraphContext {
     String show;
     Direction direction;
     Boolean showGroupIds;
+    Boolean showDuplicates;
     Boolean showLegend;
     Boolean showTitle;
     Boolean executeDot;
@@ -218,6 +219,14 @@ public class GraphContext {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Boolean getShowDuplicates() {
+        return showDuplicates;
+    }
+
+    public void setShowDuplicates(Boolean showDuplicates) {
+        this.showDuplicates = showDuplicates;
     }
 
 }

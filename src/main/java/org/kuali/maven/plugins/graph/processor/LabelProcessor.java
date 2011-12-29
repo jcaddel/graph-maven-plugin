@@ -11,14 +11,14 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 
-public class GraphNodeLabelProcessor implements Processor {
+public class LabelProcessor implements Processor {
     GraphContext graphContext;
 
-    public GraphNodeLabelProcessor() {
+    public LabelProcessor() {
         this(null);
     }
 
-    public GraphNodeLabelProcessor(GraphContext graphContext) {
+    public LabelProcessor(GraphContext graphContext) {
         super();
         this.graphContext = graphContext;
     }
@@ -32,8 +32,8 @@ public class GraphNodeLabelProcessor implements Processor {
             MavenContext mc = element.getObject();
             GraphNode graphNode = mc.getGraphNode();
             Artifact artifact = mc.getArtifact();
-            // String label = graphHelper.getLabel(artifact, hider);
-            String label = graphNode.getId() + "\\n" + artifact.getArtifactId() + "\\n" + artifact.getVersion();
+            String label = graphHelper.getLabel(artifact, labelContext);
+            // String label = graphNode.getId() + "\\n" + artifact.getArtifactId() + "\\n" + artifact.getVersion();
             graphNode.setLabel(label);
         }
     }

@@ -55,7 +55,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * If false, artifact group id's are not displayed.
+     * If true, artifact group id's are displayed on the graph.
      * </p>
      *
      * @parameter expression="${graph.showGroupIds}" default-value="true"
@@ -64,7 +64,16 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * By default, the criteria used to filter the dependency tree are shown as a legend. Set this to false to prevent
+     * If true, duplicate dependencies are displayed on the graph.
+     * </p>
+     *
+     * @parameter expression="${graph.showDuplicates}" default-value="false"
+     */
+    private boolean showDuplicates;
+
+    /**
+     * <p>
+     * If true, any criteria used to filter the dependency tree are shown as a legend. Set this to false to prevent
      * filter criteria from being shown.
      * </p>
      *
@@ -162,6 +171,14 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     public void setIgnoreDotFailure(boolean ignoreDotFailure) {
         this.ignoreDotFailure = ignoreDotFailure;
+    }
+
+    public boolean isShowDuplicates() {
+        return showDuplicates;
+    }
+
+    public void setShowDuplicates(boolean showDuplicates) {
+        this.showDuplicates = showDuplicates;
     }
 
 }

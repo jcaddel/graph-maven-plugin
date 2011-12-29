@@ -76,25 +76,19 @@ public class TreeHelper {
     Properties properties = getProperties();
 
     public void filter(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
-        List<Node<MavenContext>> displayList = new ArrayList<Node<MavenContext>>();
-        List<Node<MavenContext>> hideList = new ArrayList<Node<MavenContext>>();
+        List<Node<MavenContext>> hidden = new ArrayList<Node<MavenContext>>();
 
         List<Node<MavenContext>> list = node.getBreadthFirstList();
         for (Node<MavenContext> element : list) {
-            boolean display = filter.isMatch(element) || element.isRoot();
-            if (display) {
-                displayList.add(element);
-            } else {
-                hideList.add(element);
+            boolean hide = !filter.isMatch(element) && !element.isRoot();
+            if (hide) {
+                hidden.add(element);
             }
         }
-        logger.debug("hide list size={}", hideList.size());
-        logger.debug("display list size={}", displayList.size());
-        for (Node<MavenContext> element : hideList) {
-            hideTree(element);
-        }
-        for (Node<MavenContext> element : displayList) {
-            showPath(element);
+        logger.info("hide list size={}", hidden.size());
+
+        for (Node<MavenContext> hide : hidden) {
+            hideTree(hide);
         }
     }
 
@@ -124,7 +118,7 @@ public class TreeHelper {
             hide(node);
             logger.debug("i:hiding {}", node.getObject().getArtifactIdentifier());
         } else {
-            logger.debug("i:showing {}", node.getObject().getArtifactIdentifier());
+            logger.debug("i:showing path {}", node.getObject().getArtifactIdentifier());
             showPath(node);
         }
         for (Node<MavenContext> child : node.getChildren()) {

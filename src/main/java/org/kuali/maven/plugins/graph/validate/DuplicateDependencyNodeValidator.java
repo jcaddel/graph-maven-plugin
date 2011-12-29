@@ -25,7 +25,12 @@ public class DuplicateDependencyNodeValidator extends OmittedDependencyNodeValid
         for (DependencyNode node : nodes) {
             boolean equal = helper.equals(node.getArtifact(), node.getRelatedArtifact());
             if (!equal) {
-                // This really shouldn't happen. It is a confusing way to label nodes in the dependency tree
+                // This really shouldn't happen.
+                // It is a confusing way to label nodes in the dependency tree
+                // Maven marked this node as a "duplicate" but the related artifact is a different version
+                // The term "duplicate" would reasonably seem to imply that this version of this artifact is
+                // participating in the build.
+                // Why then, would the related artifact be a different version?
                 // This gets cleaned up by the sanitizers, so just log a message here
                 logger.debug("fake dup->" + node.getArtifact());
             }

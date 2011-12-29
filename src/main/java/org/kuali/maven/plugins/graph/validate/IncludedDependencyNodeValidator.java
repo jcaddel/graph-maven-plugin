@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
  * </p>
  *
  * <p>
- * In layman's terms, this guarantees that only one version of any given jar file will be used during a build.
+ * In layman's terms, this guarantees that only one version of a jar will be used during a build.
  * </p>
  */
 public class IncludedDependencyNodeValidator extends DependencyNodeValidator {

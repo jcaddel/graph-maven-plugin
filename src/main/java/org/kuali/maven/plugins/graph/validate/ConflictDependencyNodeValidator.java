@@ -25,6 +25,13 @@ public class ConflictDependencyNodeValidator extends OmittedDependencyNodeValida
         for (DependencyNode node : nodes) {
             boolean equal = helper.equals(node.getArtifact(), node.getRelatedArtifact());
             if (equal) {
+                // This really shouldn't happen.
+                // It is a confusing way to label nodes in the dependency tree
+                // Maven marked this node as a "conflict" but the related artifact is the same version
+                // The term "conflict" would seem to imply that this version of this artifact has been
+                // conflicted out of the build and replaced with another version
+                // Why then, would the related artifact be the same version?
+                // This gets cleaned up by the sanitizers, so just log a message here
                 logger.debug("fake conflict->" + node.getArtifact());
             }
         }

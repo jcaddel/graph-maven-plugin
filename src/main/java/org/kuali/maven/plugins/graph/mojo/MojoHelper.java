@@ -37,10 +37,8 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
-import org.kuali.maven.plugins.graph.processor.ConflictsFlatProcessor;
-import org.kuali.maven.plugins.graph.processor.DuplicatesFlatProcessor;
-import org.kuali.maven.plugins.graph.processor.GraphNodeLabelProcessor;
-import org.kuali.maven.plugins.graph.processor.Processor;
+import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
+import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.tree.Counter;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
@@ -242,7 +240,7 @@ public class MojoHelper {
             dot.fillInContext(gc);
             dot.execute(gc);
         } catch (Exception e) {
-            throw new GraphException(e);
+            e.printStackTrace();
         }
     }
 
@@ -277,19 +275,17 @@ public class MojoHelper {
             TreeMetaData md = helper.getMetaData(tree);
             helper.show(md);
         }
-        Processor processor = new GraphNodeLabelProcessor(gc);
-        processor.process(tree);
-        Filter<Node<MavenContext>> include = getIncludeFilter(gc);
-        Filter<Node<MavenContext>> exclude = getExcludeFilter(gc);
+        new LabelProcessor(gc).process(tree);
+        NodeFilter<MavenContext> include = getIncludeFilter(gc);
+        NodeFilter<MavenContext> exclude = getExcludeFilter(gc);
         Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
         helper.filter(tree, filter);
-        Processor p1 = new DuplicatesFlatProcessor();
-        Processor p2 = new ConflictsFlatProcessor();
-        p1.process(tree);
-        p2.process(tree);
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = getEdgeHandler(gc);
         List<Edge> edges = helper.getEdges(tree, handler);
+        if (Boolean.TRUE.equals(gc.getShowDuplicates())) {
+            new HideDuplicatesProcessor().process(tree);
+        }
         if (mc.isVerbose()) {
             helper.show(nodes, edges);
         }
