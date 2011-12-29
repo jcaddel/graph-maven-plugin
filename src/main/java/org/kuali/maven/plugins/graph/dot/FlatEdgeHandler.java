@@ -48,7 +48,7 @@ public class FlatEdgeHandler implements EdgeHandler {
         GraphNode parent = node.getParent().getObject().getGraphNode();
         MavenContext context = node.getObject();
         GraphNode child = context.getGraphNode();
-        boolean optional = context.getArtifact().isOptional();
+        boolean optional = context.isOptional();
         State state = context.getState();
         Scope scope = Scope.getScope(context.getArtifact().getScope());
         return getEdge(parent, child, optional, scope, state);

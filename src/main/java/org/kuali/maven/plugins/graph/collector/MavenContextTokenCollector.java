@@ -54,7 +54,7 @@ public class MavenContextTokenCollector implements TokenCollector<MavenContext> 
             scope = Scope.DEFAULT_SCOPE;
         }
         State state = context.getState();
-        String optional = context.getArtifact().isOptional() ? TreeHelper.OPTIONAL : TreeHelper.REQUIRED;
+        String optional = context.isOptional() ? TreeHelper.OPTIONAL : TreeHelper.REQUIRED;
         List<String> tokens = new ArrayList<String>();
         tokens.add(scope.getValue());
         tokens.add(optional);

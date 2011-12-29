@@ -26,6 +26,7 @@ public class MavenContext {
     Artifact artifact;
     Artifact replacement;
     State state;
+    boolean optional;
     GraphNode graphNode;
     List<Edge> edges;
     DependencyNode dependencyNode;
@@ -102,5 +103,13 @@ public class MavenContext {
 
     public void setEdges(List<Edge> edges) {
         this.edges = edges;
+    }
+
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
     }
 }

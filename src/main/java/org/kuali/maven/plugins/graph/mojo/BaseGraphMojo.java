@@ -73,6 +73,15 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
+     * If true, a dependency marked as optional will have all of its transitive dependencies displayed as optional also.
+     * </p>
+     *
+     * @parameter expression="${graph.cascadeOptional}" default-value="true"
+     */
+    private boolean cascadeOptional;
+
+    /**
+     * <p>
      * If true, any criteria used to filter the dependency tree are shown as a legend. Set this to false to prevent
      * filter criteria from being shown.
      * </p>
@@ -179,6 +188,14 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     public void setShowDuplicates(boolean showDuplicates) {
         this.showDuplicates = showDuplicates;
+    }
+
+    public boolean isCascadeOptional() {
+        return cascadeOptional;
+    }
+
+    public void setCascadeOptional(boolean cascadeOptional) {
+        this.cascadeOptional = cascadeOptional;
     }
 
 }

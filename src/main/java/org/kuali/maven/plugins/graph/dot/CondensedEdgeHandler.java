@@ -85,7 +85,7 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
         GraphNode child = replacement.getObject().getGraphNode();
 
         // Draw an edge saying "replacement" from ourself to the artifact that replaced us
-        boolean optional = context.getArtifact().isOptional();
+        boolean optional = context.isOptional();
         Edge edge = getEdge(parent, child, optional, Scope.DEFAULT_SCOPE, State.CONFLICT);
         edge.setLabel(REPLACEMENT_LABEL);
 
@@ -106,7 +106,7 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
         // This is the node that is being used instead of us
         GraphNode child = replacement.getObject().getGraphNode();
         // Use our optional/scope settings
-        boolean optional = context.getArtifact().isOptional();
+        boolean optional = context.isOptional();
         Scope scope = Scope.getScope(context.getArtifact().getScope());
 
         // Draw an edge from our parent to the node that replaced us

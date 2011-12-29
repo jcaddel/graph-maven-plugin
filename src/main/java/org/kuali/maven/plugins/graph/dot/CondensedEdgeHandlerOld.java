@@ -132,7 +132,7 @@ public class CondensedEdgeHandlerOld extends FlatEdgeHandler {
             GraphNode child = conflictNode.getGraphNode();
 
             // Use our scope and optional settings
-            boolean optional = context.getArtifact().isOptional();
+            boolean optional = context.isOptional();
             Scope scope = Scope.getScope(context.getArtifact().getScope());
 
             // Draw an edge from our parent to the conflictNode
@@ -163,7 +163,7 @@ public class CondensedEdgeHandlerOld extends FlatEdgeHandler {
         // This is the node that is being used instead of us
         GraphNode child = replacement.getObject().getGraphNode();
         // Use our optional/scope settings
-        boolean optional = context.getArtifact().isOptional();
+        boolean optional = context.isOptional();
         Scope scope = Scope.getScope(context.getArtifact().getScope());
 
         // Draw an edge from our parent to the node that replaced us

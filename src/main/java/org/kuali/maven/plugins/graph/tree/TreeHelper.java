@@ -75,6 +75,30 @@ public class TreeHelper {
     GraphHelper graphHelper = new GraphHelper();
     Properties properties = getProperties();
 
+    public void filterButShowPath(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
+        List<Node<MavenContext>> hidden = new ArrayList<Node<MavenContext>>();
+        List<Node<MavenContext>> displayed = new ArrayList<Node<MavenContext>>();
+
+        List<Node<MavenContext>> list = node.getBreadthFirstList();
+        for (Node<MavenContext> element : list) {
+            boolean display = filter.isMatch(element) || element.isRoot();
+            if (display) {
+                displayed.add(element);
+            } else {
+                hidden.add(element);
+            }
+        }
+        logger.info("hide list size={}", hidden.size());
+        logger.info("display list size={}", hidden.size());
+
+        for (Node<MavenContext> element : hidden) {
+            hideTree(element);
+        }
+        for (Node<MavenContext> element : displayed) {
+            showPath(element);
+        }
+    }
+
     public void filter(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
         List<Node<MavenContext>> hidden = new ArrayList<Node<MavenContext>>();
 
@@ -87,8 +111,8 @@ public class TreeHelper {
         }
         logger.info("hide list size={}", hidden.size());
 
-        for (Node<MavenContext> hide : hidden) {
-            hideTree(hide);
+        for (Node<MavenContext> element : hidden) {
+            hideTree(element);
         }
     }
 
@@ -197,7 +221,7 @@ public class TreeHelper {
         MavenContext context = node.getObject();
         GraphNode gn = context.getGraphNode();
         if (gn.isHidden()) {
-            logger.info("showing node {}: {}", lpad(context.getId(), 4), context.getArtifactIdentifier());
+            logger.debug("showing node {}: {}", lpad(context.getId(), 4), context.getArtifactIdentifier());
             gn.setHidden(false);
         }
     }
@@ -214,7 +238,7 @@ public class TreeHelper {
         MavenContext context = node.getObject();
         GraphNode gn = node.getObject().getGraphNode();
         if (!gn.isHidden()) {
-            logger.info(" hiding node {}: {}", lpad(context.getId(), 4), context.getArtifactIdentifier());
+            logger.debug(" hiding node {}: {}", lpad(context.getId(), 4), context.getArtifactIdentifier());
             gn.setHidden(true);
         }
     }
@@ -267,6 +291,7 @@ public class TreeHelper {
         context.setGraphNode(gn);
         context.setDependencyNode(dn);
         context.setState(State.getState(dn.getState()));
+        context.setOptional(dn.getArtifact().isOptional());
         return context;
     }
 
@@ -522,13 +547,13 @@ public class TreeHelper {
 
     protected void updateMetaData(TreeMetaData md, MavenContext context) {
         DependencyNode dn = context.getDependencyNode();
-        updateMetaData(md, dn.getArtifact());
+        updateMetaData(md, dn.getArtifact(), context.isOptional());
         if (dn.getParent() != null) {
             md.getStates().increment(context.getState().getValue());
         }
     }
 
-    protected void updateMetaData(TreeMetaData md, Artifact a) {
+    protected void updateMetaData(TreeMetaData md, Artifact a, boolean optional) {
         md.getGroupIds().increment(a.getGroupId());
         md.getArtifactIds().increment(a.getArtifactId());
         md.getTypes().increment(a.getType());
@@ -541,14 +566,14 @@ public class TreeHelper {
         if (scope != null) {
             md.getScopes().increment(scope.toString());
         }
-        md.getRequiredness().increment(a.isOptional() ? OPTIONAL : REQUIRED);
+        md.getRequiredness().increment(optional ? OPTIONAL : REQUIRED);
         md.getArtifactIdentifiers().add(getArtifactId(a));
         md.getPartialArtifactIdentifiers().add(getPartialArtifactId(a));
     }
 
     protected void updateGraphNodeStyle(MavenContext context) {
         DependencyNode dn = context.getDependencyNode();
-        boolean optional = dn.getArtifact().isOptional();
+        boolean optional = context.isOptional();
         State state = context.getState();
         Scope scope = Scope.getScope(dn.getArtifact().getScope());
         Style style = getStyle(scope, optional, state);
