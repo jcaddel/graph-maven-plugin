@@ -73,6 +73,15 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
+     * If true, dependency conflicts are displayed on the graph
+     * </p>
+     *
+     * @parameter expression="${graph.showConflicts}" default-value="true"
+     */
+    private boolean showConflicts;
+
+    /**
+     * <p>
      * If true, a dependency marked as optional will have all of its transitive dependencies displayed as optional also.
      * </p>
      *
@@ -196,6 +205,14 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     public void setCascadeOptional(boolean cascadeOptional) {
         this.cascadeOptional = cascadeOptional;
+    }
+
+    public boolean isShowConflicts() {
+        return showConflicts;
+    }
+
+    public void setShowConflicts(boolean showConflicts) {
+        this.showConflicts = showConflicts;
     }
 
 }

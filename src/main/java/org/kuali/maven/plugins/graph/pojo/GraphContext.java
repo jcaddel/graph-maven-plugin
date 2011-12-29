@@ -32,6 +32,7 @@ public class GraphContext {
     Direction direction;
     Boolean showGroupIds;
     Boolean showDuplicates;
+    Boolean showConflicts;
     Boolean cascadeOptional;
     Boolean showLegend;
     Boolean showTitle;
@@ -236,6 +237,14 @@ public class GraphContext {
 
     public void setCascadeOptional(Boolean cascadeOptional) {
         this.cascadeOptional = cascadeOptional;
+    }
+
+    public Boolean getShowConflicts() {
+        return showConflicts;
+    }
+
+    public void setShowConflicts(Boolean showConflicts) {
+        this.showConflicts = showConflicts;
     }
 
 }

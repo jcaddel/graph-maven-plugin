@@ -101,7 +101,7 @@ public class CondensedEdgeProcessor implements Processor {
         generator.addEdge(node.getParent(), edge);
     }
 
-    protected Node<MavenContext> findIncludedNode(Node<MavenContext> root, String artifactId) {
+    public static Node<MavenContext> findIncludedNode(Node<MavenContext> root, String artifactId) {
         List<Node<MavenContext>> nodes = root.getBreadthFirstList();
         for (Node<MavenContext> node : nodes) {
             MavenContext context = node.getObject();

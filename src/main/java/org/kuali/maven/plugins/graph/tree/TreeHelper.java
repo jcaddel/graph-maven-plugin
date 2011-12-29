@@ -29,7 +29,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.collector.VersionFreeArtifactTokenCollector;
-import org.kuali.maven.plugins.graph.dot.EdgeHandler;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
@@ -442,16 +441,6 @@ public class TreeHelper {
             if (!empty) {
                 edges.addAll(element.getObject().getEdges());
             }
-        }
-        return edges;
-    }
-
-    public List<Edge> getEdges(Node<MavenContext> node, EdgeHandler handler) {
-        List<Edge> edges = new ArrayList<Edge>();
-        List<Node<MavenContext>> children = node.getChildren();
-        for (Node<MavenContext> child : children) {
-            edges.addAll(handler.getEdges(child));
-            edges.addAll(getEdges(child, handler));
         }
         return edges;
     }

@@ -11,10 +11,7 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.MavenContextTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
-import org.kuali.maven.plugins.graph.dot.CondensedEdgeHandler;
 import org.kuali.maven.plugins.graph.dot.Dot;
-import org.kuali.maven.plugins.graph.dot.EdgeHandler;
-import org.kuali.maven.plugins.graph.dot.FlatEdgeHandler;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.dot.StringGenerator;
 import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
@@ -40,6 +37,7 @@ import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
 import org.kuali.maven.plugins.graph.processor.CondensedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.FilteringProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
+import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
@@ -251,17 +249,6 @@ public class MojoHelper {
         }
     }
 
-    protected EdgeHandler getEdgeHandler(LayoutStyle layout) {
-        switch (layout) {
-        case CONDENSED:
-            return new CondensedEdgeHandler();
-        case FLAT:
-            return new FlatEdgeHandler();
-        default:
-            throw new IllegalArgumentException("Unknown layout " + layout);
-        }
-    }
-
     public DependencyNode getMavenTree(MojoContext c) {
         try {
             DependencyTreeBuilder builder = c.getTreeBuilder();
@@ -272,22 +259,25 @@ public class MojoHelper {
         }
     }
 
-    protected List<Processor> getProcessors(MojoContext mc, GraphContext gc) {
+    protected List<Processor> getProcessors(GraphContext gc, boolean verbose) {
         List<Processor> processors = new ArrayList<Processor>();
         processors.add(new ValidatingProcessor());
         processors.add(new SanitizingProcessor());
-        if (mc.isVerbose()) {
-            processors.add(new ShowMetadataProcessor());
-        }
         processors.add(new LabelProcessor(gc));
         if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
             processors.add(new CascadeOptionalProcessor());
         }
+        if (verbose) {
+            processors.add(new ShowMetadataProcessor());
+        }
         processors.add(new FilteringProcessor(gc));
         processors.add(new StyleProcessor());
-        processors.add(getEdgeProcessor(gc));
+        processors.add(getEdgeProcessor(gc.getLayout()));
         if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
             processors.add(new HideDuplicatesProcessor());
+        }
+        if (!Boolean.TRUE.equals(gc.getShowConflicts())) {
+            processors.add(new HideConflictsProcessor(gc.getLayout()));
         }
         return processors;
     }
@@ -296,7 +286,7 @@ public class MojoHelper {
         TreeHelper helper = new TreeHelper();
         DependencyNode mavenTree = getMavenTree(mc);
         Node<MavenContext> tree = helper.getTree(mavenTree);
-        List<Processor> processors = getProcessors(mc, gc);
+        List<Processor> processors = getProcessors(gc, mc.isVerbose());
         for (Processor processor : processors) {
             processor.process(tree);
         }
@@ -309,8 +299,7 @@ public class MojoHelper {
         return new StringGenerator().getString(graph);
     }
 
-    protected Processor getEdgeProcessor(GraphContext gc) {
-        LayoutStyle layout = gc.getLayout();
+    protected Processor getEdgeProcessor(LayoutStyle layout) {
         switch (layout) {
         case CONDENSED:
             return new CondensedEdgeProcessor();
@@ -318,18 +307,6 @@ public class MojoHelper {
             return new FlatEdgeProcessor();
         default:
             throw new IllegalStateException("Layout style " + layout + " is unknown");
-        }
-    }
-
-    protected EdgeHandler getEdgeHandler(GraphContext gc) {
-        LayoutStyle style = gc.getLayout();
-        switch (style) {
-        case CONDENSED:
-            return new CondensedEdgeHandler();
-        case FLAT:
-            return new FlatEdgeHandler();
-        default:
-            throw new IllegalStateException("Unknown style " + style);
         }
     }
 
