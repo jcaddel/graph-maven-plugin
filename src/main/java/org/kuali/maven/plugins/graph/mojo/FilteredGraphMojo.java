@@ -182,8 +182,14 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
     public abstract File getFile();
 
     /**
-     * Restricts the depth of the dependency tree. To show only the dependencies of the current project, set this to 1.
-     * To show the dependencies of the current project and their direct dependencies, set this to 2.
+     * <p>
+     * Restricts the depth of the dependency tree.
+     * <p>
+     *
+     * <p>
+     * To show only the dependencies of the current project, set this to 1. To show the dependencies of the current
+     * project and their direct dependencies, set this to 2.
+     * </p>
      *
      * @parameter expression="${graph.depth}" default-value="-1"
      */
