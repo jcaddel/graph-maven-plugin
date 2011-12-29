@@ -87,6 +87,10 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * dependency tree beneath it) will be hidden.
      * </p>
      *
+     * <p>
+     * Include patterns are overridden by exclude patterns.
+     * </p>
+     *
      * @parameter expression="${graph.includes}"
      */
     private String includes;
@@ -172,7 +176,7 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * Hide patterns override show patterns.
+     * Show patterns are overridden by hide patterns.
      * </p>
      *
      * <p>
