@@ -34,7 +34,7 @@ public class HideConflictsProcessor implements Processor {
             handleFlatConflicts(root);
             return;
         default:
-            throw new IllegalStateException(" Unknown layout " + layout);
+            throw new IllegalStateException("Unknown layout " + layout);
         }
     }
 

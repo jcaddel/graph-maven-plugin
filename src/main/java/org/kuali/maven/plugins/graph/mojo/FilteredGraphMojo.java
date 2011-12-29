@@ -44,19 +44,23 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * In <code>CONDENSED</code> mode, each dependency appears on the graph only once. Graphviz algorithms present the
-     * connections between the dependencies as a directed hierarchical graph.
+     * In <code>CONDENSED</code> mode, each dependency appears on the graph only once. The relationships for shared
+     * dependencies are presented by Graphviz algorithms as a directed hierarchical graph.
      * </p>
      *
      * <p>
-     * For transitive dependencies that are widely used (eg commons-logging), <code>CONDENSED</code> mode makes it
-     * possible to quickly pinpoint what other dependencies are causing the transitive dependency to be included in the
-     * build.
+     * <code>CONDENSED</code> mode graphs answer the questions, "how" and "why" do transitive artifacts get included in
+     * the build tree.
+     * </p>
+     *
+     * <p>
+     * For shared dependencies (eg commons-logging), <code>CONDENSED</code> mode graphs also illuminate the decision
+     * making Maven makes when resolving conflicts over versions of the same artifact.
      * </p>
      *
      * <p>
      * In <code>FLAT</code> mode, dependencies are displayed exactly how they are defined in the pom's. This style can
-     * make it easier to comprehend the dependency tree but connections between shared dependencies are not drawn.
+     * make it easier to comprehend the dependency tree but relationships between shared dependencies are not drawn.
      * </p>
      *
      * @parameter expression="${graph.layout}" default-value="CONDENSED"
@@ -70,9 +74,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * Include patterns work "bottom up" and are overridden by exclude patterns. If an artifact matches an include
-     * pattern, it, and all of the dependencies in the path from it back to the root of the dependency tree are
-     * displayed.
+     * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
+     * wildcard.
      * </p>
      *
      * <p>
@@ -80,8 +83,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
-     * wildcard.
+     * If include patterns are provided a dependency must match one of the include patterns or it (along with the
+     * dependency tree beneath it) will be hidden.
      * </p>
      *
      * @parameter expression="${graph.includes}"
@@ -95,8 +98,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * Exclude patterns override include patterns and work "top down". If a dependency matches any exclude pattern, it,
-     * and all dependencies below it, are removed from the display.
+     * If exclude patterns are provided, a match with any exclude pattern will prevent a dependency (and the dependency
+     * tree beneath it) from being displayed.
      * </p>
      *
      * <p>
@@ -114,27 +117,30 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * Comma delimited list of dependency patterns used for hiding artifacts. The pattern syntax has the form -
-     * [scope]:[optional|required]:[state]
+     * Comma delimited list of patterns for hiding artifacts. The pattern syntax has the form -
+     * [scope]:[optional|required]
      * </p>
      *
      * <p>
-     * Hide patterns override show patterns and work "top down". If a dependency matches any hide pattern, it, and all
-     * dependencies below it, are removed from the display.
-     * </p>
-     *
-     * <p>
-     * If not provided, no dependencies are hidden.
-     * </p>
-     *
-     * <p>
-     * Scopes: compile,provided,runtime,test,system,import<br/>
-     * States: normal,conflict,cyclic,duplicate
+     * Scopes: compile,provided,runtime,test,system,import
      * </p>
      *
      * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
+     * </p>
+     *
+     * <p>
+     * If hide patterns are provided, a match with any hide pattern will prevent a dependency (and the dependency tree
+     * beneath it) from being displayed.
+     * </p>
+     *
+     * <p>
+     * Hide patterns override show patterns.
+     * </p>
+     *
+     * <p>
+     * If not provided, no dependencies are hidden.
      * </p>
      *
      * @parameter expression="${graph.hide}"
@@ -143,22 +149,30 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * Comma delimited list of dependency patterns used for showing artifacts.<br/>
-     * The pattern syntax has the form - [scope]:[optional|required]:[state]
+     * Comma delimited list of patterns for showing artifacts. The pattern syntax has the form -
+     * [scope]:[optional|required]
      * </p>
      *
      * <p>
-     * Show patterns work "bottom up" and are overridden by hide patterns. If a dependency matches any show criteria,
-     * it, and all of the dependencies in the direct path from it back to the root of the dependency tree are displayed.
-     * </p>
-     *
-     * <p>
-     * Scopes: compile,provided,runtime,test,system,import States: normal,conflict,cyclic,duplicate
+     * Scopes: compile,provided,runtime,test,system,import
      * </p>
      *
      * <p>
      * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
      * wildcard.
+     * </p>
+     *
+     * <p>
+     * If show patterns are provided a dependency must match one of the show patterns or it (along with the dependency
+     * tree beneath it) will be hidden.
+     * </p>
+     *
+     * <p>
+     * Hide patterns override show patterns.
+     * </p>
+     *
+     * <p>
+     * If not provided, all artifacts are shown.
      * </p>
      *
      * @parameter expression="${graph.show}"
