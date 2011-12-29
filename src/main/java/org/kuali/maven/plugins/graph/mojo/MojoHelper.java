@@ -283,7 +283,7 @@ public class MojoHelper {
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = getEdgeHandler(gc);
         List<Edge> edges = helper.getEdges(tree, handler);
-        if (Boolean.TRUE.equals(gc.getShowDuplicates())) {
+        if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
             new HideDuplicatesProcessor().process(tree);
         }
         if (mc.isVerbose()) {

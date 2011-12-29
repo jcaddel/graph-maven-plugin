@@ -85,7 +85,8 @@ public class CondensedEdgeHandler extends FlatEdgeHandler {
         GraphNode child = replacement.getObject().getGraphNode();
 
         // Draw an edge saying "replacement" from ourself to the artifact that replaced us
-        Edge edge = getEdge(parent, child, false, Scope.DEFAULT_SCOPE, State.CONFLICT);
+        boolean optional = context.getArtifact().isOptional();
+        Edge edge = getEdge(parent, child, optional, Scope.DEFAULT_SCOPE, State.CONFLICT);
         edge.setLabel(REPLACEMENT_LABEL);
 
         // Add the edge to the overall list

@@ -168,6 +168,8 @@
       <groupId>commons-chain</groupId>
       <artifactId>commons-chain</artifactId>
       <version>1.1</version>
+      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>commons-digester</groupId>

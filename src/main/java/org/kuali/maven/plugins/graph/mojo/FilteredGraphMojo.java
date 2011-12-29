@@ -56,7 +56,7 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      *
      * <p>
      * In <code>FLAT</code> mode, dependencies are displayed exactly how they are defined in the pom's. This style can
-     * make it easier to comprehend the dependency tree but the graph will have more nodes on it.
+     * make it easier to comprehend the dependency tree but connections between shared dependencies are not drawn.
      * </p>
      *
      * @parameter expression="${graph.layout}" default-value="CONDENSED"
