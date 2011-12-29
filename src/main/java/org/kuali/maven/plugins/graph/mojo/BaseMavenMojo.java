@@ -97,7 +97,7 @@ public abstract class BaseMavenMojo extends AbstractMojo {
 
     /**
      * <p>
-     * Set to true to enable verbose mode.
+     * If true, metadata about the dependency tree is displayed.
      * </p>
      *
      * @parameter expression="${graph.verbose}" default-value="false"
