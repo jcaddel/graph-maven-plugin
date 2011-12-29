@@ -278,14 +278,13 @@ public class MojoHelper {
             helper.show(md);
         }
         new LabelProcessor(gc).process(tree);
+        if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
+            new CascadeOptionalProcessor().process(tree);
+        }
         NodeFilter<MavenContext> include = getIncludeFilter(gc);
         NodeFilter<MavenContext> exclude = getExcludeFilter(gc);
         Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
         helper.filter(tree, filter);
-        if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
-            logger.info("cascading optional");
-            new CascadeOptionalProcessor().process(tree);
-        }
         new StyleProcessor().process(tree);
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = getEdgeHandler(gc);

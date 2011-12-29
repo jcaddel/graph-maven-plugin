@@ -38,7 +38,6 @@ import org.kuali.maven.plugins.graph.dot.GraphHelper;
 import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Edge;
-import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.LabelCount;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
@@ -100,19 +99,13 @@ public class TreeHelper {
     }
 
     public void filter(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
-        List<Node<MavenContext>> hidden = new ArrayList<Node<MavenContext>>();
-
-        List<Node<MavenContext>> list = node.getBreadthFirstList();
-        for (Node<MavenContext> element : list) {
-            boolean hide = !filter.isMatch(element) && !element.isRoot();
-            if (hide) {
-                hidden.add(element);
+        boolean hide = !filter.isMatch(node) && !node.isRoot();
+        if (hide) {
+            hideTree(node);
+        } else {
+            for (Node<MavenContext> child : node.getChildren()) {
+                filter(child, filter);
             }
-        }
-        logger.info("hide list size={}", hidden.size());
-
-        for (Node<MavenContext> element : hidden) {
-            hideTree(element);
         }
     }
 
@@ -576,6 +569,11 @@ public class TreeHelper {
             logger.info("optional {}, style={}", context.getArtifactIdentifier(), style.getStyle());
         }
         copyStyleProperties(context.getGraphNode(), style);
+        if (optional) {
+            context.getGraphNode().setStyle("dotted,filled");
+        } else {
+            context.getGraphNode().setStyle("solid,filled");
+        }
     }
 
     protected GraphNode getGraphNode(DependencyNode dn) {
@@ -614,7 +612,8 @@ public class TreeHelper {
             labelTokens.add(scope.name().toLowerCase());
         }
         if (optional) {
-            labelTokens.add(OPTIONAL);
+            // Using a dotted line for optional makes it clear enough
+            // labelTokens.add(OPTIONAL);
         }
         if (!State.INCLUDED.equals(state)) {
             labelTokens.add(state.getValue());
@@ -711,7 +710,7 @@ public class TreeHelper {
             properties.load(in);
             return properties;
         } catch (IOException e) {
-            throw new GraphException(e);
+            throw new IllegalStateException(e);
         } finally {
             IOUtils.closeQuietly(in);
         }
@@ -721,7 +720,7 @@ public class TreeHelper {
         try {
             return BeanUtils.getProperty(bean, name);
         } catch (Exception e) {
-            throw new GraphException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -729,7 +728,7 @@ public class TreeHelper {
         try {
             BeanUtils.copyProperty(bean, name, value);
         } catch (Exception e) {
-            throw new GraphException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 
