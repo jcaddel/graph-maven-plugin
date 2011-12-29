@@ -351,11 +351,6 @@ public class TreeHelper {
         for (NodeSanitizer<MavenContext> sanitizer : sanitizers) {
             sanitizer.sanitize(node);
         }
-
-        // Apply styling based on the cleaned up tree
-        for (Node<MavenContext> element : nodes) {
-            updateGraphNodeStyle(element.getObject());
-        }
     }
 
     /**
@@ -571,12 +566,15 @@ public class TreeHelper {
         md.getPartialArtifactIdentifiers().add(getPartialArtifactId(a));
     }
 
-    protected void updateGraphNodeStyle(MavenContext context) {
+    public void updateGraphNodeStyle(MavenContext context) {
         DependencyNode dn = context.getDependencyNode();
         boolean optional = context.isOptional();
         State state = context.getState();
         Scope scope = Scope.getScope(dn.getArtifact().getScope());
         Style style = getStyle(scope, optional, state);
+        if (optional) {
+            logger.info("optional {}, style={}", context.getArtifactIdentifier(), style.getStyle());
+        }
         copyStyleProperties(context.getGraphNode(), style);
     }
 

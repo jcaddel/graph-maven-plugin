@@ -40,6 +40,7 @@ import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
+import org.kuali.maven.plugins.graph.processor.StyleProcessor;
 import org.kuali.maven.plugins.graph.tree.Counter;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
@@ -281,17 +282,16 @@ public class MojoHelper {
         NodeFilter<MavenContext> exclude = getExcludeFilter(gc);
         Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
         helper.filter(tree, filter);
+        if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
+            logger.info("cascading optional");
+            new CascadeOptionalProcessor().process(tree);
+        }
+        new StyleProcessor().process(tree);
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = getEdgeHandler(gc);
         List<Edge> edges = helper.getEdges(tree, handler);
         if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
             new HideDuplicatesProcessor().process(tree);
-        }
-        if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
-            logger.info("cascading optional");
-            new CascadeOptionalProcessor().process(tree);
-        } else {
-            logger.info("not cascading optional");
         }
         if (mc.isVerbose()) {
             helper.show(nodes, edges);
