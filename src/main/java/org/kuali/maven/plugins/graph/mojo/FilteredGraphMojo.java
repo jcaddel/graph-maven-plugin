@@ -64,6 +64,7 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * @parameter expression="${graph.layout}" default-value="CONDENSED"
+     * @required
      */
     private LayoutStyle layout;
 
