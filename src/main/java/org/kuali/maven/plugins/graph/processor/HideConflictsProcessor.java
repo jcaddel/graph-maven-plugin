@@ -42,7 +42,7 @@ public class HideConflictsProcessor implements Processor {
         List<Node<MavenContext>> conflicts = helper.getNodeList(root, State.CONFLICT);
         for (Node<MavenContext> conflict : conflicts) {
             String replacementId = TreeHelper.getArtifactId(conflict.getObject().getReplacement());
-            Node<MavenContext> replacement = CondensedEdgeProcessor.findIncludedNode(root, replacementId);
+            Node<MavenContext> replacement = TreeHelper.findRequiredIncludedNode(root, replacementId);
             Edge edge = generator.getParentChildEdge(conflict, replacement);
             generator.addEdge(conflict.getParent(), edge);
             helper.hide(conflict);

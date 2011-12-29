@@ -1,7 +1,5 @@
 package org.kuali.maven.plugins.graph.processor;
 
-import java.util.List;
-
 import org.kuali.maven.plugins.graph.dot.EdgeGenerator;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
@@ -59,10 +57,10 @@ public class CondensedEdgeProcessor implements Processor {
         // This is the id of the artifact Maven is actually going to use
         // The validator's and sanitizer's guarantee that the replacement artifact will always be
         // found among the included nodes.
-        String replacementArtifactId = TreeHelper.getArtifactId(context.getReplacement());
+        String replacementId = TreeHelper.getArtifactId(context.getReplacement());
 
         // Get the node containing the replacement artifact
-        Node<MavenContext> replacement = findIncludedNode(node.getRoot(), replacementArtifactId);
+        Node<MavenContext> replacement = TreeHelper.findRequiredIncludedNode(node.getRoot(), replacementId);
 
         // Extract the correct parent/child graph nodes
         GraphNode parent = context.getGraphNode();
@@ -82,7 +80,8 @@ public class CondensedEdgeProcessor implements Processor {
         MavenContext context = node.getObject();
 
         // Find the node that replaces us
-        Node<MavenContext> replacement = findIncludedNode(node.getRoot(), context.getArtifactIdentifier());
+        String id = context.getArtifactIdentifier();
+        Node<MavenContext> replacement = TreeHelper.findRequiredIncludedNode(node.getRoot(), id);
 
         // This is our parent in the tree
         GraphNode parent = node.getParent().getObject().getGraphNode();
@@ -101,18 +100,4 @@ public class CondensedEdgeProcessor implements Processor {
         generator.addEdge(node.getParent(), edge);
     }
 
-    public static Node<MavenContext> findIncludedNode(Node<MavenContext> root, String artifactId) {
-        List<Node<MavenContext>> nodes = root.getBreadthFirstList();
-        for (Node<MavenContext> node : nodes) {
-            MavenContext context = node.getObject();
-            State state = context.getState();
-            String artifactIdentifier = context.getArtifactIdentifier();
-            boolean correctState = state == State.INCLUDED;
-            boolean correctArtifact = artifactId.equals(artifactIdentifier);
-            if (correctState && correctArtifact) {
-                return node;
-            }
-        }
-        throw new IllegalStateException("Inconsistent tree.  Can't locate " + artifactId);
-    }
 }

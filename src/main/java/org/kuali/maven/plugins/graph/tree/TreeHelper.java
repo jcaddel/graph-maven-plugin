@@ -56,6 +56,21 @@ public class TreeHelper {
     Counter counter = new Counter();
     GraphHelper graphHelper = new GraphHelper();
 
+    public static Node<MavenContext> findRequiredIncludedNode(Node<MavenContext> root, String artifactId) {
+        List<Node<MavenContext>> nodes = root.getBreadthFirstList();
+        for (Node<MavenContext> node : nodes) {
+            MavenContext context = node.getObject();
+            State state = context.getState();
+            String artifactIdentifier = context.getArtifactIdentifier();
+            boolean correctState = state == State.INCLUDED;
+            boolean correctArtifact = artifactId.equals(artifactIdentifier);
+            if (correctState && correctArtifact) {
+                return node;
+            }
+        }
+        throw new IllegalStateException("Can't locate " + artifactId);
+    }
+
     public void filterButShowPath(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
         List<Node<MavenContext>> hidden = new ArrayList<Node<MavenContext>>();
         List<Node<MavenContext>> displayed = new ArrayList<Node<MavenContext>>();
