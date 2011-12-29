@@ -18,6 +18,20 @@ package org.kuali.maven.plugins.graph.mojo;
 import java.io.File;
 
 /**
+ * <p>
+ * This mojo produces customizable graphs of Maven dependency trees.
+ * </p>
+ *
+ * <p>
+ * By default, the complete dependency tree (including transitive dependencies) is graphed. Graphs can be filtered with
+ * include/exclude criteria for artifacts (eg -Dgraph.includes=org.apache.*) and with show/hide criteria for Maven
+ * <code>scope</code> and <code>optional</code> settings (eg -Dgraph.show=compile,runtime)
+ * </p>
+ *
+ * <p>
+ * Two layout styles are supported. In <code>CONDENSED</code> mode, relationships between shared dependencies are shown
+ * on the graph. In <code>FLAT</code> mode, dependencies are displayed how they are defined in pom's.
+ * </p>
  *
  * @goal dependencies
  * @requiresDependencyResolution compile|test|runtime
