@@ -25,6 +25,7 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.pojo.Style;
+import org.kuali.maven.plugins.graph.processor.StyleProcessor;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
@@ -34,7 +35,7 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
  * </p>
  */
 public class FlatEdgeHandler implements EdgeHandler {
-    TreeHelper helper = new TreeHelper();
+    StyleProcessor sp = new StyleProcessor();
 
     @Override
     public List<Edge> getEdges(Node<MavenContext> node) {
@@ -55,10 +56,10 @@ public class FlatEdgeHandler implements EdgeHandler {
     }
 
     protected Edge getEdge(GraphNode parent, GraphNode child, boolean optional, Scope scope, State state) {
-        Style style = helper.getStyle(scope, optional, state);
+        Style style = sp.getStyle(scope, optional, state);
         String label = TreeHelper.getRelationshipLabel(scope, optional, state);
         Edge edge = new Edge(parent, child);
-        helper.copyStyleProperties(edge, style);
+        sp.copyStyleProperties(edge, style);
         edge.setLabel(label);
         return edge;
     }

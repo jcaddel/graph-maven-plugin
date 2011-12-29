@@ -21,7 +21,6 @@ import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.DepthFilter;
 import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.Filters;
-import org.kuali.maven.plugins.graph.filter.IncludeExcludeFilter;
 import org.kuali.maven.plugins.graph.filter.MatchCondition;
 import org.kuali.maven.plugins.graph.filter.MavenContextFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
@@ -38,14 +37,17 @@ import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
+import org.kuali.maven.plugins.graph.processor.FilteringProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
+import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
+import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
 import org.kuali.maven.plugins.graph.processor.StyleProcessor;
+import org.kuali.maven.plugins.graph.processor.ValidatingProcessor;
 import org.kuali.maven.plugins.graph.tree.Counter;
 import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
-import org.kuali.maven.plugins.graph.tree.TreeMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -271,20 +273,16 @@ public class MojoHelper {
         TreeHelper helper = new TreeHelper();
         DependencyNode mavenTree = getMavenTree(mc);
         Node<MavenContext> tree = helper.getTree(mavenTree);
-        helper.validate(tree);
-        helper.sanitize(tree);
+        new ValidatingProcessor().process(tree);
+        new SanitizingProcessor().process(tree);
         if (mc.isVerbose()) {
-            TreeMetaData md = helper.getMetaData(tree);
-            helper.show(md);
+            new ShowMetadataProcessor().process(tree);
         }
         new LabelProcessor(gc).process(tree);
         if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
             new CascadeOptionalProcessor().process(tree);
         }
-        NodeFilter<MavenContext> include = getIncludeFilter(gc);
-        NodeFilter<MavenContext> exclude = getExcludeFilter(gc);
-        Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
-        helper.filter(tree, filter);
+        new FilteringProcessor(gc).process(tree);
         new StyleProcessor().process(tree);
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         EdgeHandler handler = getEdgeHandler(gc);
@@ -323,7 +321,7 @@ public class MojoHelper {
         return new MavenContextFilterWrapper(filter);
     }
 
-    protected NodeFilter<MavenContext> getIncludeFilter(GraphContext gc) {
+    public NodeFilter<MavenContext> getIncludeFilter(GraphContext gc) {
         TokenCollector<Artifact> collector = new ArtifactIdTokenCollector();
         Filter<Artifact> filter = filters.getIncludePatternFilter(gc.getIncludes(), collector);
         ArtifactFilterWrapper artifactFilter = new ArtifactFilterWrapper(filter);
@@ -334,7 +332,7 @@ public class MojoHelper {
         return new NodeFilterChain<MavenContext>(filters, MatchCondition.ALL, true);
     }
 
-    protected NodeFilter<MavenContext> getExcludeFilter(GraphContext gc) {
+    public NodeFilter<MavenContext> getExcludeFilter(GraphContext gc) {
         TokenCollector<Artifact> collector = new ArtifactIdTokenCollector();
         Filter<Artifact> filter = filters.getExcludePatternFilter(gc.getExcludes(), collector);
         ArtifactFilterWrapper artifactFilter = new ArtifactFilterWrapper(filter);

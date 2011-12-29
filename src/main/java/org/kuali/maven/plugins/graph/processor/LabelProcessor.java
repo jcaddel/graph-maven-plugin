@@ -33,7 +33,6 @@ public class LabelProcessor implements Processor {
             GraphNode graphNode = mc.getGraphNode();
             Artifact artifact = mc.getArtifact();
             String label = graphHelper.getLabel(artifact, labelContext);
-            // String label = graphNode.getId() + "\\n" + artifact.getArtifactId() + "\\n" + artifact.getVersion();
             graphNode.setLabel(label);
         }
     }

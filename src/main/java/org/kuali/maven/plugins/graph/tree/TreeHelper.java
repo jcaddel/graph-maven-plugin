@@ -15,18 +15,14 @@
  */
 package org.kuali.maven.plugins.graph.tree;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.codehaus.plexus.util.StringUtils;
@@ -39,23 +35,11 @@ import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
-import org.kuali.maven.plugins.graph.pojo.LabelCount;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
-import org.kuali.maven.plugins.graph.pojo.Style;
-import org.kuali.maven.plugins.graph.sanitize.BuildSanitizer;
-import org.kuali.maven.plugins.graph.sanitize.NodeSanitizer;
-import org.kuali.maven.plugins.graph.sanitize.RelatedArtifactSanitizer;
-import org.kuali.maven.plugins.graph.validate.ConflictDependencyNodeValidator;
-import org.kuali.maven.plugins.graph.validate.DuplicateDependencyNodeValidator;
-import org.kuali.maven.plugins.graph.validate.IncludedDependencyNodeValidator;
-import org.kuali.maven.plugins.graph.validate.NodeValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
 
 /**
@@ -72,7 +56,6 @@ public class TreeHelper {
     public static final String REQUIRED = "required";
     Counter counter = new Counter();
     GraphHelper graphHelper = new GraphHelper();
-    Properties properties = getProperties();
 
     public void filterButShowPath(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
         List<Node<MavenContext>> hidden = new ArrayList<Node<MavenContext>>();
@@ -95,17 +78,6 @@ public class TreeHelper {
         }
         for (Node<MavenContext> element : displayed) {
             showPath(element);
-        }
-    }
-
-    public void filter(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
-        boolean hide = !filter.isMatch(node) && !node.isRoot();
-        if (hide) {
-            hideTree(node);
-        } else {
-            for (Node<MavenContext> child : node.getChildren()) {
-                filter(child, filter);
-            }
         }
     }
 
@@ -310,44 +282,6 @@ public class TreeHelper {
 
     /**
      * <p>
-     * Validate the dependency tree
-     * </p>
-     *
-     * @param node
-     */
-    public void validate(Node<MavenContext> node) {
-        List<NodeValidator<MavenContext>> validators = getValidators(node);
-        for (NodeValidator<MavenContext> validator : validators) {
-            validator.validate(node);
-        }
-        logger.debug("Validation complete");
-    }
-
-    /**
-     * <p>
-     * Sanitize the dependency tree.
-     * </p>
-     *
-     * @param node
-     */
-    public void sanitize(Node<MavenContext> node) {
-        // Flatten the tree into a list
-        List<Node<MavenContext>> nodes = node.getBreadthFirstList();
-
-        int included = getList(node, State.INCLUDED).size();
-
-        logger.debug("Sanitizing metadata for " + nodes.size() + " dependency nodes (" + included
-                + " unique artifacts in the build)");
-
-        // Go through the tree and clean up nodes that are not included in the build
-        List<NodeSanitizer<MavenContext>> sanitizers = getSanitizers(node);
-        for (NodeSanitizer<MavenContext> sanitizer : sanitizers) {
-            sanitizer.sanitize(node);
-        }
-    }
-
-    /**
-     * <p>
      * Convenience method for obtaining a <code>State</code> object from the <code>int</code> supplied by Maven in the
      * embedded <code>DependencyNode</code>
      * </p>
@@ -365,7 +299,8 @@ public class TreeHelper {
      * </p>
      *
      * <p>
-     * More precisely, return true if [groupId]:[artfifactId]:[type]:[classifier]:[version] are an exact match.
+     * More precisely, return true if [groupId]:[artfifactId]:[type]:[classifier]:[version] are an exact match, false
+     * otherwise.
      * </p>
      *
      * @param a1
@@ -395,21 +330,6 @@ public class TreeHelper {
         String n1 = getPartialArtifactId(a1);
         String n2 = getPartialArtifactId(a2);
         return n1.equals(n2);
-    }
-
-    protected List<NodeValidator<MavenContext>> getValidators(Node<MavenContext> node) {
-        List<NodeValidator<MavenContext>> validators = new ArrayList<NodeValidator<MavenContext>>();
-        validators.add(new IncludedDependencyNodeValidator());
-        validators.add(new DuplicateDependencyNodeValidator());
-        validators.add(new ConflictDependencyNodeValidator());
-        return validators;
-    }
-
-    protected List<NodeSanitizer<MavenContext>> getSanitizers(Node<MavenContext> node) {
-        List<NodeSanitizer<MavenContext>> sanitizers = new ArrayList<NodeSanitizer<MavenContext>>();
-        sanitizers.add(new RelatedArtifactSanitizer());
-        sanitizers.add(new BuildSanitizer());
-        return sanitizers;
     }
 
     protected boolean replacementFound(MavenContext context, Map<String, MavenContext> included) {
@@ -487,92 +407,10 @@ public class TreeHelper {
         return map;
     }
 
-    public void show(TreeMetaData md) {
-        logger.info("Metadata for " + md.getSize() + " dependency nodes");
-        logger.info("states -" + toString(md.getStates()));
-        logger.info("requiredness -" + toString(md.getRequiredness()));
-        logger.info("scopes -" + toString(md.getScopes()));
-        logger.info("types -" + toString(md.getTypes()));
-        logger.info("classifiers -" + toString(md.getClassifiers()));
-        int groups = md.getGroupIds().size();
-        int artifacts = md.getArtifactIds().size();
-        int versions = md.getVersions().size();
-        logger.info("unique gav info - groups:" + groups + " artifacts:" + artifacts + " versions:" + versions);
-        logger.info("unique artifacts (including version): " + md.getArtifactIdentifiers().size());
-        logger.info("unique artifacts  (ignoring version): " + md.getPartialArtifactIdentifiers().size());
-    }
-
-    protected String toString(Tracker tracker) {
-        List<LabelCount> labels = new ArrayList<LabelCount>();
-        for (String key : tracker.keySet()) {
-            labels.add(new LabelCount(key, tracker.get(key)));
-        }
-        Collections.sort(labels);
-        Collections.reverse(labels);
-        StringBuilder sb = new StringBuilder();
-        for (LabelCount label : labels) {
-            sb.append(" " + label.getLabel() + ":" + label.getCount());
-        }
-        return sb.toString();
-    }
-
     protected <T> void show(String label, List<T> list) {
         logger.info(label);
         for (T element : list) {
             logger.info(element.toString());
-        }
-    }
-
-    public TreeMetaData getMetaData(Node<MavenContext> node) {
-        List<Node<MavenContext>> list = node.getBreadthFirstList();
-        TreeMetaData metaData = new TreeMetaData();
-        metaData.setSize(list.size());
-        for (Node<MavenContext> element : list) {
-            updateMetaData(metaData, element.getObject());
-        }
-        return metaData;
-    }
-
-    protected void updateMetaData(TreeMetaData md, MavenContext context) {
-        DependencyNode dn = context.getDependencyNode();
-        updateMetaData(md, dn.getArtifact(), context.isOptional());
-        if (dn.getParent() != null) {
-            md.getStates().increment(context.getState().getValue());
-        }
-    }
-
-    protected void updateMetaData(TreeMetaData md, Artifact a, boolean optional) {
-        md.getGroupIds().increment(a.getGroupId());
-        md.getArtifactIds().increment(a.getArtifactId());
-        md.getTypes().increment(a.getType());
-        String classifier = a.getClassifier();
-        if (!Helper.isBlank(classifier)) {
-            md.getClassifiers().increment(classifier);
-        }
-        md.getVersions().increment(a.getVersion());
-        Scope scope = Scope.getScope(a.getScope());
-        if (scope != null) {
-            md.getScopes().increment(scope.toString());
-        }
-        md.getRequiredness().increment(optional ? OPTIONAL : REQUIRED);
-        md.getArtifactIdentifiers().add(getArtifactId(a));
-        md.getPartialArtifactIdentifiers().add(getPartialArtifactId(a));
-    }
-
-    public void updateGraphNodeStyle(MavenContext context) {
-        DependencyNode dn = context.getDependencyNode();
-        boolean optional = context.isOptional();
-        State state = context.getState();
-        Scope scope = Scope.getScope(dn.getArtifact().getScope());
-        Style style = getStyle(scope, optional, state);
-        if (optional) {
-            logger.info("optional {}, style={}", context.getArtifactIdentifier(), style.getStyle());
-        }
-        copyStyleProperties(context.getGraphNode(), style);
-        if (optional) {
-            context.getGraphNode().setStyle("dotted,filled");
-        } else {
-            context.getGraphNode().setStyle("solid,filled");
         }
     }
 
@@ -636,87 +474,7 @@ public class TreeHelper {
         return sb.toString();
     }
 
-    public void copyStyleProperties(Object dest, Style style) {
-        List<String> names = getStyleProperties();
-        for (String name : names) {
-            String value = getProperty(style, name);
-            if (!Helper.isBlank(value)) {
-                copyProperty(dest, name, value);
-            }
-        }
-    }
-
-    protected List<String> getStyleProperties() {
-        try {
-            @SuppressWarnings("unchecked")
-            Map<String, ?> map = BeanUtils.describe(Style.DEFAULT_STYLE);
-            map.remove("class");
-            return new ArrayList<String>(map.keySet());
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    protected String getStyle(String property, Scope scope, boolean optional, State state) {
-        // State styling overrides everything
-        String key1 = "state." + state.getValue() + "." + property;
-        // Scope styling overrides "optional" styling
-        String key2 = "scope." + scope.getValue() + "." + property;
-        // Fall through to styling for the "optional" attribute on a dependency
-        String key3 = "optional." + property;
-
-        String value1 = properties.getProperty(key1);
-        String value2 = properties.getProperty(key2);
-        String value3 = properties.getProperty(key3);
-
-        if (!Helper.isBlank(value1)) {
-            return value1;
-        } else if (!Helper.isBlank(value2)) {
-            return value2;
-        } else if (!Helper.isBlank(value3) && optional) {
-            return value3;
-        } else {
-            return null;
-        }
-
-    }
-
-    public Style getStyle(Scope scope, boolean optional, State state) {
-        // This happens for the root node
-        scope = (scope == null) ? Scope.DEFAULT_SCOPE : scope;
-        state = (state == null) ? State.INCLUDED : state;
-
-        List<String> properties = getStyleProperties();
-        Style style = new Style();
-
-        for (String property : properties) {
-            String value = getStyle(property, scope, optional, state);
-            if (Helper.isBlank(value)) {
-                continue;
-            }
-            copyProperty(style, property, value);
-        }
-        return style;
-    }
-
-    protected Properties getProperties() {
-        String location = "classpath:dot.properties";
-        ResourceLoader loader = new DefaultResourceLoader();
-        Resource resource = loader.getResource(location);
-        InputStream in = null;
-        try {
-            Properties properties = new Properties();
-            in = resource.getInputStream();
-            properties.load(in);
-            return properties;
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
-    }
-
-    protected String getProperty(Object bean, String name) {
+    public String getProperty(Object bean, String name) {
         try {
             return BeanUtils.getProperty(bean, name);
         } catch (Exception e) {
@@ -724,7 +482,7 @@ public class TreeHelper {
         }
     }
 
-    protected void copyProperty(Object bean, String name, Object value) {
+    public void copyProperty(Object bean, String name, Object value) {
         try {
             BeanUtils.copyProperty(bean, name, value);
         } catch (Exception e) {
