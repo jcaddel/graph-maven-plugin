@@ -49,8 +49,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * For transitive dependencies, <code>CONDENSED</code> mode graphs answer the questions "how" and "why" they get
-     * included in the build.
+     * For transitive dependencies, <code>CONDENSED</code> mode graphs illustrate the rationale Maven is using for
+     * including them in the build.
      * </p>
      *
      * <p>
