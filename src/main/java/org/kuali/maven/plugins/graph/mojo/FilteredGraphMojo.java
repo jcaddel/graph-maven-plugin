@@ -49,8 +49,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * <code>CONDENSED</code> mode graphs answer the questions, "how" and "why" do transitive artifacts get included in
-     * the build tree.
+     * <code>CONDENSED</code> mode graphs answer the questions, "how" and "why" are transitive artifacts getting
+     * included in the build tree.
      * </p>
      *
      * <p>
