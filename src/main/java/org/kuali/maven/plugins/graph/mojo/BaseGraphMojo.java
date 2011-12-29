@@ -82,7 +82,8 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * If true, a dependency marked as optional will have all of its transitive dependencies displayed as optional also.
+     * If true, any dependency marked as optional will have all of its transitive dependencies displayed as optional
+     * also.
      * </p>
      *
      * @parameter expression="${graph.cascadeOptional}" default-value="true"
@@ -91,8 +92,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * If true, any criteria used to filter the dependency tree are shown as a legend. Set this to false to prevent
-     * filter criteria from being shown.
+     * If true, any criteria used to filter the dependency tree are shown as a legend.
      * </p>
      *
      * @parameter expression="${graph.showLegend}" default-value="true"
@@ -101,7 +101,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * Set this to false to render the graph without a title.
+     * If true, the title for the graph will be displayed.
      * </p>
      *
      * @parameter expression="${graph.showTitle}" default-value="true"

@@ -31,7 +31,7 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * Set to false to show only the dependencies for the current project
+     * If true, transitive dependencies are graphed.
      * </p>
      *
      * @parameter expression="${graph.transitive}" default-value="true"
