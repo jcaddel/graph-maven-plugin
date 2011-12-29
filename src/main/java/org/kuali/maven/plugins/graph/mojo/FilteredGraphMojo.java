@@ -80,12 +80,12 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * If not provided all dependencies are included.
+     * If include patterns are provided a dependency must match one of the include patterns or it (along with the
+     * dependency tree beneath it) will be hidden.
      * </p>
      *
      * <p>
-     * If include patterns are provided a dependency must match one of the include patterns or it (along with the
-     * dependency tree beneath it) will be hidden.
+     * If not provided all dependencies are included.
      * </p>
      *
      * <p>
@@ -108,15 +108,15 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * Exclude commons-logging:<br>
-     * <code>-Dgraph.excludes=commons-logging</code><br>
-     * Exclude logging in general:<br>
-     * <code>-Dgraph.excludes=commons-logging,org.slf4j,log4j</code><br>
-     * Exclude war files:<br>
-     * <code>-Dgraph.excludes=::war</code><br>
-     * Exclude source:<br>
-     * <code>-Dgraph.excludes=:::sources</code><br>
+     * For example:
      * </p>
+     *
+     * <pre>
+     * Exclude commons-logging     -Dgraph.excludes=commons-logging
+     * Exclude logging in general  -Dgraph.excludes=commons-logging,org.slf4j,log4j
+     * Exclude war files           -Dgraph.excludes=*:*:war
+     * Exclude source              -Dgraph.excludes=:::sources
+     * </pre>
      *
      * <p>
      * If exclude patterns are provided, a match with any exclude pattern will prevent a dependency (and the dependency
@@ -151,6 +151,17 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
+     * For example:
+     * </p>
+     *
+     * <pre>
+     * Hide test dependencies             -Dgraph.hide=test
+     * Hide test & provided dependencies  -Dgraph.hide=test,provided
+     * Hide optional dependencies         -Dgraph.hide=*:optional
+     * Hide required dependencies         -Dgraph.hide=*:required
+     * </pre>
+     *
+     * <p>
      * If hide patterns are provided, a match with any hide pattern will prevent a dependency (and the dependency tree
      * beneath it) from being displayed.
      * </p>
@@ -180,15 +191,6 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * <p>
      * Each pattern segment is optional and supports the use of the asterisk "*" as a wildcard. An empty pattern segment
      * is treated as a wildcard.
-     * </p>
-     *
-     * <p>
-     * Hide test dependencies:<br>
-     * <code>-Dgraph.hide=test</code><br>
-     * Hide optional dependencies:<br>
-     * <code>-Dgraph.hide=:optional</code><br>
-     * Hide required dependencies:<br>
-     * <code>-Dgraph.hide=:required</code><br>
      * </p>
      *
      * <p>
