@@ -29,8 +29,8 @@ import java.io.File;
  * </p>
  *
  * <p>
- * Two layout styles are supported. In <code>CONDENSED</code> mode, relationships between shared dependencies included
- * in the graph. In <code>FLAT</code> mode, dependencies are displayed how they are defined in pom's.
+ * Two layout styles are supported. In <code>CONDENSED</code> mode, relationships between shared dependencies are
+ * included in the graph. In <code>FLAT</code> mode, dependencies are displayed how they are defined in pom's.
  * </p>
  *
  * @goal dependencies
