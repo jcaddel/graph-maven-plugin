@@ -108,6 +108,10 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
+     * Exclude patterns override include patterns.
+     * </p>
+     *
+     * <p>
      * If not provided, no artifacts are excluded.
      * </p>
      *
