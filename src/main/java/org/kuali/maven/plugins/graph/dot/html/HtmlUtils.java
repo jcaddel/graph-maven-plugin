@@ -25,7 +25,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 public class HtmlUtils {
 
-    protected boolean isSkip(Object value) {
+    protected boolean isSkipProperty(Object value) {
         if (value == null) {
             return true;
         }
@@ -59,11 +59,11 @@ public class HtmlUtils {
 
     public Map<String, ?> getAttributes(HtmlTag element) {
         Map<String, ?> description = describe(element);
-        List<String> keys = new ArrayList<String>(description.keySet());
-        for (String key : keys) {
-            Object value = description.get(key);
-            if (isSkip(value)) {
-                description.remove(key);
+        List<String> properties = new ArrayList<String>(description.keySet());
+        for (String property : properties) {
+            Object value = description.get(property);
+            if (isSkipProperty(value)) {
+                description.remove(property);
             }
         }
         description.remove("class");

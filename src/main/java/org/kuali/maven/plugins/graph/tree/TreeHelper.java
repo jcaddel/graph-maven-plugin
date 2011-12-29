@@ -396,7 +396,7 @@ public class TreeHelper {
      * </p>
      *
      * <p>
-     * More precisely, return true if [groupId]:[artfifactId]:[type]:[classifier] are an exact match.
+     * More precisely, return true if [groupId]:[artfifactId]:[type]:[classifier] are an exact match, false otherwise
      * </p>
      *
      * @param a1

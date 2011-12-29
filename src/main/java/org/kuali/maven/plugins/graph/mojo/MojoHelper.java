@@ -37,6 +37,7 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
+import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.tree.Counter;
@@ -285,6 +286,12 @@ public class MojoHelper {
         List<Edge> edges = helper.getEdges(tree, handler);
         if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
             new HideDuplicatesProcessor().process(tree);
+        }
+        if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
+            logger.info("cascading optional");
+            new CascadeOptionalProcessor().process(tree);
+        } else {
+            logger.info("not cascading optional");
         }
         if (mc.isVerbose()) {
             helper.show(nodes, edges);
