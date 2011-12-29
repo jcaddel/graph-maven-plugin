@@ -74,8 +74,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
-     * wildcard.
+     * Each pattern segment is optional and supports the use of the asterisk "*" as a wildcard. An empty pattern segment
+     * is treated as a wildcard.
      * </p>
      *
      * <p>
@@ -98,17 +98,17 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
+     * Each pattern segment is optional and supports the use of the asterisk "*" as a wildcard. An empty pattern segment
+     * is treated as a wildcard.
+     * </p>
+     *
+     * <p>
      * If exclude patterns are provided, a match with any exclude pattern will prevent a dependency (and the dependency
      * tree beneath it) from being displayed.
      * </p>
      *
      * <p>
      * If not provided, no artifacts are excluded.
-     * </p>
-     *
-     * <p>
-     * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
-     * wildcard.
      * </p>
      *
      * @parameter expression="${graph.excludes}"
@@ -126,8 +126,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
-     * wildcard.
+     * Each pattern segment is optional and supports the use of the asterisk "*" as a wildcard. An empty pattern segment
+     * is treated as a wildcard.
      * </p>
      *
      * <p>
@@ -158,8 +158,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * Each pattern segment is optional and supports <code>*</code> wildcards. An empty pattern segment is treated as a
-     * wildcard.
+     * Each pattern segment is optional and supports the use of the asterisk "*" as a wildcard. An empty pattern segment
+     * is treated as a wildcard.
      * </p>
      *
      * <p>
