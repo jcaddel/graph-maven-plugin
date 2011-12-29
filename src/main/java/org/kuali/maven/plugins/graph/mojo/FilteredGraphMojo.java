@@ -108,6 +108,13 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
+     * Exclude commons-logging: <code>-Dgraph.excludes=commons-logging</code><br>
+     * Exclude logging in general: <code>-Dgraph.excludes=commons-logging,org.slf4j,log4j</code><br>
+     * Exclude war files: <code>-Dgraph.excludes=::war</code><br>
+     * Exclude source: <code>-Dgraph.excludes=:::sources</code><br>
+     * </p>
+     *
+     * <p>
      * If exclude patterns are provided, a match with any exclude pattern will prevent a dependency (and the dependency
      * tree beneath it) from being displayed.
      * </p>
@@ -169,6 +176,12 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * <p>
      * Each pattern segment is optional and supports the use of the asterisk "*" as a wildcard. An empty pattern segment
      * is treated as a wildcard.
+     * </p>
+     *
+     * <p>
+     * Hide test dependencies: <code>-Dgraph.hide=test</code><br>
+     * Hide optional dependencies: <code>-Dgraph.hide=:optional</code><br>
+     * Hide required dependencies: <code>-Dgraph.hide=:required</code><br>
      * </p>
      *
      * <p>
