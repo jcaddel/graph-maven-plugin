@@ -433,6 +433,19 @@ public class TreeHelper {
         return nodes;
     }
 
+    public List<Edge> getEdges(Node<MavenContext> node) {
+        List<Edge> edges = new ArrayList<Edge>();
+        List<Node<MavenContext>> list = node.getBreadthFirstList();
+        for (Node<MavenContext> element : list) {
+            List<Edge> elementEdges = element.getObject().getEdges();
+            boolean empty = Helper.isEmpty(elementEdges);
+            if (!empty) {
+                edges.addAll(element.getObject().getEdges());
+            }
+        }
+        return edges;
+    }
+
     public List<Edge> getEdges(Node<MavenContext> node, EdgeHandler handler) {
         List<Edge> edges = new ArrayList<Edge>();
         List<Node<MavenContext>> children = node.getChildren();

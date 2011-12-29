@@ -37,9 +37,12 @@ import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
+import org.kuali.maven.plugins.graph.processor.CondensedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.FilteringProcessor;
+import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
+import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
 import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
 import org.kuali.maven.plugins.graph.processor.StyleProcessor;
@@ -269,32 +272,53 @@ public class MojoHelper {
         }
     }
 
+    protected List<Processor> getProcessors(MojoContext mc, GraphContext gc) {
+        List<Processor> processors = new ArrayList<Processor>();
+        processors.add(new ValidatingProcessor());
+        processors.add(new SanitizingProcessor());
+        if (mc.isVerbose()) {
+            processors.add(new ShowMetadataProcessor());
+        }
+        processors.add(new LabelProcessor(gc));
+        if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
+            processors.add(new CascadeOptionalProcessor());
+        }
+        processors.add(new FilteringProcessor(gc));
+        processors.add(new StyleProcessor());
+        processors.add(getEdgeProcessor(gc));
+        if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
+            processors.add(new HideDuplicatesProcessor());
+        }
+        return processors;
+    }
+
     public String getDotFileContent(MojoContext mc, GraphContext gc) {
         TreeHelper helper = new TreeHelper();
         DependencyNode mavenTree = getMavenTree(mc);
         Node<MavenContext> tree = helper.getTree(mavenTree);
-        new ValidatingProcessor().process(tree);
-        new SanitizingProcessor().process(tree);
-        if (mc.isVerbose()) {
-            new ShowMetadataProcessor().process(tree);
+        List<Processor> processors = getProcessors(mc, gc);
+        for (Processor processor : processors) {
+            processor.process(tree);
         }
-        new LabelProcessor(gc).process(tree);
-        if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
-            new CascadeOptionalProcessor().process(tree);
-        }
-        new FilteringProcessor(gc).process(tree);
-        new StyleProcessor().process(tree);
         List<GraphNode> nodes = helper.getGraphNodes(tree);
-        EdgeHandler handler = getEdgeHandler(gc);
-        List<Edge> edges = helper.getEdges(tree, handler);
-        if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
-            new HideDuplicatesProcessor().process(tree);
-        }
+        List<Edge> edges = helper.getEdges(tree);
         if (mc.isVerbose()) {
             helper.show(nodes, edges);
         }
         Graph graph = new GraphHelper().getGraph(gc.getTitle(), gc.getDirection(), nodes, edges);
         return new StringGenerator().getString(graph);
+    }
+
+    protected Processor getEdgeProcessor(GraphContext gc) {
+        LayoutStyle layout = gc.getLayout();
+        switch (layout) {
+        case CONDENSED:
+            return new CondensedEdgeProcessor();
+        case FLAT:
+            return new FlatEdgeProcessor();
+        default:
+            throw new IllegalStateException("Layout style " + layout + " is unknown");
+        }
     }
 
     protected EdgeHandler getEdgeHandler(GraphContext gc) {
