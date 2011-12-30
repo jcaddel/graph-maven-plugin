@@ -27,7 +27,7 @@
   </parent>
 
   <groupId>org.kuali.maven.plugins</groupId>
-  <artifactId>graph-maven-plugin</artifactId>
+  <artifactId>whatever</artifactId>
   <version>1.0.5-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <url>http://${kuali.site.hostname}/maven/plugins/${project.artifactId}/${project.version}</url>
@@ -54,15 +54,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.8.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -73,6 +67,17 @@
       <groupId>net.sourceforge.collections</groupId>
       <artifactId>collections-generic</artifactId>
       <version>4.01</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.8.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -111,28 +116,29 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>${kuali.slf4j.version}</version>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
-    <!--
-      <dependency>
+    <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-impl</artifactId>
       <version>2.1</version>
       <exclusions>
-      <exclusion>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
       </exclusions>
-      </dependency> -->
-    <dependency>
-      <groupId>org.apache.maven.reporting</groupId>
-      <artifactId>maven-reporting-api</artifactId>
-      <version>3.0</version>
     </dependency>
   </dependencies>
 
   <build>
+    <plugins>
+      <plugin>
+        <groupId>org.kuali.maven.plugins</groupId>
+        <artifactId>graph-maven-plugin</artifactId>
+        <version>1.0.5-SNAPSHOT</version>
+      </plugin>
+    </plugins>
     <testResources>
       <testResource>
         <directory>src/test/resources</directory>
