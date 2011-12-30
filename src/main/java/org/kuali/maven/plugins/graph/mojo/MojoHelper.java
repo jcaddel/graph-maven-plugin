@@ -44,10 +44,10 @@ import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
 import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
 import org.kuali.maven.plugins.graph.processor.StyleProcessor;
 import org.kuali.maven.plugins.graph.processor.ValidatingProcessor;
-import org.kuali.maven.plugins.graph.tree.Counter;
-import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
+import org.kuali.maven.plugins.graph.util.Counter;
+import org.kuali.maven.plugins.graph.util.Helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,11 +72,12 @@ public class MojoHelper {
                 execute(mc, descriptor);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new GraphException(e);
         }
     }
 
-    protected List<GraphDescriptor> getDescriptorsToUse(MojoContext mc, GraphDescriptor gc, List<GraphDescriptor> descriptors) {
+    protected List<GraphDescriptor> getDescriptorsToUse(MojoContext mc, GraphDescriptor gc,
+            List<GraphDescriptor> descriptors) {
         List<GraphDescriptor> descriptorsToUse = new ArrayList<GraphDescriptor>();
         if (descriptors == null) {
             descriptors = new ArrayList<GraphDescriptor>();
@@ -231,7 +232,7 @@ public class MojoHelper {
             logger.info(gc.getFile().getPath());
             dot.execute(gc);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new GraphException(e);
         }
     }
 

@@ -34,7 +34,7 @@ import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.LabelContext;
 import org.kuali.maven.plugins.graph.pojo.NameValue;
-import org.kuali.maven.plugins.graph.tree.Helper;
+import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
  * Various utility methods for working with Graph pojo's.

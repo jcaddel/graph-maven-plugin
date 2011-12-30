@@ -19,7 +19,7 @@ import java.io.File;
 
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
-import org.kuali.maven.plugins.graph.tree.Helper;
+import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
  * <p>

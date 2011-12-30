@@ -9,11 +9,11 @@ import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.kuali.maven.plugins.graph.pojo.LabelCount;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
-import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
-import org.kuali.maven.plugins.graph.tree.Tracker;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.kuali.maven.plugins.graph.tree.TreeMetaData;
+import org.kuali.maven.plugins.graph.util.Helper;
+import org.kuali.maven.plugins.graph.util.Tracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

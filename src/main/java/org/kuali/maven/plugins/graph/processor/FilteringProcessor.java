@@ -25,7 +25,7 @@ public class FilteringProcessor implements Processor {
 
     @Override
     public void process(Node<MavenContext> node) {
-        Filter<Node<MavenContext>> filter = getFilter(node);
+        Filter<Node<MavenContext>> filter = getIncludeExcludeFilter(node);
         filter(node, filter);
     }
 
@@ -40,11 +40,10 @@ public class FilteringProcessor implements Processor {
         }
     }
 
-    protected Filter<Node<MavenContext>> getFilter(Node<MavenContext> node) {
+    protected Filter<Node<MavenContext>> getIncludeExcludeFilter(Node<MavenContext> node) {
         NodeFilter<MavenContext> include = mh.getIncludeFilter(graphDescriptor);
         NodeFilter<MavenContext> exclude = mh.getExcludeFilter(graphDescriptor);
-        Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
-        return filter;
+        return new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
     }
 
     public GraphDescriptor getGraphDescriptor() {

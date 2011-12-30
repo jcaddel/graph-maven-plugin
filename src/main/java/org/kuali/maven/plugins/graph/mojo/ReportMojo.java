@@ -8,7 +8,7 @@ import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
-import org.kuali.maven.plugins.graph.tree.Helper;
+import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
  * @goal report

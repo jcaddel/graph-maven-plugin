@@ -8,8 +8,8 @@ import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.LabelContext;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
-import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
+import org.kuali.maven.plugins.graph.util.Helper;
 
 public class LabelProcessor implements Processor {
     GraphDescriptor graphDescriptor;

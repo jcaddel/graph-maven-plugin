@@ -16,6 +16,8 @@
 package org.kuali.maven.plugins.graph.tree;
 
 import org.apache.commons.collections15.list.SetUniqueList;
+import org.kuali.maven.plugins.graph.util.Helper;
+import org.kuali.maven.plugins.graph.util.Tracker;
 
 /**
  * <p>

@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
-import org.kuali.maven.plugins.graph.tree.Helper;
+import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
  * Convenience mojo for generating multiple graphs.

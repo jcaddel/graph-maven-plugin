@@ -18,7 +18,7 @@ package org.kuali.maven.plugins.graph.filter;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
-import org.kuali.maven.plugins.graph.tree.Helper;
+import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
  * <p>
