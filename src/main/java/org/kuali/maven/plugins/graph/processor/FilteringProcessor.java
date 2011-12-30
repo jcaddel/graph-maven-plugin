@@ -12,15 +12,15 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
 public class FilteringProcessor implements Processor {
     MojoHelper mh = new MojoHelper();
     TreeHelper helper = new TreeHelper();
-    GraphDescriptor graphContext;
+    GraphDescriptor graphDescriptor;
 
     public FilteringProcessor() {
         this(null);
     }
 
-    public FilteringProcessor(GraphDescriptor graphContext) {
+    public FilteringProcessor(GraphDescriptor graphDescriptor) {
         super();
-        this.graphContext = graphContext;
+        this.graphDescriptor = graphDescriptor;
     }
 
     @Override
@@ -41,18 +41,18 @@ public class FilteringProcessor implements Processor {
     }
 
     protected Filter<Node<MavenContext>> getFilter(Node<MavenContext> node) {
-        NodeFilter<MavenContext> include = mh.getIncludeFilter(graphContext);
-        NodeFilter<MavenContext> exclude = mh.getExcludeFilter(graphContext);
+        NodeFilter<MavenContext> include = mh.getIncludeFilter(graphDescriptor);
+        NodeFilter<MavenContext> exclude = mh.getExcludeFilter(graphDescriptor);
         Filter<Node<MavenContext>> filter = new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
         return filter;
     }
 
     public GraphDescriptor getGraphContext() {
-        return graphContext;
+        return graphDescriptor;
     }
 
-    public void setGraphContext(GraphDescriptor graphContext) {
-        this.graphContext = graphContext;
+    public void setGraphContext(GraphDescriptor graphDescriptor) {
+        this.graphDescriptor = graphDescriptor;
     }
 
 }

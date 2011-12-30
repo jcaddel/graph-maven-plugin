@@ -12,21 +12,21 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 
 public class LabelProcessor implements Processor {
-    GraphDescriptor graphContext;
+    GraphDescriptor graphDescriptor;
 
     public LabelProcessor() {
         this(null);
     }
 
-    public LabelProcessor(GraphDescriptor graphContext) {
+    public LabelProcessor(GraphDescriptor graphDescriptor) {
         super();
-        this.graphContext = graphContext;
+        this.graphDescriptor = graphDescriptor;
     }
 
     @Override
     public void process(Node<MavenContext> node) {
         GraphHelper graphHelper = new GraphHelper();
-        LabelContext labelContext = Helper.copyProperties(LabelContext.class, graphContext);
+        LabelContext labelContext = Helper.copyProperties(LabelContext.class, graphDescriptor);
         List<Node<MavenContext>> treeNodes = node.getBreadthFirstList();
         for (Node<MavenContext> element : treeNodes) {
             MavenContext mc = element.getObject();
@@ -38,11 +38,11 @@ public class LabelProcessor implements Processor {
     }
 
     public GraphDescriptor getGraphContext() {
-        return graphContext;
+        return graphDescriptor;
     }
 
-    public void setGraphContext(GraphDescriptor graphContext) {
-        this.graphContext = graphContext;
+    public void setGraphContext(GraphDescriptor graphDescriptor) {
+        this.graphDescriptor = graphDescriptor;
     }
 
 }
