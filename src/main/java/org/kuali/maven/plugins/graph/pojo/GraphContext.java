@@ -43,7 +43,7 @@ public class GraphContext {
     String content;
     File dotFile;
     String type;
-    LayoutStyle layout;
+    Layout layout;
     String label;
     String category;
 
@@ -199,11 +199,11 @@ public class GraphContext {
         this.type = type;
     }
 
-    public LayoutStyle getLayout() {
+    public Layout getLayout() {
         return layout;
     }
 
-    public void setLayout(LayoutStyle layout) {
+    public void setLayout(Layout layout) {
         this.layout = layout;
     }
 

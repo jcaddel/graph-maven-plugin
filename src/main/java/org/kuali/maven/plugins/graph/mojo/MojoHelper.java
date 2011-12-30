@@ -28,7 +28,7 @@ import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
-import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
+import org.kuali.maven.plugins.graph.pojo.Layout;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
@@ -100,7 +100,7 @@ public class MojoHelper {
                 descriptor.setTransitive(true);
             }
             if (descriptor.getLayout() == null) {
-                descriptor.setLayout(LayoutStyle.LINKED);
+                descriptor.setLayout(Layout.LINKED);
             }
         }
         Helper.addAll(descriptorsToUse, descriptors);
@@ -207,19 +207,19 @@ public class MojoHelper {
         gc.setShow(show);
         gc.setLabel(label);
         gc.setTransitive(transitive);
-        gc.setLayout(LayoutStyle.FLAT);
+        gc.setLayout(Layout.FLAT);
         String category = (transitive ? "transitive" : "direct") + "/" + (scope == null ? "any" : scope.toString());
         gc.setCategory(category);
         return gc;
     }
 
-    protected GraphContext getGraphContext(Scope scope, Boolean transitive, LayoutStyle layout, GraphContext context) {
+    protected GraphContext getGraphContext(Scope scope, Boolean transitive, Layout layout, GraphContext context) {
         GraphContext gc = Helper.copyProperties(GraphContext.class, context);
         gc.setTransitive(transitive);
         gc.setCategory(transitive ? "transitive" : "direct");
         String label = scope == null ? "all" : scope.toString();
         String show = scope == null ? null : scope.toString();
-        if (LayoutStyle.LINKED != layout) {
+        if (Layout.LINKED != layout) {
             label = label + "-" + layout.toString().toLowerCase();
         }
         gc.setShow(show);
@@ -299,7 +299,7 @@ public class MojoHelper {
         return new StringGenerator().getString(graph);
     }
 
-    protected Processor getEdgeProcessor(LayoutStyle layout) {
+    protected Processor getEdgeProcessor(Layout layout) {
         switch (layout) {
         case LINKED:
             return new LinkedEdgeProcessor();

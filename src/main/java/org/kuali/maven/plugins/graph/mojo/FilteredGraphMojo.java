@@ -18,7 +18,7 @@ package org.kuali.maven.plugins.graph.mojo;
 import java.io.File;
 
 import org.kuali.maven.plugins.graph.pojo.GraphContext;
-import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
+import org.kuali.maven.plugins.graph.pojo.Layout;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
@@ -49,12 +49,12 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * For a transitive dependency, <code>LINKED</code> mode graphs illustrate why Maven includes it in the build.
+     * For a transitive dependency, <code>LINKED</code> mode illustrates why Maven includes it in the build.
      * </p>
      *
      * <p>
-     * For shared dependencies (eg commons-logging), <code>LINKED</code> mode graphs also illuminate the decision
-     * making Maven makes when resolving conflicts over differing versions of the same artifact.
+     * For a shared dependency (eg commons-logging), <code>LINKED</code> mode shows the decision making Maven makes when
+     * resolving conflicts over differing versions of the same artifact.
      * </p>
      *
      * <p>
@@ -65,7 +65,7 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * @parameter expression="${graph.layout}" default-value="LINKED"
      * @required
      */
-    private LayoutStyle layout;
+    private Layout layout;
 
     /**
      * <p>
@@ -241,11 +241,11 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
         this.transitive = transitive;
     }
 
-    public LayoutStyle getLayout() {
+    public Layout getLayout() {
         return layout;
     }
 
-    public void setLayout(LayoutStyle layout) {
+    public void setLayout(Layout layout) {
         this.layout = layout;
     }
 

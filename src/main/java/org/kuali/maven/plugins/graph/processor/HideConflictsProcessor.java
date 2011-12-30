@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.EdgeGenerator;
 import org.kuali.maven.plugins.graph.pojo.Edge;
-import org.kuali.maven.plugins.graph.pojo.LayoutStyle;
+import org.kuali.maven.plugins.graph.pojo.Layout;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
 public class HideConflictsProcessor implements Processor {
-    LayoutStyle layout;
+    Layout layout;
     TreeHelper helper = new TreeHelper();
     EdgeGenerator generator = new EdgeGenerator();
 
@@ -19,7 +19,7 @@ public class HideConflictsProcessor implements Processor {
         this(null);
     }
 
-    public HideConflictsProcessor(LayoutStyle layout) {
+    public HideConflictsProcessor(Layout layout) {
         super();
         this.layout = layout;
     }
@@ -56,11 +56,11 @@ public class HideConflictsProcessor implements Processor {
         }
     }
 
-    public LayoutStyle getLayout() {
+    public Layout getLayout() {
         return layout;
     }
 
-    public void setLayout(LayoutStyle layout) {
+    public void setLayout(Layout layout) {
         this.layout = layout;
     }
 }
