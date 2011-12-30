@@ -34,12 +34,12 @@ import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
-import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.FilteringProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
+import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
 import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
@@ -187,17 +187,6 @@ public class MojoHelper {
         // non-transitive
         String label2 = getLabel(optional, null);
         contexts.add(getGraphContext(context, scope, show, label2, false));
-        for (State state : State.values()) {
-            show = getFilter(scope, optional, state);
-
-            // transitive
-            label1 = getLabel(optional, state);
-            contexts.add(getGraphContext(context, scope, show, label1, true));
-
-            // non-transitive
-            label2 = getLabel(optional, state);
-            contexts.add(getGraphContext(context, scope, show, label2, false));
-        }
         return contexts;
     }
 

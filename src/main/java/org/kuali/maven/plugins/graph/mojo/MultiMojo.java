@@ -66,7 +66,6 @@ public class MultiMojo extends BaseGraphMojo {
      * </p>
      *
      * @parameter expression="${graph.useDefaultDescriptors}" default-value="true"
-     * @required
      */
     boolean useDefaultDescriptors;
 
