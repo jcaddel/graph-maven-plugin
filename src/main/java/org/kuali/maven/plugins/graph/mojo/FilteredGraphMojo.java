@@ -44,8 +44,9 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * In <code>LINKED</code> mode, each dependency appears on the graph only once. The relationships for shared
-     * dependencies are presented by Graphviz algorithms as a directed hierarchical graph.
+     * In <code>LINKED</code> mode, the relationships between shared dependencies are shown. Each dependency included in
+     * the build is displayed only once. The relationships between dependencies are presented by Graphviz algorithms as
+     * a directed hierarchical graph.
      * </p>
      *
      * <p>
@@ -53,8 +54,9 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * For a shared dependency (eg commons-logging), <code>LINKED</code> mode shows the decision making Maven makes when
-     * resolving conflicts over differing versions of the same artifact.
+     * For a shared dependency (eg commons-logging), <code>LINKED</code> mode shows what other libraries depend on it.
+     * <code>LINKED</code> mode also shows the decision making Maven makes when resolving conflicts over differing
+     * versions of the same artifact.
      * </p>
      *
      * <p>
@@ -84,7 +86,7 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * If not provided all dependencies are included.
+     * If not provided, all dependencies are included.
      * </p>
      *
      * <p>

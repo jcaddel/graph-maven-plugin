@@ -24,13 +24,13 @@ import java.io.File;
  *
  * <p>
  * By default, the complete dependency tree (including transitive dependencies) is graphed. Graphs can be filtered with
- * include/exclude criteria for artifacts (eg -Dgraph.includes=org.apache.*) and with show/hide criteria for Maven
- * <code>scope</code> and <code>optional</code> settings (eg -Dgraph.show=compile,runtime)
+ * include/exclude criteria for artifacts and with show/hide criteria for Maven <code>scope</code> and
+ * <code>optional</code> settings.
  * </p>
  *
  * <p>
  * Two layout styles are supported. In <code>LINKED</code> mode, relationships between shared dependencies are included
- * in the graph. In <code>FLAT</code> mode, dependencies are displayed how they are defined in pom's.
+ * in the graph. In <code>FLAT</code> mode, dependencies are displayed exactly how they are defined in pom's.
  * </p>
  *
  * @goal dependencies
@@ -40,7 +40,8 @@ public class DependenciesMojo extends FilteredGraphMojo {
 
     /**
      * <p>
-     * The file the graph will be written to
+     * The file the graph will be written to. The file extension can be any output format supported by Graphviz (png,
+     * jpg, gif, pdf, ...)
      * </p>
      *
      * @required
