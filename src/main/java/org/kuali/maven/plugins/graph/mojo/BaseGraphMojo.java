@@ -92,7 +92,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * If true, any criteria used to filter the dependency tree are shown as a legend.
+     * If true, any filters applied to the dependency tree are shown in the legend.
      * </p>
      *
      * @parameter expression="${graph.showLegend}" default-value="true"

@@ -17,10 +17,7 @@ package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
 
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
 import org.kuali.maven.plugins.graph.pojo.Layout;
-import org.kuali.maven.plugins.graph.pojo.MojoContext;
-import org.kuali.maven.plugins.graph.tree.Helper;
 
 /**
  * <p>
@@ -55,8 +52,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      *
      * <p>
      * For a shared dependency (eg commons-logging), <code>LINKED</code> mode shows what other libraries depend on it.
-     * <code>LINKED</code> mode also shows the decision making Maven makes when resolving conflicts over differing
-     * versions of the same artifact.
+     * <code>LINKED</code> mode also shows the decisions Maven makes when resolving conflicts between pom's that depend
+     * on different versions of the same artifact.
      * </p>
      *
      * <p>
@@ -226,14 +223,6 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * @parameter expression="${graph.depth}" default-value="-1"
      */
     private int depth;
-
-    @Override
-    public void execute() {
-        MojoContext mc = Helper.copyProperties(MojoContext.class, this);
-        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
-        MojoHelper mh = new MojoHelper();
-        mh.execute(mc, gc);
-    }
 
     public boolean isTransitive() {
         return transitive;
