@@ -161,10 +161,10 @@ public class MojoHelper {
         List<GraphDescriptor> list1 = getGraphDescriptors(scope, null, context);
 
         // optional only
-        // List<GraphContext> list2 = getGraphDescriptors(scope, true, context);
+        // List<GraphDescriptor> list2 = getGraphDescriptors(scope, true, context);
 
         // required only
-        // List<GraphContext> list3 = getGraphDescriptors(scope, false, context);
+        // List<GraphDescriptor> list3 = getGraphDescriptors(scope, false, context);
 
         // Add them to the list
         contexts.addAll(list1);

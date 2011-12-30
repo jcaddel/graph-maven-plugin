@@ -37,11 +37,11 @@ public class LabelProcessor implements Processor {
         }
     }
 
-    public GraphDescriptor getGraphContext() {
+    public GraphDescriptor getGraphDescriptor() {
         return graphDescriptor;
     }
 
-    public void setGraphContext(GraphDescriptor graphDescriptor) {
+    public void setGraphDescriptor(GraphDescriptor graphDescriptor) {
         this.graphDescriptor = graphDescriptor;
     }
 

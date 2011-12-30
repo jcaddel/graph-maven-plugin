@@ -47,11 +47,11 @@ public class FilteringProcessor implements Processor {
         return filter;
     }
 
-    public GraphDescriptor getGraphContext() {
+    public GraphDescriptor getGraphDescriptor() {
         return graphDescriptor;
     }
 
-    public void setGraphContext(GraphDescriptor graphDescriptor) {
+    public void setGraphDescriptor(GraphDescriptor graphDescriptor) {
         this.graphDescriptor = graphDescriptor;
     }
 
