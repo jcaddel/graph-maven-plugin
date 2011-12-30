@@ -45,8 +45,8 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      *
      * <p>
      * In <code>LINKED</code> mode, the relationships between shared dependencies are shown. Each dependency included in
-     * the build is displayed only once. The relationships between dependencies are presented by Graphviz algorithms as
-     * a directed hierarchical graph.
+     * the build is displayed on the graph only once. The connections between dependencies are presented by Graphviz
+     * algorithms as a directed hierarchical graph.
      * </p>
      *
      * <p>

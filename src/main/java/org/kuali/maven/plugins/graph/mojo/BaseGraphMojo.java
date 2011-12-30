@@ -35,7 +35,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * Set to true to retain the .dot text file Graphviz uses to draw the graph
+     * If true, the .dot text file Graphviz uses to draw the graph is not deleted
      * </p>
      *
      * @parameter expression="${graph.keepDotFile}" default-value="false"
@@ -110,7 +110,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * Set this to false to skip executing the "dot" binary that produces an image from the .dot text file
+     * If true, the Graphviz "dot" binary is executed to produce a graph from the .dot text file
      * </p>
      *
      * @parameter expression="${graph.executeDot}" default-value="true"
@@ -119,8 +119,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * Set this to true to prevent the overall Maven build from failing if the "dot" binary returns a non-zero exit
-     * value.
+     * If true, the Maven build will continue if the "dot" binary returns a non-zero exit value.
      * </p>
      *
      * @parameter expression="${graph.ignoreDotFailure}" default-value="false"

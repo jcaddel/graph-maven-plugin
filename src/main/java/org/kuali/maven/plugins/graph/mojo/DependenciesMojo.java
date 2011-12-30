@@ -29,8 +29,28 @@ import java.io.File;
  * </p>
  *
  * <p>
- * Two layout styles are supported. In <code>LINKED</code> mode, relationships between shared dependencies are included
- * in the graph. In <code>FLAT</code> mode, dependencies are displayed exactly how they are defined in pom's.
+ * Two layout styles are supported - <code>LINKED</code> and <code>FLAT</code>.
+ * </p>
+ *
+ * <p>
+ * In <code>LINKED</code> mode, the relationships between shared dependencies are shown. Each dependency included in the
+ * build is displayed on the graph only once. The connections between dependencies are presented by Graphviz algorithms
+ * as a directed hierarchical graph.
+ * </p>
+ *
+ * <p>
+ * For a transitive dependency, <code>LINKED</code> mode illustrates why Maven includes it in the build.
+ * </p>
+ *
+ * <p>
+ * For a shared dependency (eg commons-logging), <code>LINKED</code> mode shows what other libraries depend on it.
+ * <code>LINKED</code> mode also shows the decision making Maven makes when resolving conflicts over differing versions
+ * of the same artifact.
+ * </p>
+ *
+ * <p>
+ * In <code>FLAT</code> mode, dependencies are displayed exactly how they are defined in the pom's. This style can make
+ * it easier to comprehend the dependency tree but relationships between shared dependencies are not drawn.
  * </p>
  *
  * @goal dependencies
