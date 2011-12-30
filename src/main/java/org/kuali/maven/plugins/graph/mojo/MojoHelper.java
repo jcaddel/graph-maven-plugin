@@ -34,7 +34,7 @@ import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
-import org.kuali.maven.plugins.graph.processor.CondensedEdgeProcessor;
+import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.FilteringProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
@@ -100,7 +100,7 @@ public class MojoHelper {
                 descriptor.setTransitive(true);
             }
             if (descriptor.getLayout() == null) {
-                descriptor.setLayout(LayoutStyle.CONDENSED);
+                descriptor.setLayout(LayoutStyle.LINKED);
             }
         }
         Helper.addAll(descriptorsToUse, descriptors);
@@ -219,7 +219,7 @@ public class MojoHelper {
         gc.setCategory(transitive ? "transitive" : "direct");
         String label = scope == null ? "all" : scope.toString();
         String show = scope == null ? null : scope.toString();
-        if (LayoutStyle.CONDENSED != layout) {
+        if (LayoutStyle.LINKED != layout) {
             label = label + "-" + layout.toString().toLowerCase();
         }
         gc.setShow(show);
@@ -301,8 +301,8 @@ public class MojoHelper {
 
     protected Processor getEdgeProcessor(LayoutStyle layout) {
         switch (layout) {
-        case CONDENSED:
-            return new CondensedEdgeProcessor();
+        case LINKED:
+            return new LinkedEdgeProcessor();
         case FLAT:
             return new FlatEdgeProcessor();
         default:

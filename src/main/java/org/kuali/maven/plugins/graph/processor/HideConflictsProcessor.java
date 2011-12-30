@@ -27,8 +27,8 @@ public class HideConflictsProcessor implements Processor {
     @Override
     public void process(Node<MavenContext> root) {
         switch (layout) {
-        case CONDENSED:
-            handleCondensedConflicts(root);
+        case LINKED:
+            handleLinkedConflicts(root);
             return;
         case FLAT:
             handleFlatConflicts(root);
@@ -38,7 +38,7 @@ public class HideConflictsProcessor implements Processor {
         }
     }
 
-    protected void handleCondensedConflicts(Node<MavenContext> root) {
+    protected void handleLinkedConflicts(Node<MavenContext> root) {
         List<Node<MavenContext>> conflicts = helper.getNodeList(root, State.CONFLICT);
         for (Node<MavenContext> conflict : conflicts) {
             String replacementId = TreeHelper.getArtifactId(conflict.getObject().getReplacement());

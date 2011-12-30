@@ -11,8 +11,8 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CondensedEdgeProcessor implements Processor {
-    private static final Logger logger = LoggerFactory.getLogger(CondensedEdgeProcessor.class);
+public class LinkedEdgeProcessor implements Processor {
+    private static final Logger logger = LoggerFactory.getLogger(LinkedEdgeProcessor.class);
     public static final String REPLACEMENT_LABEL = "replacement";
     EdgeGenerator generator = new EdgeGenerator();
 

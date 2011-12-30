@@ -40,22 +40,21 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * The style for the graph layout. Valid options are <code>CONDENSED</code> and <code>FLAT</code>
+     * The style for the graph layout. Valid options are <code>LINKED</code> and <code>FLAT</code>
      * </p>
      *
      * <p>
-     * In <code>CONDENSED</code> mode, each dependency appears on the graph only once. The relationships for shared
+     * In <code>LINKED</code> mode, each dependency appears on the graph only once. The relationships for shared
      * dependencies are presented by Graphviz algorithms as a directed hierarchical graph.
      * </p>
      *
      * <p>
-     * For transitive dependencies, <code>CONDENSED</code> mode graphs illustrate the rationale Maven is using for
-     * including them in the build.
+     * For a transitive dependency, <code>LINKED</code> mode graphs illustrate why Maven includes it in the build.
      * </p>
      *
      * <p>
-     * For shared dependencies (eg commons-logging), <code>CONDENSED</code> mode graphs also illuminate the decision
-     * making Maven makes when resolving conflicts over versions of the same artifact.
+     * For shared dependencies (eg commons-logging), <code>LINKED</code> mode graphs also illuminate the decision
+     * making Maven makes when resolving conflicts over differing versions of the same artifact.
      * </p>
      *
      * <p>
@@ -63,7 +62,7 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * make it easier to comprehend the dependency tree but relationships between shared dependencies are not drawn.
      * </p>
      *
-     * @parameter expression="${graph.layout}" default-value="CONDENSED"
+     * @parameter expression="${graph.layout}" default-value="LINKED"
      * @required
      */
     private LayoutStyle layout;
@@ -80,7 +79,7 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      * </p>
      *
      * <p>
-     * If include patterns are provided a dependency must match one of the include patterns or it (along with the
+     * If include patterns are provided, a dependency must match one of the include patterns or it (along with the
      * dependency tree beneath it) will be hidden.
      * </p>
      *
