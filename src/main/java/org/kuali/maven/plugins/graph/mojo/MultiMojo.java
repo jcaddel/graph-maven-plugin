@@ -18,7 +18,7 @@ package org.kuali.maven.plugins.graph.mojo;
 import java.io.File;
 import java.util.List;
 
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
@@ -37,14 +37,14 @@ public class MultiMojo extends BaseGraphMojo {
      *
      * @parameter
      */
-    List<GraphContext> descriptors;
+    List<GraphDescriptor> descriptors;
 
     /**
      * <p>
      * The directory graphs are generated into.
      * </p>
      *
-     * @parameter expression="${graph.dir}" default-value="${project.build.directory}/graph"
+     * @parameter expression="${graph.outputDir}" default-value="${project.build.directory}/graph"
      * @required
      */
     File outputDir;
@@ -54,10 +54,10 @@ public class MultiMojo extends BaseGraphMojo {
      * The output format for the graph. This can be any format supported by Graphviz (png, jpg, gif, pdf, ...)
      * </p>
      *
-     * @parameter expression="${graph.format}" default-value="png"
+     * @parameter expression="${graph.outputFormat}" default-value="png"
      * @required
      */
-    String format;
+    String outputFormat;
 
     /**
      * <p>
@@ -72,16 +72,16 @@ public class MultiMojo extends BaseGraphMojo {
     @Override
     public void execute() {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
-        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
+        GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
         helper.execute(mc, gc, descriptors);
     }
 
-    public List<GraphContext> getDescriptors() {
+    public List<GraphDescriptor> getDescriptors() {
         return descriptors;
     }
 
-    public void setDescriptors(List<GraphContext> descriptors) {
+    public void setDescriptors(List<GraphDescriptor> descriptors) {
         this.descriptors = descriptors;
     }
 
@@ -101,12 +101,12 @@ public class MultiMojo extends BaseGraphMojo {
         this.useDefaultDescriptors = useDefaultDescriptors;
     }
 
-    public String getFormat() {
-        return format;
+    public String getOutputFormat() {
+        return outputFormat;
     }
 
-    public void setFormat(String type) {
-        this.format = type;
+    public void setOutputFormat(String type) {
+        this.outputFormat = type;
     }
 
 }

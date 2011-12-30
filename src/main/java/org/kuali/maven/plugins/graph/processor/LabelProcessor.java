@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.LabelContext;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
@@ -12,13 +12,13 @@ import org.kuali.maven.plugins.graph.tree.Helper;
 import org.kuali.maven.plugins.graph.tree.Node;
 
 public class LabelProcessor implements Processor {
-    GraphContext graphContext;
+    GraphDescriptor graphContext;
 
     public LabelProcessor() {
         this(null);
     }
 
-    public LabelProcessor(GraphContext graphContext) {
+    public LabelProcessor(GraphDescriptor graphContext) {
         super();
         this.graphContext = graphContext;
     }
@@ -37,11 +37,11 @@ public class LabelProcessor implements Processor {
         }
     }
 
-    public GraphContext getGraphContext() {
+    public GraphDescriptor getGraphContext() {
         return graphContext;
     }
 
-    public void setGraphContext(GraphContext graphContext) {
+    public void setGraphContext(GraphDescriptor graphContext) {
         this.graphContext = graphContext;
     }
 

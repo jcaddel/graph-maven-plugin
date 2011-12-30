@@ -29,7 +29,7 @@ import org.kuali.maven.plugins.graph.dot.html.TableRow;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.LabelContext;
@@ -45,7 +45,7 @@ public class GraphHelper {
     HtmlUtils htmlUtils = new HtmlUtils();
     public static final String DEFAULT_TYPE = "jar";
 
-    public String getGraphTitle(GraphContext context) {
+    public String getGraphTitle(GraphDescriptor context) {
         String title = context.getShowTitle() ? context.getTitle() : "";
 
         if (!context.getShowLegend()) {
@@ -61,7 +61,7 @@ public class GraphHelper {
         return "<" + htmlUtils.toHtml(table) + ">";
     }
 
-    protected List<NameValue> getLegendLabels(GraphContext context) {
+    protected List<NameValue> getLegendLabels(GraphDescriptor context) {
         List<NameValue> labels = new ArrayList<NameValue>();
         addLabel("includes", context.getIncludes(), labels);
         addLabel("excludes", context.getExcludes(), labels);

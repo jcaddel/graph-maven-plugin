@@ -25,7 +25,7 @@ import org.kuali.maven.plugins.graph.filter.NodeFilterChain;
 import org.kuali.maven.plugins.graph.filter.ReverseNodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.Layout;
@@ -56,19 +56,19 @@ public class MojoHelper {
     private static final Logger logger = LoggerFactory.getLogger(MojoHelper.class);
     Filters filters = new Filters();
 
-    public void execute(MojoContext mc, GraphContext gc, List<GraphContext> descriptors) {
+    public void execute(MojoContext mc, GraphDescriptor gc, List<GraphDescriptor> descriptors) {
         try {
             if (mc.isSkip()) {
                 logger.info("Skipping execution");
                 return;
             }
-            List<GraphContext> descriptorsToUse = getDescriptorsToUse(mc, gc, descriptors);
+            List<GraphDescriptor> descriptorsToUse = getDescriptorsToUse(mc, gc, descriptors);
             if (Helper.isEmpty(descriptorsToUse)) {
                 logger.info("No descriptors");
                 return;
             }
 
-            for (GraphContext descriptor : descriptorsToUse) {
+            for (GraphDescriptor descriptor : descriptorsToUse) {
                 execute(mc, descriptor);
             }
         } catch (Exception e) {
@@ -76,18 +76,18 @@ public class MojoHelper {
         }
     }
 
-    protected List<GraphContext> getDescriptorsToUse(MojoContext mc, GraphContext gc, List<GraphContext> descriptors) {
-        List<GraphContext> descriptorsToUse = new ArrayList<GraphContext>();
+    protected List<GraphDescriptor> getDescriptorsToUse(MojoContext mc, GraphDescriptor gc, List<GraphDescriptor> descriptors) {
+        List<GraphDescriptor> descriptorsToUse = new ArrayList<GraphDescriptor>();
         if (descriptors == null) {
-            descriptors = new ArrayList<GraphContext>();
+            descriptors = new ArrayList<GraphDescriptor>();
         }
         if (mc.isUseDefaultDescriptors()) {
             descriptorsToUse.addAll(getDefaultDescriptors(gc));
         }
         logger.info("descriptor count={}", descriptorsToUse.size());
         Counter counter = new Counter(1);
-        logger.debug("global type={}", gc.getFormat());
-        for (GraphContext descriptor : descriptors) {
+        logger.debug("global type={}", gc.getOutputFormat());
+        for (GraphDescriptor descriptor : descriptors) {
             Helper.copyPropertiesIfNull(descriptor, gc);
             if (descriptor.getCategory() == null) {
                 descriptor.setCategory("other");
@@ -103,7 +103,7 @@ public class MojoHelper {
             }
         }
         Helper.addAll(descriptorsToUse, descriptors);
-        for (GraphContext descriptor : descriptorsToUse) {
+        for (GraphDescriptor descriptor : descriptorsToUse) {
             String filename = getFilename(mc, descriptor);
             File file = new File(filename);
             descriptor.setFile(file);
@@ -112,28 +112,28 @@ public class MojoHelper {
         return descriptorsToUse;
     }
 
-    protected String getFilename(MojoContext mc, GraphContext gc) {
+    protected String getFilename(MojoContext mc, GraphDescriptor gc) {
         String category = gc.getCategory();
         String label = gc.getLabel();
-        String type = gc.getFormat();
+        String type = gc.getOutputFormat();
         return mc.getOutputDir().getAbsolutePath() + FS + category + FS + label + "." + type;
     }
 
-    protected List<GraphContext> getDefaultDescriptors(GraphContext gc) {
-        List<GraphContext> flat = new ArrayList<GraphContext>();
+    protected List<GraphDescriptor> getDefaultDescriptors(GraphDescriptor gc) {
+        List<GraphDescriptor> flat = new ArrayList<GraphDescriptor>();
         flat.addAll(getGraphContexts(null, gc));
         for (Scope scope : Scope.values()) {
             flat.addAll(getGraphContexts(scope, gc));
         }
-        List<GraphContext> linked = new ArrayList<GraphContext>();
-        for (GraphContext descriptor : flat) {
-            linked.add(Helper.copyProperties(GraphContext.class, descriptor));
+        List<GraphDescriptor> linked = new ArrayList<GraphDescriptor>();
+        for (GraphDescriptor descriptor : flat) {
+            linked.add(Helper.copyProperties(GraphDescriptor.class, descriptor));
             descriptor.setLabel(descriptor.getLabel() + "-flat");
         }
-        for (GraphContext descriptor : linked) {
+        for (GraphDescriptor descriptor : linked) {
             descriptor.setLayout(Layout.LINKED);
         }
-        List<GraphContext> both = new ArrayList<GraphContext>(flat);
+        List<GraphDescriptor> both = new ArrayList<GraphDescriptor>(flat);
         both.addAll(linked);
         return both;
     }
@@ -154,11 +154,11 @@ public class MojoHelper {
         }
     }
 
-    protected List<GraphContext> getGraphContexts(Scope scope, GraphContext context) {
-        List<GraphContext> contexts = new ArrayList<GraphContext>();
+    protected List<GraphDescriptor> getGraphContexts(Scope scope, GraphDescriptor context) {
+        List<GraphDescriptor> contexts = new ArrayList<GraphDescriptor>();
 
         // optional or required
-        List<GraphContext> list1 = getGraphContexts(scope, null, context);
+        List<GraphDescriptor> list1 = getGraphContexts(scope, null, context);
 
         // optional only
         // List<GraphContext> list2 = getGraphContexts(scope, true, context);
@@ -173,8 +173,8 @@ public class MojoHelper {
         return contexts;
     }
 
-    protected List<GraphContext> getGraphContexts(Scope scope, Boolean optional, GraphContext context) {
-        List<GraphContext> contexts = new ArrayList<GraphContext>();
+    protected List<GraphDescriptor> getGraphContexts(Scope scope, Boolean optional, GraphDescriptor context) {
+        List<GraphDescriptor> contexts = new ArrayList<GraphDescriptor>();
         String show = getFilter(scope, optional);
 
         // transitive
@@ -185,9 +185,9 @@ public class MojoHelper {
         return contexts;
     }
 
-    protected GraphContext getGraphContext(GraphContext context, Scope scope, String show, boolean transitive) {
+    protected GraphDescriptor getGraphContext(GraphDescriptor context, Scope scope, String show, boolean transitive) {
         String label = scope == null ? "dependencies" : scope.toString();
-        GraphContext gc = Helper.copyProperties(GraphContext.class, context);
+        GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, context);
         gc.setShow(show);
         gc.setLabel(label);
         gc.setTransitive(transitive);
@@ -197,8 +197,8 @@ public class MojoHelper {
         return gc;
     }
 
-    protected GraphContext getGraphContext(Scope scope, Boolean transitive, Layout layout, GraphContext context) {
-        GraphContext gc = Helper.copyProperties(GraphContext.class, context);
+    protected GraphDescriptor getGraphContext(Scope scope, Boolean transitive, Layout layout, GraphDescriptor context) {
+        GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, context);
         gc.setTransitive(transitive);
         gc.setCategory(transitive ? "transitive" : "direct");
         String label = scope == null ? "all" : scope.toString();
@@ -212,7 +212,7 @@ public class MojoHelper {
         return gc;
     }
 
-    public void execute(MojoContext mc, GraphContext gc) {
+    public void execute(MojoContext mc, GraphDescriptor gc) {
         if (mc.isSkip()) {
             logger.info("Skipping execution");
             return;
@@ -260,7 +260,7 @@ public class MojoHelper {
         }
     }
 
-    protected List<Processor> getProcessors(GraphContext gc, boolean verbose) {
+    protected List<Processor> getProcessors(GraphDescriptor gc, boolean verbose) {
         List<Processor> processors = new ArrayList<Processor>();
         processors.add(new ValidatingProcessor());
         processors.add(new SanitizingProcessor());
@@ -283,7 +283,7 @@ public class MojoHelper {
         return processors;
     }
 
-    protected Node<MavenContext> getProcessedTree(MojoContext mc, GraphContext gc) {
+    protected Node<MavenContext> getProcessedTree(MojoContext mc, GraphDescriptor gc) {
         TreeHelper helper = new TreeHelper();
         if (mc.getMavenTree() == null) {
             DependencyNode mavenTree = getMavenTree(mc);
@@ -297,7 +297,7 @@ public class MojoHelper {
         return tree;
     }
 
-    public Graph getGraph(Node<MavenContext> tree, MojoContext mc, GraphContext gc) {
+    public Graph getGraph(Node<MavenContext> tree, MojoContext mc, GraphDescriptor gc) {
         GraphHelper gh = new GraphHelper();
         TreeHelper helper = new TreeHelper();
         List<GraphNode> nodes = helper.getGraphNodes(tree);
@@ -320,19 +320,19 @@ public class MojoHelper {
         }
     }
 
-    protected NodeFilter<MavenContext> getShowFilter(GraphContext gc) {
+    protected NodeFilter<MavenContext> getShowFilter(GraphDescriptor gc) {
         TokenCollector<MavenContext> collector = new MavenContextTokenCollector();
         Filter<MavenContext> filter = filters.getIncludePatternFilter(gc.getShow(), collector);
         return new MavenContextFilterWrapper(filter);
     }
 
-    protected NodeFilter<MavenContext> getHideFilter(GraphContext gc) {
+    protected NodeFilter<MavenContext> getHideFilter(GraphDescriptor gc) {
         TokenCollector<MavenContext> collector = new MavenContextTokenCollector();
         Filter<MavenContext> filter = filters.getExcludePatternFilter(gc.getHide(), collector);
         return new MavenContextFilterWrapper(filter);
     }
 
-    public NodeFilter<MavenContext> getIncludeFilter(GraphContext gc) {
+    public NodeFilter<MavenContext> getIncludeFilter(GraphDescriptor gc) {
         TokenCollector<Artifact> collector = new ArtifactIdTokenCollector();
         Filter<Artifact> filter = filters.getIncludePatternFilter(gc.getIncludes(), collector);
         ArtifactFilterWrapper artifactFilter = new ArtifactFilterWrapper(filter);
@@ -343,7 +343,7 @@ public class MojoHelper {
         return new NodeFilterChain<MavenContext>(filters, MatchCondition.ALL, true);
     }
 
-    public NodeFilter<MavenContext> getExcludeFilter(GraphContext gc) {
+    public NodeFilter<MavenContext> getExcludeFilter(GraphDescriptor gc) {
         TokenCollector<Artifact> collector = new ArtifactIdTokenCollector();
         Filter<Artifact> filter = filters.getExcludePatternFilter(gc.getExcludes(), collector);
         ArtifactFilterWrapper artifactFilter = new ArtifactFilterWrapper(filter);
@@ -356,7 +356,7 @@ public class MojoHelper {
         return new NodeFilterChain<MavenContext>(filters, MatchCondition.ANY, false);
     }
 
-    protected DepthFilter<MavenContext> getDepthFilter(GraphContext gc) {
+    protected DepthFilter<MavenContext> getDepthFilter(GraphDescriptor gc) {
         int maxDepth = gc.getTransitive() ? DepthFilter.INFINITE : 1;
         maxDepth = (gc.getDepth() != null && gc.getDepth() >= 0) ? gc.getDepth() : maxDepth;
         return new DepthFilter<MavenContext>(maxDepth);

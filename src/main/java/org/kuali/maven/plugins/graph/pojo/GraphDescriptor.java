@@ -20,7 +20,7 @@ import java.io.File;
 /**
  *
  */
-public class GraphContext {
+public class GraphDescriptor {
     String executable = "dot";
     String title;
     Boolean keepDotFile;
@@ -43,7 +43,7 @@ public class GraphContext {
     File file;
     String content;
     File dotFile;
-    String format;
+    String outputFormat;
     Layout layout;
     String label;
     String category;
@@ -192,12 +192,12 @@ public class GraphContext {
         this.dotFile = dotFile;
     }
 
-    public String getFormat() {
-        return format;
+    public String getOutputFormat() {
+        return outputFormat;
     }
 
-    public void setFormat(String type) {
-        this.format = type;
+    public void setOutputFormat(String type) {
+        this.outputFormat = type;
     }
 
     public Layout getLayout() {

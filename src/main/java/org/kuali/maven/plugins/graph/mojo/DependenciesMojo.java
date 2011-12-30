@@ -17,7 +17,7 @@ package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
 
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
@@ -76,7 +76,7 @@ public class DependenciesMojo extends FilteredGraphMojo {
     @Override
     public void execute() {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
-        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
+        GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper mh = new MojoHelper();
         mh.execute(mc, gc);
     }

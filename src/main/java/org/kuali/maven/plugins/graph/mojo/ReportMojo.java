@@ -6,7 +6,7 @@ import java.util.Locale;
 import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.tree.Helper;
 
@@ -40,7 +40,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     public void generate(Sink sink, Locale locale) throws MavenReportException {
         setOutputDir(new File(reportOutputDirectory + FS + imagesPath));
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
-        GraphContext gc = Helper.copyProperties(GraphContext.class, this);
+        GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
         helper.execute(mc, gc, descriptors);
     }

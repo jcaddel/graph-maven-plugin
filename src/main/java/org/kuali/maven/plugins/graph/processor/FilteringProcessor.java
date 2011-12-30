@@ -4,7 +4,7 @@ import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.IncludeExcludeFilter;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.mojo.MojoHelper;
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
@@ -12,13 +12,13 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
 public class FilteringProcessor implements Processor {
     MojoHelper mh = new MojoHelper();
     TreeHelper helper = new TreeHelper();
-    GraphContext graphContext;
+    GraphDescriptor graphContext;
 
     public FilteringProcessor() {
         this(null);
     }
 
-    public FilteringProcessor(GraphContext graphContext) {
+    public FilteringProcessor(GraphDescriptor graphContext) {
         super();
         this.graphContext = graphContext;
     }
@@ -47,11 +47,11 @@ public class FilteringProcessor implements Processor {
         return filter;
     }
 
-    public GraphContext getGraphContext() {
+    public GraphDescriptor getGraphContext() {
         return graphContext;
     }
 
-    public void setGraphContext(GraphContext graphContext) {
+    public void setGraphContext(GraphDescriptor graphContext) {
         this.graphContext = graphContext;
     }
 

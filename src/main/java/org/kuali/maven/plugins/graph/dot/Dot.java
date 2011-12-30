@@ -27,7 +27,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.codehaus.plexus.util.cli.DefaultConsumer;
 import org.codehaus.plexus.util.cli.StreamConsumer;
-import org.kuali.maven.plugins.graph.pojo.GraphContext;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,22 +38,22 @@ import org.slf4j.LoggerFactory;
 public class Dot {
     private static final Logger logger = LoggerFactory.getLogger(Dot.class);
 
-    public void fillInContext(GraphContext gc, String content) {
+    public void fillInContext(GraphDescriptor gc, String content) {
         File dotFile = createDotFile(gc.getFile(), content);
         String type = getType(gc.getFile());
         gc.setDotFile(dotFile);
-        gc.setFormat(type);
+        gc.setOutputFormat(type);
     }
 
-    protected String[] getArgs(GraphContext context) {
+    protected String[] getArgs(GraphDescriptor context) {
         List<String> args = new ArrayList<String>();
-        args.add("-T" + context.getFormat());
+        args.add("-T" + context.getOutputFormat());
         args.add("-o" + context.getFile().getAbsolutePath());
         args.add(context.getDotFile().getAbsolutePath());
         return args.toArray(new String[args.size()]);
     }
 
-    protected Commandline getCommandLine(GraphContext context) {
+    protected Commandline getCommandLine(GraphDescriptor context) {
         Commandline commandline = new Commandline();
         try {
             commandline.addSystemEnvironment();
@@ -65,7 +65,7 @@ public class Dot {
         return commandline;
     }
 
-    protected int execute(Commandline commandLine, GraphContext context) {
+    protected int execute(Commandline commandLine, GraphDescriptor context) {
         try {
             StreamConsumer stdout = new DefaultConsumer();
             StreamConsumer stderr = new DefaultConsumer();
@@ -86,7 +86,7 @@ public class Dot {
         }
     }
 
-    protected String getErrorMessage(GraphContext context, Commandline commandLine, int exitValue) {
+    protected String getErrorMessage(GraphDescriptor context, Commandline commandLine, int exitValue) {
         String[] args = commandLine.getArguments();
         String executable = commandLine.getExecutable();
         String s = executable;
@@ -100,7 +100,7 @@ public class Dot {
         return sb.toString();
     }
 
-    public void execute(GraphContext context) {
+    public void execute(GraphDescriptor context) {
         if (context.getExecuteDot()) {
             Commandline commandline = getCommandLine(context);
             execute(commandline, context);
