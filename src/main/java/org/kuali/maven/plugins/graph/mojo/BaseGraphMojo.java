@@ -16,6 +16,7 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import org.kuali.maven.plugins.graph.pojo.Direction;
+import org.kuali.maven.plugins.graph.pojo.FilterType;
 
 /**
  * <p>
@@ -23,6 +24,15 @@ import org.kuali.maven.plugins.graph.pojo.Direction;
  *
  */
 public abstract class BaseGraphMojo extends BaseMavenMojo {
+
+    /**
+     * <p>
+     * Controls how filtering is applied to the tree. Valid options are HIDE, PATH.
+     * </p>
+     *
+     * @parameter expression="${graph.filterType}" default-value="HIDE"
+     */
+    private FilterType filterType;
 
     /**
      * <p>
@@ -229,6 +239,14 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     public void setSkipEmptyGraphs(boolean skipEmptyGraphs) {
         this.skipEmptyGraphs = skipEmptyGraphs;
+    }
+
+    public FilterType getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(FilterType filterType) {
+        this.filterType = filterType;
     }
 
 }

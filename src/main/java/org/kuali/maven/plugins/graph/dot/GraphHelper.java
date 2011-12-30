@@ -28,9 +28,10 @@ import org.kuali.maven.plugins.graph.dot.html.TableCell;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.Edge;
+import org.kuali.maven.plugins.graph.pojo.FilterType;
 import org.kuali.maven.plugins.graph.pojo.Graph;
-import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.LabelContext;
 import org.kuali.maven.plugins.graph.pojo.NameValue;
@@ -67,6 +68,9 @@ public class GraphHelper {
         addLabel("excludes", context.getExcludes(), labels);
         addLabel("show", context.getShow(), labels);
         addLabel("hide", context.getHide(), labels);
+        if (context.getFilterType() != FilterType.HIDE) {
+            addLabel("filter type", context.getFilterType().toString(), labels);
+        }
         if (!context.getTransitive()) {
             addLabel("transitive", context.getTransitive() + "", labels);
         }
