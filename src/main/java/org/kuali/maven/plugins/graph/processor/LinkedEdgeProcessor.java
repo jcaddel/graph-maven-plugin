@@ -43,7 +43,7 @@ public class LinkedEdgeProcessor implements Processor {
             handleDuplicate(node);
             return;
         case CONFLICT:
-            // Draw a line from us to the replacement artifact
+            // Draw a line from us to the included node containing the replacement artifact
             handleConflict(node);
             return;
         default:

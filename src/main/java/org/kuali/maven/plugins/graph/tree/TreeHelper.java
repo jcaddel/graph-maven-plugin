@@ -164,7 +164,7 @@ public class TreeHelper {
 
     /**
      * <p>
-     * Display every node in path from this node back to the root.
+     * Display every node in the path from this node back to the root.
      * </p>
      */
     public void showPath(Node<MavenContext> node) {
