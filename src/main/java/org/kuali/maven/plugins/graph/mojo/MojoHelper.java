@@ -121,9 +121,9 @@ public class MojoHelper {
 
     protected List<GraphDescriptor> getDefaultDescriptors(GraphDescriptor gc) {
         List<GraphDescriptor> flat = new ArrayList<GraphDescriptor>();
-        flat.addAll(getGraphContexts(null, gc));
+        flat.addAll(getGraphDescriptors(null, gc));
         for (Scope scope : Scope.values()) {
-            flat.addAll(getGraphContexts(scope, gc));
+            flat.addAll(getGraphDescriptors(scope, gc));
         }
         List<GraphDescriptor> linked = new ArrayList<GraphDescriptor>();
         for (GraphDescriptor descriptor : flat) {
@@ -154,17 +154,17 @@ public class MojoHelper {
         }
     }
 
-    protected List<GraphDescriptor> getGraphContexts(Scope scope, GraphDescriptor context) {
+    protected List<GraphDescriptor> getGraphDescriptors(Scope scope, GraphDescriptor context) {
         List<GraphDescriptor> contexts = new ArrayList<GraphDescriptor>();
 
         // optional or required
-        List<GraphDescriptor> list1 = getGraphContexts(scope, null, context);
+        List<GraphDescriptor> list1 = getGraphDescriptors(scope, null, context);
 
         // optional only
-        // List<GraphContext> list2 = getGraphContexts(scope, true, context);
+        // List<GraphContext> list2 = getGraphDescriptors(scope, true, context);
 
         // required only
-        // List<GraphContext> list3 = getGraphContexts(scope, false, context);
+        // List<GraphContext> list3 = getGraphDescriptors(scope, false, context);
 
         // Add them to the list
         contexts.addAll(list1);
@@ -173,19 +173,19 @@ public class MojoHelper {
         return contexts;
     }
 
-    protected List<GraphDescriptor> getGraphContexts(Scope scope, Boolean optional, GraphDescriptor context) {
+    protected List<GraphDescriptor> getGraphDescriptors(Scope scope, Boolean optional, GraphDescriptor context) {
         List<GraphDescriptor> contexts = new ArrayList<GraphDescriptor>();
         String show = getFilter(scope, optional);
 
         // transitive
-        contexts.add(getGraphContext(context, scope, show, true));
+        contexts.add(getGraphDescriptor(context, scope, show, true));
 
         // non-transitive
-        contexts.add(getGraphContext(context, scope, show, false));
+        contexts.add(getGraphDescriptor(context, scope, show, false));
         return contexts;
     }
 
-    protected GraphDescriptor getGraphContext(GraphDescriptor context, Scope scope, String show, boolean transitive) {
+    protected GraphDescriptor getGraphDescriptor(GraphDescriptor context, Scope scope, String show, boolean transitive) {
         String label = scope == null ? "dependencies" : scope.toString();
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, context);
         gc.setShow(show);
@@ -197,7 +197,7 @@ public class MojoHelper {
         return gc;
     }
 
-    protected GraphDescriptor getGraphContext(Scope scope, Boolean transitive, Layout layout, GraphDescriptor context) {
+    protected GraphDescriptor getGraphDescriptor(Scope scope, Boolean transitive, Layout layout, GraphDescriptor context) {
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, context);
         gc.setTransitive(transitive);
         gc.setCategory(transitive ? "transitive" : "direct");
