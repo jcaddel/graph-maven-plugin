@@ -10,25 +10,40 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
+/**
+ * This processor searches the entire tree for nodes that match the filter. Any nodes that match are collected into a
+ * list. Once the list is created, the path from each node back to the root is displayed along with the entire tree
+ * below the node.
+ *
+ * @author jeffcaddel
+ *
+ */
 public class ShowPathsProcessor implements Processor {
+    public static final boolean DEFAULT_SHOW_SUB_TREES_VALUE = true;
     MojoHelper mh = new MojoHelper();
     TreeHelper helper = new TreeHelper();
     GraphDescriptor graphDescriptor;
+    boolean showSubTrees = DEFAULT_SHOW_SUB_TREES_VALUE;
 
     public ShowPathsProcessor() {
         this(null);
     }
 
     public ShowPathsProcessor(GraphDescriptor graphDescriptor) {
+        this(graphDescriptor, DEFAULT_SHOW_SUB_TREES_VALUE);
+    }
+
+    public ShowPathsProcessor(GraphDescriptor graphDescriptor, boolean showSubTrees) {
         super();
         this.graphDescriptor = graphDescriptor;
+        this.showSubTrees = showSubTrees;
     }
 
     @Override
     public void process(Node<MavenContext> node) {
+        Filter<Node<MavenContext>> filter = mh.getIncludeExcludeFilter(graphDescriptor);
         List<Node<MavenContext>> list = node.getBreadthFirstList();
         List<Node<MavenContext>> displayed = new ArrayList<Node<MavenContext>>();
-        Filter<Node<MavenContext>> filter = mh.getIncludeFilter(graphDescriptor);
         for (Node<MavenContext> element : list) {
             helper.hide(element);
             boolean display = filter.isMatch(element) || element.isRoot();
@@ -38,6 +53,9 @@ public class ShowPathsProcessor implements Processor {
         }
         for (Node<MavenContext> element : displayed) {
             helper.showPath(element);
+            if (!element.isRoot() && showSubTrees) {
+                helper.showTree(element);
+            }
         }
     }
 
@@ -47,6 +65,14 @@ public class ShowPathsProcessor implements Processor {
 
     public void setGraphDescriptor(GraphDescriptor graphDescriptor) {
         this.graphDescriptor = graphDescriptor;
+    }
+
+    public boolean isShowSubTrees() {
+        return showSubTrees;
+    }
+
+    public void setShowSubTrees(boolean showSubTrees) {
+        this.showSubTrees = showSubTrees;
     }
 
 }

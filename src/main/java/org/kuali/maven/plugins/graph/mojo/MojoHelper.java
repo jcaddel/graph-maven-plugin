@@ -18,6 +18,7 @@ import org.kuali.maven.plugins.graph.filter.ArtifactFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.DepthFilter;
 import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.Filters;
+import org.kuali.maven.plugins.graph.filter.IncludeExcludeFilter;
 import org.kuali.maven.plugins.graph.filter.MatchCondition;
 import org.kuali.maven.plugins.graph.filter.MavenContextFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
@@ -33,7 +34,6 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
-import org.kuali.maven.plugins.graph.processor.FilteringProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
@@ -42,6 +42,7 @@ import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
 import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
+import org.kuali.maven.plugins.graph.processor.ShowPathsProcessor;
 import org.kuali.maven.plugins.graph.processor.StyleProcessor;
 import org.kuali.maven.plugins.graph.processor.ValidatingProcessor;
 import org.kuali.maven.plugins.graph.tree.Node;
@@ -55,6 +56,12 @@ public class MojoHelper {
     private static final String FS = System.getProperty("file.separator");
     private static final Logger logger = LoggerFactory.getLogger(MojoHelper.class);
     Filters filters = new Filters();
+
+    public Filter<Node<MavenContext>> getIncludeExcludeFilter(GraphDescriptor descriptor) {
+        NodeFilter<MavenContext> include = getIncludeFilter(descriptor);
+        NodeFilter<MavenContext> exclude = getExcludeFilter(descriptor);
+        return new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
+    }
 
     public void execute(MojoContext mc, GraphDescriptor gc, List<GraphDescriptor> descriptors) {
         try {
@@ -272,7 +279,8 @@ public class MojoHelper {
         if (verbose) {
             processors.add(new ShowMetadataProcessor());
         }
-        processors.add(new FilteringProcessor(gc));
+        // processors.add(new FilteringProcessor(gc));
+        processors.add(new ShowPathsProcessor(gc));
         processors.add(new StyleProcessor());
         processors.add(getEdgeProcessor(gc.getLayout()));
         if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {

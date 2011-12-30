@@ -192,6 +192,20 @@ public class TreeHelper {
 
     /**
      * <p>
+     * Show this node, and every node in the sub-tree below this node.
+     * </p>
+     *
+     * @param node
+     */
+    public void showTree(Node<MavenContext> node) {
+        show(node);
+        for (Node<MavenContext> child : node.getChildren()) {
+            showTree(child);
+        }
+    }
+
+    /**
+     * <p>
      * Convenience method setting the hidden flag to false on the graph node contained inside the
      * <code>MavenContext</code>.
      * <p>
