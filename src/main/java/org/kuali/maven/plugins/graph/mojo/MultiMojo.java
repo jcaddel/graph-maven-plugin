@@ -51,13 +51,13 @@ public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * The type of image files to produce
+     * The output format for the graph. This can be any format supported by Graphviz (png, jpg, gif, pdf, ...)
      * </p>
      *
-     * @parameter expression="${graph.type}" default-value="png"
+     * @parameter expression="${graph.format}" default-value="png"
      * @required
      */
-    String type;
+    String format;
 
     /**
      * <p>
@@ -102,12 +102,12 @@ public class MultiMojo extends BaseGraphMojo {
         this.useDefaultDescriptors = useDefaultDescriptors;
     }
 
-    public String getType() {
-        return type;
+    public String getFormat() {
+        return format;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFormat(String type) {
+        this.format = type;
     }
 
 }

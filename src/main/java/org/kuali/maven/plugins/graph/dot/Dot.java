@@ -42,12 +42,12 @@ public class Dot {
         File dotFile = createDotFile(gc.getFile(), gc.getContent());
         String type = getType(gc.getFile());
         gc.setDotFile(dotFile);
-        gc.setType(type);
+        gc.setFormat(type);
     }
 
     protected String[] getArgs(GraphContext context) {
         List<String> args = new ArrayList<String>();
-        args.add("-T" + context.getType());
+        args.add("-T" + context.getFormat());
         args.add("-o" + context.getFile().getAbsolutePath());
         args.add(context.getDotFile().getAbsolutePath());
         return args.toArray(new String[args.size()]);

@@ -42,7 +42,7 @@ public class GraphContext {
     File file;
     String content;
     File dotFile;
-    String type;
+    String format;
     Layout layout;
     String label;
     String category;
@@ -191,12 +191,12 @@ public class GraphContext {
         this.dotFile = dotFile;
     }
 
-    public String getType() {
-        return type;
+    public String getFormat() {
+        return format;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFormat(String type) {
+        this.format = type;
     }
 
     public Layout getLayout() {

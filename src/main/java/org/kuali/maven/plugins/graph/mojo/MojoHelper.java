@@ -87,7 +87,7 @@ public class MojoHelper {
         }
         logger.info("descriptor count={}", descriptorsToUse.size());
         Counter counter = new Counter(1);
-        logger.debug("global type={}", gc.getType());
+        logger.debug("global type={}", gc.getFormat());
         for (GraphContext descriptor : descriptors) {
             Helper.copyPropertiesIfNull(descriptor, gc);
             if (descriptor.getCategory() == null) {
@@ -116,7 +116,7 @@ public class MojoHelper {
     protected String getFilename(MojoContext mc, GraphContext gc) {
         String category = gc.getCategory();
         String label = gc.getLabel();
-        String type = gc.getType();
+        String type = gc.getFormat();
         return mc.getOutputDir().getAbsolutePath() + FS + category + FS + label + "." + type;
     }
 
