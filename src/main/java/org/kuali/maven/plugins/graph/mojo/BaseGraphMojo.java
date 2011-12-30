@@ -119,12 +119,21 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * If true, the Maven build will continue even if the "dot" binary returns a non-zero exit value.
+     * If true, the Maven build will continue even if the "dot" executable returns a non-zero exit value.
      * </p>
      *
      * @parameter expression="${graph.ignoreDotFailure}" default-value="false"
      */
     private boolean ignoreDotFailure;
+
+    /**
+     * <p>
+     * If true, do not invoke Graphviz if nothing but the root node would get graphed.
+     * </p>
+     *
+     * @parameter expression="${graph.skipEmptyGraphs}" default-value="true"
+     */
+    private boolean skipEmptyGraphs;
 
     public String getTitle() {
         return title;
@@ -212,6 +221,14 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     public void setShowConflicts(boolean showConflicts) {
         this.showConflicts = showConflicts;
+    }
+
+    public boolean isSkipEmptyGraphs() {
+        return skipEmptyGraphs;
+    }
+
+    public void setSkipEmptyGraphs(boolean skipEmptyGraphs) {
+        this.skipEmptyGraphs = skipEmptyGraphs;
     }
 
 }

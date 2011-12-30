@@ -32,7 +32,6 @@ import org.kuali.maven.plugins.graph.pojo.Layout;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
-import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
 import org.kuali.maven.plugins.graph.processor.FilteringProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
@@ -121,40 +120,38 @@ public class MojoHelper {
     }
 
     protected List<GraphContext> getDefaultDescriptors(GraphContext gc) {
-        List<GraphContext> descriptors = new ArrayList<GraphContext>();
-        descriptors.addAll(getGraphContexts(null, gc));
+        List<GraphContext> flat = new ArrayList<GraphContext>();
+        flat.addAll(getGraphContexts(null, gc));
         for (Scope scope : Scope.values()) {
-            descriptors.addAll(getGraphContexts(scope, gc));
+            flat.addAll(getGraphContexts(scope, gc));
         }
-        return descriptors;
+        List<GraphContext> linked = new ArrayList<GraphContext>();
+        for (GraphContext descriptor : flat) {
+            linked.add(Helper.copyProperties(GraphContext.class, descriptor));
+            descriptor.setLabel(descriptor.getLabel() + "-flat");
+        }
+        for (GraphContext descriptor : linked) {
+            descriptor.setLayout(Layout.LINKED);
+        }
+        List<GraphContext> both = new ArrayList<GraphContext>(flat);
+        both.addAll(linked);
+        return both;
     }
 
-    protected String getFilter(Scope scope, Boolean optional, State state) {
+    protected String getFilter(Scope scope, Boolean optional) {
         StringBuilder sb = new StringBuilder();
-        sb.append(scope == null ? "" : scope.toString());
+        sb.append(scope == null ? "*" : scope.toString());
         sb.append(":");
-        sb.append(optional == null ? "" : (optional ? "optional" : "required"));
-        sb.append(":");
-        sb.append(state == null ? "" : state.toString());
+        sb.append(optional == null ? "*" : (optional ? "optional" : "required"));
         return sb.toString();
     }
 
-    protected String getLabel(Boolean optional, State state) {
-        if (optional == null && state == null) {
-            return "all";
-        }
-
-        if (optional != null && state == null) {
+    protected String getLabel(Boolean optional) {
+        if (optional == null) {
+            return "";
+        } else {
             return optional ? "optional" : "required";
         }
-
-        String o = optional == null ? "" : (optional ? "optional-" : "required-");
-        String s = state == null ? "any" : state.toString();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(o);
-        sb.append(s);
-        return sb.toString();
     }
 
     protected List<GraphContext> getGraphContexts(Scope scope, GraphContext context) {
@@ -164,40 +161,38 @@ public class MojoHelper {
         List<GraphContext> list1 = getGraphContexts(scope, null, context);
 
         // optional only
-        List<GraphContext> list2 = getGraphContexts(scope, true, context);
+        // List<GraphContext> list2 = getGraphContexts(scope, true, context);
 
         // required only
-        List<GraphContext> list3 = getGraphContexts(scope, false, context);
+        // List<GraphContext> list3 = getGraphContexts(scope, false, context);
 
         // Add them to the list
         contexts.addAll(list1);
-        contexts.addAll(list2);
-        contexts.addAll(list3);
+        // contexts.addAll(list2);
+        // contexts.addAll(list3);
         return contexts;
     }
 
     protected List<GraphContext> getGraphContexts(Scope scope, Boolean optional, GraphContext context) {
         List<GraphContext> contexts = new ArrayList<GraphContext>();
-        String show = getFilter(scope, optional, null);
+        String show = getFilter(scope, optional);
 
         // transitive
-        String label1 = getLabel(optional, null);
-        contexts.add(getGraphContext(context, scope, show, label1, true));
+        contexts.add(getGraphContext(context, scope, show, true));
 
         // non-transitive
-        String label2 = getLabel(optional, null);
-        contexts.add(getGraphContext(context, scope, show, label2, false));
+        contexts.add(getGraphContext(context, scope, show, false));
         return contexts;
     }
 
-    protected GraphContext getGraphContext(GraphContext context, Scope scope, String show, String label,
-            boolean transitive) {
+    protected GraphContext getGraphContext(GraphContext context, Scope scope, String show, boolean transitive) {
+        String label = scope == null ? "dependencies" : scope.toString();
         GraphContext gc = Helper.copyProperties(GraphContext.class, context);
         gc.setShow(show);
         gc.setLabel(label);
         gc.setTransitive(transitive);
         gc.setLayout(Layout.FLAT);
-        String category = (transitive ? "transitive" : "direct") + "/" + (scope == null ? "any" : scope.toString());
+        String category = transitive ? "transitive" : "direct";
         gc.setCategory(category);
         return gc;
     }
@@ -224,18 +219,35 @@ public class MojoHelper {
         }
 
         try {
-            logger.info(gc.getFile().getPath());
-            GraphHelper gh = new GraphHelper();
-            String title = gh.getGraphTitle(gc);
-            gc.setTitle(title);
-            String content = getDotFileContent(mc, gc);
-            gc.setContent(content);
+            Node<MavenContext> tree = getProcessedTree(mc, gc);
+            Graph graph = getGraph(tree, mc, gc);
+            if (isEmptyGraph(graph) && Boolean.TRUE.equals(gc.getSkipEmptyGraphs())) {
+                logger.info("Skipping empty graph");
+                return;
+            }
+            String content = getDotFileContent(graph);
             Dot dot = new Dot();
-            dot.fillInContext(gc);
+            dot.fillInContext(gc, content);
+            logger.info(gc.getFile().getPath());
             dot.execute(gc);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    protected boolean isEmptyGraph(Graph graph) {
+        int count = 0;
+        List<GraphNode> nodes = graph.getNodes();
+        for (GraphNode node : nodes) {
+            if (!node.isHidden()) {
+                count++;
+            }
+        }
+        return count <= 1;
+    }
+
+    protected String getDotFileContent(Graph graph) {
+        return new StringGenerator().getString(graph);
     }
 
     public DependencyNode getMavenTree(MojoContext c) {
@@ -271,21 +283,30 @@ public class MojoHelper {
         return processors;
     }
 
-    public String getDotFileContent(MojoContext mc, GraphContext gc) {
+    protected Node<MavenContext> getProcessedTree(MojoContext mc, GraphContext gc) {
         TreeHelper helper = new TreeHelper();
-        DependencyNode mavenTree = getMavenTree(mc);
-        Node<MavenContext> tree = helper.getTree(mavenTree);
+        if (mc.getMavenTree() == null) {
+            DependencyNode mavenTree = getMavenTree(mc);
+            mc.setMavenTree(mavenTree);
+        }
+        Node<MavenContext> tree = helper.getTree(mc.getMavenTree());
         List<Processor> processors = getProcessors(gc, mc.isVerbose());
         for (Processor processor : processors) {
             processor.process(tree);
         }
+        return tree;
+    }
+
+    public Graph getGraph(Node<MavenContext> tree, MojoContext mc, GraphContext gc) {
+        GraphHelper gh = new GraphHelper();
+        TreeHelper helper = new TreeHelper();
         List<GraphNode> nodes = helper.getGraphNodes(tree);
         List<Edge> edges = helper.getEdges(tree);
         if (mc.isVerbose()) {
             helper.show(nodes, edges);
         }
-        Graph graph = new GraphHelper().getGraph(gc.getTitle(), gc.getDirection(), nodes, edges);
-        return new StringGenerator().getString(graph);
+        String title = gh.getGraphTitle(gc);
+        return gh.getGraph(title, gc.getDirection(), nodes, edges);
     }
 
     protected Processor getEdgeProcessor(Layout layout) {

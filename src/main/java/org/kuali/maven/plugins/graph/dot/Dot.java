@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
 public class Dot {
     private static final Logger logger = LoggerFactory.getLogger(Dot.class);
 
-    public void fillInContext(GraphContext gc) {
-        File dotFile = createDotFile(gc.getFile(), gc.getContent());
+    public void fillInContext(GraphContext gc, String content) {
+        File dotFile = createDotFile(gc.getFile(), content);
         String type = getType(gc.getFile());
         gc.setDotFile(dotFile);
         gc.setFormat(type);

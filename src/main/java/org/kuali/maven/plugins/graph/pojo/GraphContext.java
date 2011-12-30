@@ -38,6 +38,7 @@ public class GraphContext {
     Boolean showTitle;
     Boolean executeDot;
     Boolean ignoreDotFailure;
+    Boolean skipEmptyGraphs;
     Integer depth;
     File file;
     String content;
@@ -245,6 +246,14 @@ public class GraphContext {
 
     public void setShowConflicts(Boolean showConflicts) {
         this.showConflicts = showConflicts;
+    }
+
+    public Boolean getSkipEmptyGraphs() {
+        return skipEmptyGraphs;
+    }
+
+    public void setSkipEmptyGraphs(Boolean skipEmptyGraphs) {
+        this.skipEmptyGraphs = skipEmptyGraphs;
     }
 
 }

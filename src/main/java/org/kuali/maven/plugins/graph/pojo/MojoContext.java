@@ -23,6 +23,7 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactCollector;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 
 /**
@@ -52,6 +53,8 @@ public class MojoContext {
     private File outputDir;
 
     private boolean useDefaultDescriptors;
+
+    private DependencyNode mavenTree;
 
     public MavenProject getProject() {
         return project;
@@ -139,5 +142,13 @@ public class MojoContext {
 
     public void setUseDefaultDescriptors(boolean useDefaultDescriptors) {
         this.useDefaultDescriptors = useDefaultDescriptors;
+    }
+
+    public DependencyNode getMavenTree() {
+        return mavenTree;
+    }
+
+    public void setMavenTree(DependencyNode mavenTree) {
+        this.mavenTree = mavenTree;
     }
 }
