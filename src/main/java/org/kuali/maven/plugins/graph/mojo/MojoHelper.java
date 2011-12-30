@@ -93,7 +93,7 @@ public class MojoHelper {
         if (mc.isUseDefaultDescriptors()) {
             descriptorsToUse.addAll(getDefaultDescriptors(gc));
         }
-        logger.info("descriptor count={}", descriptorsToUse.size());
+        logger.debug("descriptor count={}", descriptorsToUse.size());
         Counter counter = new Counter(1);
         logger.debug("global type={}", gc.getOutputFormat());
         for (GraphDescriptor descriptor : descriptors) {
@@ -147,11 +147,11 @@ public class MojoHelper {
         return both;
     }
 
-    protected String getFilter(Scope scope, Boolean optional) {
+    protected String getFilter(Scope scope) {
         StringBuilder sb = new StringBuilder();
         sb.append(scope == null ? "*" : scope.toString());
         sb.append(":");
-        sb.append(optional == null ? "*" : (optional ? "optional" : "required"));
+        sb.append("*");
         return sb.toString();
     }
 
@@ -184,7 +184,7 @@ public class MojoHelper {
 
     protected List<GraphDescriptor> getGraphDescriptors(Scope scope, Boolean optional, GraphDescriptor context) {
         List<GraphDescriptor> contexts = new ArrayList<GraphDescriptor>();
-        String show = getFilter(scope, optional);
+        String show = getFilter(scope);
 
         // transitive
         contexts.add(getGraphDescriptor(context, scope, show, true));
