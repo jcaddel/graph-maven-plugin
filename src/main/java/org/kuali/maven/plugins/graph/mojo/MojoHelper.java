@@ -37,6 +37,7 @@ import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
+import org.kuali.maven.plugins.graph.processor.HidingProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
@@ -279,8 +280,7 @@ public class MojoHelper {
         if (verbose) {
             processors.add(new ShowMetadataProcessor());
         }
-        // processors.add(new FilteringProcessor(gc));
-        processors.add(new ShowPathsProcessor(gc));
+        processors.add(getHideShowProcessor(gc));
         processors.add(new StyleProcessor());
         processors.add(getEdgeProcessor(gc.getLayout()));
         if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
@@ -290,6 +290,20 @@ public class MojoHelper {
             processors.add(new HideConflictsProcessor(gc.getLayout()));
         }
         return processors;
+    }
+
+    protected Processor getHideShowProcessor(GraphDescriptor gd) {
+        switch (gd.getFilterType()) {
+        case H:
+            return new HidingProcessor(gd);
+        case P:
+            return new ShowPathsProcessor(gd, false);
+        case PT:
+            return new ShowPathsProcessor(gd, true);
+        default:
+            throw new IllegalStateException("Unknown filter type " + gd.getFilterType());
+        }
+
     }
 
     protected Node<MavenContext> getProcessedTree(MojoContext mc, GraphDescriptor gc) {

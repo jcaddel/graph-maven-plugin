@@ -17,6 +17,7 @@ package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
 
+import org.kuali.maven.plugins.graph.pojo.FilterType;
 import org.kuali.maven.plugins.graph.pojo.Layout;
 
 /**
@@ -25,6 +26,16 @@ import org.kuali.maven.plugins.graph.pojo.Layout;
  *
  */
 public abstract class FilteredGraphMojo extends BaseGraphMojo {
+
+    /**
+     * <p>
+     * Controls how the filter is applied to the tree nodes. H=hide, P=show paths to root, PT=show paths to root +
+     * sub-tree
+     * </p>
+     *
+     * @parameter expression="${graph.filterType}" default-value="H"
+     */
+    private FilterType filterType;
 
     /**
      * <p>
@@ -278,6 +289,14 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
 
     public void setDepth(int depth) {
         this.depth = depth;
+    }
+
+    public FilterType getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(FilterType filterType) {
+        this.filterType = filterType;
     }
 
 }

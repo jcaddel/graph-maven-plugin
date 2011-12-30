@@ -47,6 +47,7 @@ public class GraphDescriptor {
     Layout layout;
     String label;
     String category;
+    FilterType filterType;
 
     public String getExecutable() {
         return executable;
@@ -254,6 +255,14 @@ public class GraphDescriptor {
 
     public void setSkipEmptyGraphs(Boolean skipEmptyGraphs) {
         this.skipEmptyGraphs = skipEmptyGraphs;
+    }
+
+    public FilterType getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(FilterType filterType) {
+        this.filterType = filterType;
     }
 
 }
