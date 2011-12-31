@@ -2,8 +2,6 @@ package org.kuali.maven.plugins.graph.pojo;
 
 import java.util.List;
 
-import com.sun.rowset.internal.Row;
-
 public class Category {
     String label;
     String description;
