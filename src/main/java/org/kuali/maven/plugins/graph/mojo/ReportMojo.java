@@ -79,9 +79,24 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         sink.text(category.getName());
         sink.sectionTitle2_();
         sink.text(category.getDescription());
+        sink.lineBreak();
+        sink.lineBreak();
+        sink.table();
+        sink.tableRow();
+        sink.tableHeaderCell();
+        sink.text("Type");
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text("Graphs");
+        sink.tableHeaderCell_();
+        sink.tableHeaderCell();
+        sink.text("Description");
+        sink.tableHeaderCell_();
+        sink.tableRow_();
         for (Group group : category.getGroups()) {
             doGroup(sink, group);
         }
+        sink.table_();
         sink.section2_();
     }
 
@@ -89,25 +104,27 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         if (isEmpty(group)) {
             return;
         }
-        sink.section3();
-        sink.sectionTitle3();
+        sink.tableRow();
+        sink.tableCell();
         sink.text(group.getName());
-        sink.sectionTitle3_();
+        sink.tableCell_();
+        sink.tableCell();
+        doDescriptors(sink, group.getDescriptors());
+        sink.tableCell_();
+        sink.tableCell();
         sink.text(group.getDescription());
-        sink.list();
-        sink.listItem();
-        for (GraphDescriptor gd : group.getDescriptors()) {
-            doDescriptor(sink, gd);
-        }
-        sink.listItem_();
-        sink.list_();
-        sink.section3_();
+        sink.tableCell_();
+        sink.tableRow_();
     }
 
-    protected void doDescriptor(Sink sink, GraphDescriptor gd) {
-        doLink(sink, gd);
-        sink.text(",");
-        sink.nonBreakingSpace();
+    protected void doDescriptors(Sink sink, List<GraphDescriptor> gds) {
+        for (int i = 0; i < gds.size(); i++) {
+            if (i != 0) {
+                sink.text(",");
+                sink.nonBreakingSpace();
+            }
+            doLink(sink, gds.get(i));
+        }
     }
 
     protected void doLink(Sink sink, GraphDescriptor gd) {

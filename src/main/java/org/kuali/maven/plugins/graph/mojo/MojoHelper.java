@@ -147,6 +147,7 @@ public class MojoHelper {
     protected Category getCategory(GraphDescriptor gd, boolean transitive) {
         String name = getTransitiveLabel(transitive);
         Category c = new Category(name);
+        c.setDescription(getDescription(transitive));
         c.setGroups(getGroups(gd, transitive));
         for (Group group : c.getGroups()) {
             group.setCategory(c);
@@ -158,6 +159,36 @@ public class MojoHelper {
         return transitive ? "transitive" : "direct";
     }
 
+    protected String getDescription(Scope scope) {
+        if (scope == null) {
+            return "These are the dependencies for the project for all scopes.";
+        }
+        switch (scope) {
+        case COMPILE:
+            return "These dependencies are required for compilation.  They are available in all classpaths of the project and are also propagated as transitive dependencies to projects that depend on this project";
+        case IMPORT:
+            return "This scope is only used on a dependency of type pom in the <dependencyManagement> section. It indicates that the specified POM should be replaced with the dependencies in that POM's <dependencyManagement> section";
+        case PROVIDED:
+            return "Similar to compile, but with the expectation that the JDK or a container will provide the dependency at runtime.  These dependencies are only available on the compilation and test classpaths, and are not transitive.";
+        case RUNTIME:
+            return "These dependencies are not required for compilation, but are for execution. They are in the runtime and test classpaths, but not the compile classpath.";
+        case SYSTEM:
+            return "This scope is similar to provided except that you have to provide the JAR which contains it explicitly. The artifact must always be available and is not looked up in a repository.";
+        case TEST:
+            return "These dependencies are only required to compile and run unit tests for the application";
+        default:
+            throw new IllegalArgumentException("Unknown scope " + scope);
+        }
+    }
+
+    protected String getDescription(boolean transitive) {
+        if (transitive) {
+            return "These are the dependencies declared in this project's pom plus any transitive dependencies needed by this project.";
+        } else {
+            return "These are the dependencies declared in this project's pom";
+        }
+    }
+
     protected String getScopeLabel(Scope scope) {
         return scope == null ? "all" : scope.toString();
     }
@@ -166,9 +197,11 @@ public class MojoHelper {
         List<Group> groups = new ArrayList<Group>();
         Group any = new Group(getScopeLabel(null));
         any.setDescriptors(getDescriptors(gd, any, transitive, null));
+        any.setDescription(getDescription(null));
         groups.add(any);
         for (Scope scope : Scope.values()) {
             Group group = new Group(getScopeLabel(scope));
+            group.setDescription(getDescription(scope));
             group.setDescriptors(getDescriptors(gd, group, transitive, scope));
             groups.add(group);
         }
