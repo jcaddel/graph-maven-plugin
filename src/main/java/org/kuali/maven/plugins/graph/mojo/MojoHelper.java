@@ -56,7 +56,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MojoHelper {
-    private static final String FS = System.getProperty("file.separator");
     private static final Logger logger = LoggerFactory.getLogger(MojoHelper.class);
     Filters filters = new Filters();
 
@@ -108,7 +107,7 @@ public class MojoHelper {
     }
 
     protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir) {
-        logger.debug("global type={}", gd.getOutputFormat());
+        logger.debug("default output format={}", gd.getOutputFormat());
         Counter counter = new Counter(1);
         for (GraphDescriptor descriptor : gds) {
             Helper.copyPropertiesIfNull(descriptor, gd);

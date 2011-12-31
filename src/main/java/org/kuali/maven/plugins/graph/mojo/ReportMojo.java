@@ -46,7 +46,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         GraphDescriptor gd = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
         List<Category> categories = helper.getDefaultCategories(gd);
-        helper.categories(mc, gd, helper.getDefaultCategories(gd));
+        helper.categories(mc, gd, categories);
         doHead(sink);
         doBody(sink, categories);
         sink.flush();
@@ -59,14 +59,21 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         sink.sectionTitle1();
         sink.text("Project Dependency Graphs");
         sink.sectionTitle1_();
-        for (Category category : categories) {
-            doCategory(sink, category);
+        if (isEmpty(categories)) {
+            sink.text("No graphs to display");
+        } else {
+            for (Category category : categories) {
+                doCategory(sink, category);
+            }
         }
         sink.section1_();
         sink.body_();
     }
 
     protected void doCategory(Sink sink, Category category) {
+        if (isEmpty(category)) {
+            return;
+        }
         sink.section2();
         sink.sectionTitle2();
         sink.text(category.getName());
@@ -79,6 +86,9 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     }
 
     protected void doGroup(Sink sink, Group group) {
+        if (isEmpty(group)) {
+            return;
+        }
         sink.section3();
         sink.sectionTitle3();
         sink.text(group.getName());
@@ -165,8 +175,45 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         return subDirectory;
     }
 
-    public void setSubDirectory(String imagesPath) {
-        this.subDirectory = imagesPath;
+    public void setSubDirectory(String subDirectory) {
+        this.subDirectory = subDirectory;
+    }
+
+    protected boolean isEmpty(List<Category> categories) {
+        if (Helper.isEmpty(categories)) {
+            return true;
+        } else {
+            for (Category category : categories) {
+                if (!isEmpty(category)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    protected boolean isEmpty(Category category) {
+        if (Helper.isEmpty(category.getGroups())) {
+            return true;
+        } else {
+            return isEmptyGroups(category.getGroups());
+        }
+    }
+
+    protected boolean isEmptyGroups(List<Group> groups) {
+        if (Helper.isEmpty(groups)) {
+            return true;
+        }
+        for (Group group : groups) {
+            if (!isEmpty(group)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected boolean isEmpty(Group group) {
+        return Helper.isEmpty(group.getDescriptors());
     }
 
 }
