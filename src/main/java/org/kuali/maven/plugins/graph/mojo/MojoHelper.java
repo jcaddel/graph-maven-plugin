@@ -79,7 +79,8 @@ public class MojoHelper {
         }
         for (Category category : categories) {
             for (Group group : category.getGroups()) {
-                fillInDescriptors(gc, group.getDescriptors(), mc.getOutputDir());
+                group.setCategory(category);
+                fillInDescriptors(gc, group.getDescriptors(), mc.getOutputDir(), group);
                 List<GraphDescriptor> executed = execute(mc, gc, group.getDescriptors());
                 group.setDescriptors(executed);
             }
@@ -109,7 +110,8 @@ public class MojoHelper {
         }
     }
 
-    protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir) {
+    protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir, Group group) {
+        gd.setGroup(group);
         logger.debug("default output format={}", gd.getOutputFormat());
         Counter counter = new Counter(1);
         for (GraphDescriptor descriptor : gds) {
@@ -164,7 +166,7 @@ public class MojoHelper {
 
     protected String getDescription(Scope scope) {
         if (scope == null) {
-            return "These are the dependencies for the project for all scopes.";
+            return "These are the dependencies of the project for all scopes.";
         }
         switch (scope) {
         case COMPILE:
@@ -226,16 +228,8 @@ public class MojoHelper {
         descriptor.setTransitive(transitive);
         descriptor.setName(layout.toString().toLowerCase());
         descriptor.setLayout(layout);
-        descriptor.setKeepDotFile(true);
         descriptor.setGroup(group);
         return descriptor;
-    }
-
-    protected String getLabel(Scope scope, Layout layout) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(scope == null ? "dependencies" : scope.toString());
-        sb.append(layout == Layout.LINKED ? "" : "-flat");
-        return sb.toString();
     }
 
     public GraphDescriptor execute(MojoContext mc, GraphDescriptor gc) {

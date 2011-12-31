@@ -131,14 +131,9 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     protected void doLink(Sink sink, GraphDescriptor gd) {
         MojoHelper helper = new MojoHelper();
         String href = subDirectory + "/" + helper.getRelativePath(gd);
-        String show = getShow(gd);
         sink.link(href);
-        sink.text(show);
+        sink.text(gd.getName());
         sink.link_();
-    }
-
-    protected String getShow(GraphDescriptor gd) {
-        return gd.getLayout().toString().toLowerCase();
     }
 
     protected void doHead(Sink sink) {

@@ -29,27 +29,30 @@
         <groupId>${project.groupId}</groupId>
         <artifactId>${project.artifactId}</artifactId>
         <version>${project.version}</version>
-        <executions>
-          <execution>
-            <id>multi</id>
-            <goals>
-              <goal>multi</goal>
-            </goals>
-            <phase>${multi.phase}</phase>
-            <configuration>
-              <descriptors>
-                <descriptor>
-                  <label>kuali</label>
-                  <includes>org.kuali.*</includes>
-                </descriptor>
-                <descriptor>
-                  <label>logging</label>
-                  <includes>commons-logging,org.slf4j,log4j</includes>
-                </descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
+        <configuration>
+          <categories>
+            <category>
+              <name>other</name>
+              <description>other</description>
+              <groups>
+                <group>
+                  <name>other</name>
+                  <description>other</description>
+                  <descriptors>
+                    <descriptor>
+                      <includes>org.kuali.*</includes>
+                      <name>kuali</name>
+                    </descriptor>
+                    <descriptor>
+                      <includes>commons-logging,org.slf4j,log4j</includes>
+                      <name>logging</name>
+                    </descriptor>
+                  </descriptors>
+                </group>
+              </groups>
+            </category>
+          </categories>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
