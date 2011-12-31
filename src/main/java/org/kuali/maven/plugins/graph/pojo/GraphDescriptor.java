@@ -39,7 +39,9 @@ public class GraphDescriptor {
     Boolean executeDot;
     Boolean ignoreDotFailure;
     Boolean skipEmptyGraphs;
+    Boolean defaultDescriptor;
     Integer depth;
+    Scope scope;
     File file;
     String content;
     File dotFile;
@@ -48,6 +50,7 @@ public class GraphDescriptor {
     String label;
     String category;
     FilterType filterType;
+    String description;
 
     public String getExecutable() {
         return executable;
@@ -263,6 +266,30 @@ public class GraphDescriptor {
 
     public void setFilterType(FilterType filterType) {
         this.filterType = filterType;
+    }
+
+    public Boolean getDefaultDescriptor() {
+        return defaultDescriptor;
+    }
+
+    public void setDefaultDescriptor(Boolean defaultDescriptor) {
+        this.defaultDescriptor = defaultDescriptor;
+    }
+
+    public Scope getScope() {
+        return scope;
+    }
+
+    public void setScope(Scope scope) {
+        this.scope = scope;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

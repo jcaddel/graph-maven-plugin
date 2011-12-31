@@ -88,20 +88,25 @@ public class MojoHelper {
         }
     }
 
-    protected List<GraphDescriptor> getDescriptorsToUse(MojoContext mc, GraphDescriptor gc,
-            List<GraphDescriptor> descriptors) {
+    protected List<GraphDescriptor> getDescriptorsToUse(MojoContext mc, GraphDescriptor gd, List<GraphDescriptor> gds) {
         List<GraphDescriptor> descriptorsToUse = new ArrayList<GraphDescriptor>();
-        if (descriptors == null) {
-            descriptors = new ArrayList<GraphDescriptor>();
+        if (gds == null) {
+            gds = new ArrayList<GraphDescriptor>();
         }
         if (mc.isUseDefaultDescriptors()) {
-            descriptorsToUse.addAll(getDefaultDescriptors(gc));
+            descriptorsToUse.addAll(getDefaultDescriptors(gd));
         }
+        Helper.addAll(descriptorsToUse, gds);
         logger.debug("descriptor count={}", descriptorsToUse.size());
+        fillInDescriptors(descriptorsToUse, gd, mc.getOutputDir());
+        return descriptorsToUse;
+    }
+
+    protected void fillInDescriptors(List<GraphDescriptor> gds, GraphDescriptor gd, File outputDir) {
+        logger.debug("global type={}", gd.getOutputFormat());
         Counter counter = new Counter(1);
-        logger.debug("global type={}", gc.getOutputFormat());
-        for (GraphDescriptor descriptor : descriptors) {
-            Helper.copyPropertiesIfNull(descriptor, gc);
+        for (GraphDescriptor descriptor : gds) {
+            Helper.copyPropertiesIfNull(descriptor, gd);
             if (descriptor.getCategory() == null) {
                 descriptor.setCategory("other");
             }
@@ -114,22 +119,18 @@ public class MojoHelper {
             if (descriptor.getLayout() == null) {
                 descriptor.setLayout(Layout.LINKED);
             }
-        }
-        Helper.addAll(descriptorsToUse, descriptors);
-        for (GraphDescriptor descriptor : descriptorsToUse) {
-            String filename = getFilename(mc, descriptor);
+            String filename = getFilename(outputDir, descriptor);
             File file = new File(filename);
             descriptor.setFile(file);
             logger.debug(file.getPath());
         }
-        return descriptorsToUse;
     }
 
-    protected String getFilename(MojoContext mc, GraphDescriptor gc) {
+    protected String getFilename(File outputDir, GraphDescriptor gc) {
         String category = gc.getCategory();
         String label = gc.getLabel();
-        String type = gc.getOutputFormat();
-        return mc.getOutputDir().getAbsolutePath() + FS + category + FS + label + "." + type;
+        String extension = gc.getOutputFormat();
+        return outputDir.getAbsolutePath() + FS + category + FS + label + "." + extension;
     }
 
     protected List<GraphDescriptor> getDefaultDescriptors(GraphDescriptor gc) {
@@ -141,7 +142,7 @@ public class MojoHelper {
 
     protected List<GraphDescriptor> getGraphDescriptors(boolean transitive, GraphDescriptor descriptor) {
         List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
-        add(descriptors, descriptor, null, "*:*", transitive);
+        add(descriptors, descriptor, null, null, transitive);
         for (Scope scope : Scope.values()) {
             String show = scope.toString() + ":*";
             add(descriptors, descriptor, scope, show, transitive);
@@ -149,23 +150,23 @@ public class MojoHelper {
         return descriptors;
     }
 
-    protected void add(List<GraphDescriptor> descriptors, GraphDescriptor gd, Scope scope, String show,
-            boolean transitive) {
-        String label = getLabel(scope, Layout.LINKED);
+    protected void add(List<GraphDescriptor> gds, GraphDescriptor gd, Scope scope, String show, boolean transitive) {
         GraphDescriptor one = Helper.copyProperties(GraphDescriptor.class, gd);
         one.setShow(show);
-        one.setLabel(label);
         one.setTransitive(transitive);
+        one.setLabel(getLabel(scope, Layout.LINKED));
         one.setLayout(Layout.LINKED);
-        String category = transitive ? "transitive" : "direct";
-        one.setCategory(category);
+        one.setCategory(transitive ? "transitive" : "direct");
+        one.setDefaultDescriptor(true);
+        one.setScope(scope);
+        one.setKeepDotFile(true);
 
         GraphDescriptor two = Helper.copyProperties(GraphDescriptor.class, one);
         two.setLayout(Layout.FLAT);
         two.setLabel(getLabel(scope, Layout.FLAT));
 
-        descriptors.add(one);
-        descriptors.add(two);
+        gds.add(one);
+        gds.add(two);
     }
 
     protected String getLabel(Scope scope, Layout layout) {

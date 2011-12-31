@@ -1,6 +1,7 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,24 +45,36 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
         List<GraphDescriptor> executedDescriptors = helper.execute(mc, gc, descriptors);
+        List<GraphDescriptor> defaultDescriptors = getDescriptors(executedDescriptors, true);
+        List<GraphDescriptor> otherDescriptors = getDescriptors(executedDescriptors, false);
         doHead(sink);
-        doBody(sink, executedDescriptors);
+        doBody(sink, defaultDescriptors, otherDescriptors);
         sink.flush();
         sink.close();
     }
 
-    protected void doBody(Sink sink, List<GraphDescriptor> descriptors) {
+    protected List<GraphDescriptor> getDescriptors(List<GraphDescriptor> gds, Boolean isDefault) {
+        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
+        for (GraphDescriptor descriptor : gds) {
+            if (isDefault.equals(descriptor.getDefaultDescriptor())) {
+                descriptors.add(descriptor);
+            }
+        }
+        return descriptors;
+    }
+
+    protected void doBody(Sink sink, List<GraphDescriptor> defaults, List<GraphDescriptor> other) {
         sink.body();
         sink.section1();
         sink.sectionTitle1();
         sink.text("Project Dependency Graphs");
         sink.sectionTitle1_();
-        doSection2(sink, descriptors);
+        doDefaults(sink, defaults);
         sink.section1_();
         sink.body_();
     }
 
-    protected void doSection2(Sink sink, List<GraphDescriptor> descriptors) {
+    protected void doDefaults(Sink sink, List<GraphDescriptor> descriptors) {
         sink.section2();
         sink.sectionTitle2();
         sink.text("direct");
@@ -69,13 +82,35 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         for (GraphDescriptor d : descriptors) {
             sink.list();
             sink.listItem();
-            sink.link(graphsDir + "/" + d.getCategory() + "/" + d.getLabel() + "." + d.getOutputFormat());
-            sink.text(d.getLabel());
+            doLink(sink, d);
             sink.link_();
             sink.listItem_();
             sink.list_();
         }
         sink.section2_();
+    }
+
+    protected void doLink(Sink sink, GraphDescriptor gd) {
+        String href = getHref(gd);
+        String show = getShow(gd);
+        sink.link(href);
+        sink.text(show);
+    }
+
+    protected String getShow(GraphDescriptor gd) {
+        return gd.getLayout().toString().toLowerCase();
+    }
+
+    protected String getHref(GraphDescriptor gd) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(graphsDir);
+        sb.append("/");
+        sb.append(gd.getCategory());
+        sb.append("/");
+        sb.append(gd.getLabel());
+        sb.append(".");
+        sb.append(gd.getOutputFormat());
+        return sb.toString();
     }
 
     protected void doHead(Sink sink) {
