@@ -1,6 +1,7 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,7 +46,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gd = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        List<Category> categories = helper.getDefaultCategories(gd);
+        categories = Helper.isEmpty(categories) ? new ArrayList<Category>() : categories;
         helper.categories(mc, gd, categories);
         doHead(sink);
         doBody(sink, categories);

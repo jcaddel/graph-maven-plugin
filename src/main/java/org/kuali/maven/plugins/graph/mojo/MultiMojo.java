@@ -16,6 +16,7 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.pojo.Category;
@@ -76,7 +77,8 @@ public class MultiMojo extends BaseGraphMojo {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        helper.categories(mc, gc, helper.getDefaultCategories(gc));
+        categories = Helper.isEmpty(categories) ? new ArrayList<Category>() : categories;
+        helper.categories(mc, gc, categories);
     }
 
     public File getOutputDir() {

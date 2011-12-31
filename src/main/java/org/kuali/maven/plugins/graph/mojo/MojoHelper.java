@@ -70,9 +70,12 @@ public class MojoHelper {
             logger.info("Skipping execution");
             return;
         }
-        if (Helper.isEmpty(categories)) {
+        if (Helper.isEmpty(categories) && !mc.isGenerateDefaultGraphs()) {
             logger.info("No categories");
             return;
+        }
+        if (mc.isGenerateDefaultGraphs()) {
+            categories.addAll(0, getDefaultCategories(gc));
         }
         for (Category category : categories) {
             for (Group group : category.getGroups()) {
