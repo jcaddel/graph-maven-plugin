@@ -15,6 +15,10 @@ import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
+ * <p>
+ * Generate dependency graphs as a report during Maven site generation.
+ * </p>
+ *
  * @goal report
  * @requiresDependencyResolution compile|test|runtime
  */
@@ -23,9 +27,11 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     private static final String FS = System.getProperty("file.separator");
 
     /**
+     * <p>
      * Output folder where the main page of the report will be generated. Note that this parameter is only relevant if
      * the goal is run directly from the command line or from the default lifecycle. If the goal is run indirectly as
      * part of site generation, the output directory configured in the Maven Site Plugin will be used instead.
+     * </p>
      *
      * @parameter expression="${project.reporting.outputDirectory}"
      * @required

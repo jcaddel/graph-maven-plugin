@@ -27,7 +27,17 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * Controls how filtering is applied to the tree. Valid options are HIDE, PATH.
+     * Controls how filtering is applied to the tree. Valid options are <code>HIDE</code>, <code>PATH</code>
+     * </p>
+     *
+     * <p>
+     * <code>HIDE</code> prunes the tree from the top down. The dependency tree is traversed and any node that does not
+     * match the filter criteria is removed (along with its entire sub-tree) from the graph.
+     * </p>
+     *
+     * <p>
+     * <code>PATH</code> searches the tree for any nodes that match the filter criteria. All matching nodes are
+     * displayed and all nodes in the path back to the root from all matching nodes are displayed as well.
      * </p>
      *
      * @parameter expression="${graph.filterType}" default-value="HIDE"
