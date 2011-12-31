@@ -16,7 +16,7 @@ import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
  * <p>
- * Generate dependency graphs as a report during Maven site generation.
+ * Generate a set of common dependency graphs and a report linking to them during Maven site generation.
  * </p>
  *
  * @goal report
