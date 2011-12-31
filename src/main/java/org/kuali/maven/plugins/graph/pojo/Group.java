@@ -2,18 +2,32 @@ package org.kuali.maven.plugins.graph.pojo;
 
 import java.util.List;
 
-public class Row {
+public class Group {
     Category category;
-    String label;
+    String name;
     String description;
     List<GraphDescriptor> descriptors;
 
-    public Category getCategory() {
-        return category;
+    public Group() {
+        this(null);
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public Group(String name) {
+        this(name, null);
+    }
+
+    public Group(String name, String description) {
+        super();
+        this.name = name;
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String label) {
+        this.name = label;
     }
 
     public String getDescription() {
@@ -32,12 +46,11 @@ public class Row {
         this.descriptors = descriptors;
     }
 
-    public String getLabel() {
-        return label;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setCategory(Category category) {
+        this.category = category;
     }
-
 }

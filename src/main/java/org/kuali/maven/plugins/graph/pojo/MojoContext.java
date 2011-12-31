@@ -52,7 +52,7 @@ public class MojoContext {
 
     private File outputDir;
 
-    private boolean useDefaultDescriptors;
+    private boolean generateDefaultGraphs;
 
     private DependencyNode mavenTree;
 
@@ -136,12 +136,12 @@ public class MojoContext {
         this.outputDir = dir;
     }
 
-    public boolean isUseDefaultDescriptors() {
-        return useDefaultDescriptors;
+    public boolean isGenerateDefaultGraphs() {
+        return generateDefaultGraphs;
     }
 
-    public void setUseDefaultDescriptors(boolean useDefaultDescriptors) {
-        this.useDefaultDescriptors = useDefaultDescriptors;
+    public void setGenerateDefaultGraphs(boolean useDefaultDescriptors) {
+        this.generateDefaultGraphs = useDefaultDescriptors;
     }
 
     public DependencyNode getMavenTree() {

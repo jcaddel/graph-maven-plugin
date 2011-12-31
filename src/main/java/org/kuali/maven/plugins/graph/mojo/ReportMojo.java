@@ -1,14 +1,15 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
+import org.kuali.maven.plugins.graph.pojo.Category;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
+import org.kuali.maven.plugins.graph.pojo.Group;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.util.Helper;
 
@@ -23,7 +24,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     /**
      * Output folder where the main page of the report will be generated. Note that this parameter is only relevant if
      * the goal is run directly from the command line or from the default lifecycle. If the goal is run indirectly as
-     * part of a site generation, the output directory configured in the Maven Site Plugin will be used instead.
+     * part of site generation, the output directory configured in the Maven Site Plugin will be used instead.
      *
      * @parameter expression="${project.reporting.outputDirectory}"
      * @required
@@ -31,86 +32,85 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     private File reportOutputDirectory;
 
     /**
-     * Path relative to the output folder where images are created.
+     * Directory inside the output folder where graphs are created.
      *
-     * @parameter expression="${graph.imagesPath}" default-value="graphs"
+     * @parameter expression="${graph.subDirectory}" default-value="graph"
      * @required
      */
-    private String graphsDir;
+    private String subDirectory;
 
     @Override
     public void generate(Sink sink, Locale locale) throws MavenReportException {
-        setOutputDir(new File(reportOutputDirectory + FS + graphsDir));
+        setOutputDir(new File(reportOutputDirectory + FS + subDirectory));
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
-        GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
+        GraphDescriptor gd = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        List<GraphDescriptor> executedDescriptors = helper.execute(mc, gc, descriptors);
-        List<GraphDescriptor> defaultDescriptors = getDescriptors(executedDescriptors, true);
-        List<GraphDescriptor> otherDescriptors = getDescriptors(executedDescriptors, false);
+        List<Category> categories = helper.getDefaultCategories(gd);
+        helper.categories(mc, gd, helper.getDefaultCategories(gd));
         doHead(sink);
-        doBody(sink, defaultDescriptors, otherDescriptors);
+        doBody(sink, categories);
         sink.flush();
         sink.close();
     }
 
-    protected List<GraphDescriptor> getDescriptors(List<GraphDescriptor> gds, Boolean isDefault) {
-        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
-        for (GraphDescriptor descriptor : gds) {
-            if (isDefault.equals(descriptor.getDefaultDescriptor())) {
-                descriptors.add(descriptor);
-            }
-        }
-        return descriptors;
-    }
-
-    protected void doBody(Sink sink, List<GraphDescriptor> defaults, List<GraphDescriptor> other) {
+    protected void doBody(Sink sink, List<Category> categories) {
         sink.body();
         sink.section1();
         sink.sectionTitle1();
         sink.text("Project Dependency Graphs");
         sink.sectionTitle1_();
-        doDefaults(sink, defaults);
+        for (Category category : categories) {
+            doCategory(sink, category);
+        }
         sink.section1_();
         sink.body_();
     }
 
-    protected void doDefaults(Sink sink, List<GraphDescriptor> descriptors) {
+    protected void doCategory(Sink sink, Category category) {
         sink.section2();
         sink.sectionTitle2();
-        sink.text("direct");
+        sink.text(category.getName());
         sink.sectionTitle2_();
-        for (GraphDescriptor d : descriptors) {
-            sink.list();
-            sink.listItem();
-            doLink(sink, d);
-            sink.link_();
-            sink.listItem_();
-            sink.list_();
+        sink.text(category.getDescription());
+        for (Group group : category.getGroups()) {
+            doGroup(sink, group);
         }
         sink.section2_();
     }
 
+    protected void doGroup(Sink sink, Group group) {
+        sink.section3();
+        sink.sectionTitle3();
+        sink.text(group.getName());
+        sink.sectionTitle3_();
+        sink.text(group.getDescription());
+        sink.list();
+        sink.listItem();
+        for (GraphDescriptor gd : group.getDescriptors()) {
+            doDescriptor(sink, gd);
+        }
+        sink.listItem_();
+        sink.list_();
+        sink.section3_();
+    }
+
+    protected void doDescriptor(Sink sink, GraphDescriptor gd) {
+        doLink(sink, gd);
+        sink.text(",");
+        sink.nonBreakingSpace();
+    }
+
     protected void doLink(Sink sink, GraphDescriptor gd) {
-        String href = getHref(gd);
+        MojoHelper helper = new MojoHelper();
+        String href = subDirectory + "/" + helper.getRelativePath(gd);
         String show = getShow(gd);
         sink.link(href);
         sink.text(show);
+        sink.link_();
     }
 
     protected String getShow(GraphDescriptor gd) {
         return gd.getLayout().toString().toLowerCase();
-    }
-
-    protected String getHref(GraphDescriptor gd) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(graphsDir);
-        sb.append("/");
-        sb.append(gd.getCategory());
-        sb.append("/");
-        sb.append(gd.getLabel());
-        sb.append(".");
-        sb.append(gd.getOutputFormat());
-        return sb.toString();
     }
 
     protected void doHead(Sink sink) {
@@ -161,12 +161,12 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         this.reportOutputDirectory = reportOutputDirectory;
     }
 
-    public String getGraphsDir() {
-        return graphsDir;
+    public String getSubDirectory() {
+        return subDirectory;
     }
 
-    public void setGraphsDir(String imagesPath) {
-        this.graphsDir = imagesPath;
+    public void setSubDirectory(String imagesPath) {
+        this.subDirectory = imagesPath;
     }
 
 }

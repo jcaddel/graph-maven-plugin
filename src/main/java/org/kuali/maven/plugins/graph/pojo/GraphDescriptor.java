@@ -39,7 +39,6 @@ public class GraphDescriptor {
     Boolean executeDot;
     Boolean ignoreDotFailure;
     Boolean skipEmptyGraphs;
-    Boolean defaultDescriptor;
     Integer depth;
     Scope scope;
     File file;
@@ -47,10 +46,10 @@ public class GraphDescriptor {
     File dotFile;
     String outputFormat;
     Layout layout;
-    String label;
-    String category;
     FilterType filterType;
     String description;
+    String name;
+    Group group;
 
     public String getExecutable() {
         return executable;
@@ -212,22 +211,6 @@ public class GraphDescriptor {
         this.layout = layout;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public Boolean getShowDuplicates() {
         return showDuplicates;
     }
@@ -268,14 +251,6 @@ public class GraphDescriptor {
         this.filterType = filterType;
     }
 
-    public Boolean getDefaultDescriptor() {
-        return defaultDescriptor;
-    }
-
-    public void setDefaultDescriptor(Boolean defaultDescriptor) {
-        this.defaultDescriptor = defaultDescriptor;
-    }
-
     public Scope getScope() {
         return scope;
     }
@@ -290,6 +265,22 @@ public class GraphDescriptor {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
 }

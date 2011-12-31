@@ -24,11 +24,13 @@ import org.kuali.maven.plugins.graph.filter.MavenContextFilterWrapper;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.filter.NodeFilterChain;
 import org.kuali.maven.plugins.graph.filter.ReverseNodeFilter;
+import org.kuali.maven.plugins.graph.pojo.Category;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
+import org.kuali.maven.plugins.graph.pojo.Group;
 import org.kuali.maven.plugins.graph.pojo.Layout;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
@@ -64,19 +66,36 @@ public class MojoHelper {
         return new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
     }
 
+    public void categories(MojoContext mc, GraphDescriptor gc, List<Category> categories) {
+        if (mc.isSkip()) {
+            logger.info("Skipping execution");
+            return;
+        }
+        if (Helper.isEmpty(categories)) {
+            logger.info("No categories");
+            return;
+        }
+        for (Category category : categories) {
+            for (Group group : category.getGroups()) {
+                fillInDescriptors(gc, group.getDescriptors(), mc.getOutputDir());
+                List<GraphDescriptor> executed = execute(mc, gc, group.getDescriptors());
+                group.setDescriptors(executed);
+            }
+        }
+    }
+
     public List<GraphDescriptor> execute(MojoContext mc, GraphDescriptor gc, List<GraphDescriptor> descriptors) {
         try {
             if (mc.isSkip()) {
                 logger.info("Skipping execution");
                 return null;
             }
-            List<GraphDescriptor> descriptorsToUse = getDescriptorsToUse(mc, gc, descriptors);
-            if (Helper.isEmpty(descriptorsToUse)) {
+            if (Helper.isEmpty(descriptors)) {
                 logger.info("No descriptors");
                 return null;
             }
             List<GraphDescriptor> executedGraphs = new ArrayList<GraphDescriptor>();
-            for (GraphDescriptor descriptor : descriptorsToUse) {
+            for (GraphDescriptor descriptor : descriptors) {
                 GraphDescriptor executed = execute(mc, descriptor);
                 if (executed != null) {
                     executedGraphs.add(executed);
@@ -88,30 +107,13 @@ public class MojoHelper {
         }
     }
 
-    protected List<GraphDescriptor> getDescriptorsToUse(MojoContext mc, GraphDescriptor gd, List<GraphDescriptor> gds) {
-        List<GraphDescriptor> descriptorsToUse = new ArrayList<GraphDescriptor>();
-        if (gds == null) {
-            gds = new ArrayList<GraphDescriptor>();
-        }
-        if (mc.isUseDefaultDescriptors()) {
-            descriptorsToUse.addAll(getDefaultDescriptors(gd));
-        }
-        Helper.addAll(descriptorsToUse, gds);
-        logger.debug("descriptor count={}", descriptorsToUse.size());
-        fillInDescriptors(descriptorsToUse, gd, mc.getOutputDir());
-        return descriptorsToUse;
-    }
-
-    protected void fillInDescriptors(List<GraphDescriptor> gds, GraphDescriptor gd, File outputDir) {
+    protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir) {
         logger.debug("global type={}", gd.getOutputFormat());
         Counter counter = new Counter(1);
         for (GraphDescriptor descriptor : gds) {
             Helper.copyPropertiesIfNull(descriptor, gd);
-            if (descriptor.getCategory() == null) {
-                descriptor.setCategory("other");
-            }
-            if (descriptor.getLabel() == null) {
-                descriptor.setLabel(counter.increment() + "");
+            if (descriptor.getName() == null) {
+                descriptor.setName(counter.increment() + "");
             }
             if (descriptor.getTransitive() == null) {
                 descriptor.setTransitive(true);
@@ -119,54 +121,79 @@ public class MojoHelper {
             if (descriptor.getLayout() == null) {
                 descriptor.setLayout(Layout.LINKED);
             }
-            String filename = getFilename(outputDir, descriptor);
-            File file = new File(filename);
+            File file = new File(outputDir, getRelativePath(descriptor));
             descriptor.setFile(file);
-            logger.debug(file.getPath());
         }
     }
 
-    protected String getFilename(File outputDir, GraphDescriptor gc) {
-        String category = gc.getCategory();
-        String label = gc.getLabel();
-        String extension = gc.getOutputFormat();
-        return outputDir.getAbsolutePath() + FS + category + FS + label + "." + extension;
+    protected List<Category> getDefaultCategories(GraphDescriptor gd) {
+        List<Category> categories = new ArrayList<Category>();
+        categories.add(getCategory(gd, false));
+        categories.add(getCategory(gd, true));
+        return categories;
     }
 
-    protected List<GraphDescriptor> getDefaultDescriptors(GraphDescriptor gc) {
-        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
-        descriptors.addAll(getGraphDescriptors(false, gc));
-        descriptors.addAll(getGraphDescriptors(true, gc));
-        return descriptors;
+    protected String getRelativePath(GraphDescriptor gd) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(gd.getGroup().getCategory().getName());
+        sb.append("/");
+        sb.append(gd.getGroup().getName());
+        sb.append("/");
+        sb.append(gd.getName());
+        sb.append(".");
+        sb.append(gd.getOutputFormat());
+        return sb.toString();
     }
 
-    protected List<GraphDescriptor> getGraphDescriptors(boolean transitive, GraphDescriptor descriptor) {
-        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
-        add(descriptors, descriptor, null, null, transitive);
+    protected Category getCategory(GraphDescriptor gd, boolean transitive) {
+        String name = getTransitiveLabel(transitive);
+        Category c = new Category(name);
+        c.setGroups(getGroups(gd, transitive));
+        for (Group group : c.getGroups()) {
+            group.setCategory(c);
+        }
+        return c;
+    }
+
+    protected String getTransitiveLabel(boolean transitive) {
+        return transitive ? "transitive" : "direct";
+    }
+
+    protected String getScopeLabel(Scope scope) {
+        return scope == null ? "all" : scope.toString();
+    }
+
+    protected List<Group> getGroups(GraphDescriptor gd, boolean transitive) {
+        List<Group> groups = new ArrayList<Group>();
+        Group any = new Group(getScopeLabel(null));
+        any.setDescriptors(getDescriptors(gd, any, transitive, null));
+        groups.add(any);
         for (Scope scope : Scope.values()) {
-            String show = scope.toString() + ":*";
-            add(descriptors, descriptor, scope, show, transitive);
+            Group group = new Group(getScopeLabel(scope));
+            group.setDescriptors(getDescriptors(gd, group, transitive, scope));
+            groups.add(group);
+        }
+        return groups;
+    }
+
+    protected List<GraphDescriptor> getDescriptors(GraphDescriptor gd, Group group, boolean transitive, Scope scope) {
+        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
+        for (Layout layout : Layout.values()) {
+            descriptors.add(getDescriptor(gd, group, transitive, scope, layout));
         }
         return descriptors;
     }
 
-    protected void add(List<GraphDescriptor> gds, GraphDescriptor gd, Scope scope, String show, boolean transitive) {
-        GraphDescriptor one = Helper.copyProperties(GraphDescriptor.class, gd);
-        one.setShow(show);
-        one.setTransitive(transitive);
-        one.setLabel(getLabel(scope, Layout.LINKED));
-        one.setLayout(Layout.LINKED);
-        one.setCategory(transitive ? "transitive" : "direct");
-        one.setDefaultDescriptor(true);
-        one.setScope(scope);
-        one.setKeepDotFile(true);
-
-        GraphDescriptor two = Helper.copyProperties(GraphDescriptor.class, one);
-        two.setLayout(Layout.FLAT);
-        two.setLabel(getLabel(scope, Layout.FLAT));
-
-        gds.add(one);
-        gds.add(two);
+    protected GraphDescriptor getDescriptor(GraphDescriptor gd, Group group, boolean transitive, Scope scope,
+            Layout layout) {
+        GraphDescriptor descriptor = Helper.copyProperties(GraphDescriptor.class, gd);
+        descriptor.setShow(scope == null ? "*" : scope.toString());
+        descriptor.setTransitive(transitive);
+        descriptor.setName(layout.toString().toLowerCase());
+        descriptor.setLayout(layout);
+        descriptor.setKeepDotFile(true);
+        descriptor.setGroup(group);
+        return descriptor;
     }
 
     protected String getLabel(Scope scope, Layout layout) {
@@ -174,21 +201,6 @@ public class MojoHelper {
         sb.append(scope == null ? "dependencies" : scope.toString());
         sb.append(layout == Layout.LINKED ? "" : "-flat");
         return sb.toString();
-    }
-
-    protected GraphDescriptor getGraphDescriptor(Scope scope, Boolean transitive, Layout layout, GraphDescriptor context) {
-        GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, context);
-        gc.setTransitive(transitive);
-        gc.setCategory(transitive ? "transitive" : "direct");
-        String label = scope == null ? "all" : scope.toString();
-        String show = scope == null ? null : scope.toString();
-        if (Layout.LINKED != layout) {
-            label = label + "-" + layout.toString().toLowerCase();
-        }
-        gc.setShow(show);
-        gc.setLabel(label);
-        gc.setLayout(layout);
-        return gc;
     }
 
     public GraphDescriptor execute(MojoContext mc, GraphDescriptor gc) {

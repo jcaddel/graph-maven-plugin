@@ -18,12 +18,15 @@ package org.kuali.maven.plugins.graph.mojo;
 import java.io.File;
 import java.util.List;
 
+import org.kuali.maven.plugins.graph.pojo.Category;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
+ * <p>
  * Convenience mojo for generating multiple graphs.
+ * </p>
  *
  * @goal multi
  * @requiresDependencyResolution compile|test|runtime
@@ -32,12 +35,12 @@ public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * List of graph descriptors.
+     * List of graphs to generate organized into categories and groups.
      * </p>
      *
      * @parameter
      */
-    List<GraphDescriptor> descriptors;
+    List<Category> categories;
 
     /**
      * <p>
@@ -61,28 +64,19 @@ public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * If true, the default set of graphs is generated in addition to those provided in the <code>descriptors</code>
-     * list.
+     * If true, the default set of graphs is generated in addition to those provided in <code>categories</code> list.
      * </p>
      *
-     * @parameter expression="${graph.useDefaultDescriptors}" default-value="true"
+     * @parameter expression="${graph.generateDefaultGraphs}" default-value="true"
      */
-    boolean useDefaultDescriptors;
+    boolean generateDefaultGraphs;
 
     @Override
     public void execute() {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        helper.execute(mc, gc, descriptors);
-    }
-
-    public List<GraphDescriptor> getDescriptors() {
-        return descriptors;
-    }
-
-    public void setDescriptors(List<GraphDescriptor> descriptors) {
-        this.descriptors = descriptors;
+        helper.categories(mc, gc, helper.getDefaultCategories(gc));
     }
 
     public File getOutputDir() {
@@ -93,12 +87,12 @@ public class MultiMojo extends BaseGraphMojo {
         this.outputDir = dir;
     }
 
-    public boolean isUseDefaultDescriptors() {
-        return useDefaultDescriptors;
+    public boolean isGenerateDefaultGraphs() {
+        return generateDefaultGraphs;
     }
 
-    public void setUseDefaultDescriptors(boolean useDefaultDescriptors) {
-        this.useDefaultDescriptors = useDefaultDescriptors;
+    public void setGenerateDefaultGraphs(boolean generateDefaultGraphs) {
+        this.generateDefaultGraphs = generateDefaultGraphs;
     }
 
     public String getOutputFormat() {
@@ -107,6 +101,14 @@ public class MultiMojo extends BaseGraphMojo {
 
     public void setOutputFormat(String type) {
         this.outputFormat = type;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
 }
