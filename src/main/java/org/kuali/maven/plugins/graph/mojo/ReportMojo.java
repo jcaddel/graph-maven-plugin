@@ -32,14 +32,14 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     /**
      * Path relative to the output folder where images are created.
      *
-     * @parameter expression="${graph.imagesPath}" default-value="images/dependencies"
+     * @parameter expression="${graph.imagesPath}" default-value="graphs"
      * @required
      */
-    private String imagesPath;
+    private String graphsDir;
 
     @Override
     public void generate(Sink sink, Locale locale) throws MavenReportException {
-        setOutputDir(new File(reportOutputDirectory + FS + imagesPath));
+        setOutputDir(new File(reportOutputDirectory + FS + graphsDir));
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
@@ -69,7 +69,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         for (GraphDescriptor d : descriptors) {
             sink.list();
             sink.listItem();
-            sink.link(imagesPath + "/" + d.getCategory() + "/" + d.getLabel() + "." + d.getOutputFormat());
+            sink.link(graphsDir + "/" + d.getCategory() + "/" + d.getLabel() + "." + d.getOutputFormat());
             sink.text(d.getLabel());
             sink.link_();
             sink.listItem_();
@@ -126,12 +126,12 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         this.reportOutputDirectory = reportOutputDirectory;
     }
 
-    public String getImagesPath() {
-        return imagesPath;
+    public String getGraphsDir() {
+        return graphsDir;
     }
 
-    public void setImagesPath(String imagesPath) {
-        this.imagesPath = imagesPath;
+    public void setGraphsDir(String imagesPath) {
+        this.graphsDir = imagesPath;
     }
 
 }
