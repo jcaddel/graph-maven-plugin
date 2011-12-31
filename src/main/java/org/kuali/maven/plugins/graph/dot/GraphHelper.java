@@ -69,7 +69,7 @@ public class GraphHelper {
         addLabel("show", context.getShow(), labels);
         addLabel("hide", context.getHide(), labels);
         if (context.getFilterType() != FilterType.HIDE) {
-            addLabel("filter type", context.getFilterType().toString(), labels);
+            addLabel("filter", context.getFilterType().toString(), labels);
         }
         if (!context.getTransitive()) {
             addLabel("transitive", context.getTransitive() + "", labels);
