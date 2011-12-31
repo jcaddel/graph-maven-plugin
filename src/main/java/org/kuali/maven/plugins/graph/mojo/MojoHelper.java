@@ -64,21 +64,25 @@ public class MojoHelper {
         return new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
     }
 
-    public void execute(MojoContext mc, GraphDescriptor gc, List<GraphDescriptor> descriptors) {
+    public List<GraphDescriptor> execute(MojoContext mc, GraphDescriptor gc, List<GraphDescriptor> descriptors) {
         try {
             if (mc.isSkip()) {
                 logger.info("Skipping execution");
-                return;
+                return null;
             }
             List<GraphDescriptor> descriptorsToUse = getDescriptorsToUse(mc, gc, descriptors);
             if (Helper.isEmpty(descriptorsToUse)) {
                 logger.info("No descriptors");
-                return;
+                return null;
             }
-
+            List<GraphDescriptor> executedGraphs = new ArrayList<GraphDescriptor>();
             for (GraphDescriptor descriptor : descriptorsToUse) {
-                execute(mc, descriptor);
+                GraphDescriptor executed = execute(mc, descriptor);
+                if (executed != null) {
+                    executedGraphs.add(executed);
+                }
             }
+            return executedGraphs;
         } catch (Exception e) {
             throw new GraphException(e);
         }
@@ -129,81 +133,46 @@ public class MojoHelper {
     }
 
     protected List<GraphDescriptor> getDefaultDescriptors(GraphDescriptor gc) {
-        List<GraphDescriptor> flat = new ArrayList<GraphDescriptor>();
-        flat.addAll(getGraphDescriptors(null, gc));
+        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
+        descriptors.addAll(getGraphDescriptors(false, gc));
+        descriptors.addAll(getGraphDescriptors(true, gc));
+        return descriptors;
+    }
+
+    protected List<GraphDescriptor> getGraphDescriptors(boolean transitive, GraphDescriptor descriptor) {
+        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
+        add(descriptors, descriptor, null, "*:*", transitive);
         for (Scope scope : Scope.values()) {
-            flat.addAll(getGraphDescriptors(scope, gc));
+            String show = scope.toString() + ":*";
+            add(descriptors, descriptor, scope, show, transitive);
         }
-        List<GraphDescriptor> linked = new ArrayList<GraphDescriptor>();
-        for (GraphDescriptor descriptor : flat) {
-            linked.add(Helper.copyProperties(GraphDescriptor.class, descriptor));
-            descriptor.setLabel(descriptor.getLabel() + "-flat");
-        }
-        for (GraphDescriptor descriptor : linked) {
-            descriptor.setLayout(Layout.LINKED);
-        }
-        List<GraphDescriptor> both = new ArrayList<GraphDescriptor>(flat);
-        both.addAll(linked);
-        return both;
+        return descriptors;
     }
 
-    protected String getFilter(Scope scope) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(scope == null ? "*" : scope.toString());
-        sb.append(":");
-        sb.append("*");
-        return sb.toString();
-    }
-
-    protected String getLabel(Boolean optional) {
-        if (optional == null) {
-            return "";
-        } else {
-            return optional ? "optional" : "required";
-        }
-    }
-
-    protected List<GraphDescriptor> getGraphDescriptors(Scope scope, GraphDescriptor context) {
-        List<GraphDescriptor> contexts = new ArrayList<GraphDescriptor>();
-
-        // optional or required
-        List<GraphDescriptor> list1 = getGraphDescriptors(scope, null, context);
-
-        // optional only
-        // List<GraphDescriptor> list2 = getGraphDescriptors(scope, true, context);
-
-        // required only
-        // List<GraphDescriptor> list3 = getGraphDescriptors(scope, false, context);
-
-        // Add them to the list
-        contexts.addAll(list1);
-        // contexts.addAll(list2);
-        // contexts.addAll(list3);
-        return contexts;
-    }
-
-    protected List<GraphDescriptor> getGraphDescriptors(Scope scope, Boolean optional, GraphDescriptor context) {
-        List<GraphDescriptor> contexts = new ArrayList<GraphDescriptor>();
-        String show = getFilter(scope);
-
-        // transitive
-        contexts.add(getGraphDescriptor(context, scope, show, true));
-
-        // non-transitive
-        contexts.add(getGraphDescriptor(context, scope, show, false));
-        return contexts;
-    }
-
-    protected GraphDescriptor getGraphDescriptor(GraphDescriptor context, Scope scope, String show, boolean transitive) {
-        String label = scope == null ? "dependencies" : scope.toString();
-        GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, context);
-        gc.setShow(show);
-        gc.setLabel(label);
-        gc.setTransitive(transitive);
-        gc.setLayout(Layout.FLAT);
+    protected void add(List<GraphDescriptor> descriptors, GraphDescriptor gd, Scope scope, String show,
+            boolean transitive) {
+        String label = getLabel(scope, Layout.LINKED);
+        GraphDescriptor one = Helper.copyProperties(GraphDescriptor.class, gd);
+        one.setShow(show);
+        one.setLabel(label);
+        one.setTransitive(transitive);
+        one.setLayout(Layout.LINKED);
         String category = transitive ? "transitive" : "direct";
-        gc.setCategory(category);
-        return gc;
+        one.setCategory(category);
+
+        GraphDescriptor two = Helper.copyProperties(GraphDescriptor.class, one);
+        two.setLayout(Layout.FLAT);
+        two.setLabel(getLabel(scope, Layout.FLAT));
+
+        descriptors.add(one);
+        descriptors.add(two);
+    }
+
+    protected String getLabel(Scope scope, Layout layout) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(scope == null ? "dependencies" : scope.toString());
+        sb.append(layout == Layout.LINKED ? "" : "-flat");
+        return sb.toString();
     }
 
     protected GraphDescriptor getGraphDescriptor(Scope scope, Boolean transitive, Layout layout, GraphDescriptor context) {
@@ -221,24 +190,25 @@ public class MojoHelper {
         return gc;
     }
 
-    public void execute(MojoContext mc, GraphDescriptor gc) {
+    public GraphDescriptor execute(MojoContext mc, GraphDescriptor gc) {
         if (mc.isSkip()) {
             logger.info("Skipping execution");
-            return;
+            return null;
         }
 
         try {
             Node<MavenContext> tree = getProcessedTree(mc, gc);
             Graph graph = getGraph(tree, mc, gc);
             if (isEmptyGraph(graph) && Boolean.TRUE.equals(gc.getSkipEmptyGraphs())) {
-                logger.info("Skipping empty graph");
-                return;
+                logger.debug("Skipping empty graph");
+                return null;
             }
             String content = getDotFileContent(graph);
             Dot dot = new Dot();
             dot.fillInContext(gc, content);
             logger.info(gc.getFile().getPath());
             dot.execute(gc);
+            return gc;
         } catch (Exception e) {
             throw new GraphException(e);
         }

@@ -1,6 +1,7 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.maven.reporting.MavenReport;
@@ -42,7 +43,47 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        helper.execute(mc, gc, descriptors);
+        List<GraphDescriptor> executedDescriptors = helper.execute(mc, gc, descriptors);
+        doHead(sink);
+        doBody(sink, executedDescriptors);
+        sink.flush();
+        sink.close();
+    }
+
+    protected void doBody(Sink sink, List<GraphDescriptor> descriptors) {
+        sink.body();
+        sink.section1();
+        sink.sectionTitle1();
+        sink.text("Project Dependency Graphs");
+        sink.sectionTitle1_();
+        doSection2(sink, descriptors);
+        sink.section1_();
+        sink.body_();
+    }
+
+    protected void doSection2(Sink sink, List<GraphDescriptor> descriptors) {
+        sink.section2();
+        sink.sectionTitle2();
+        sink.text("direct");
+        sink.sectionTitle2_();
+        for (GraphDescriptor d : descriptors) {
+            sink.list();
+            sink.listItem();
+            sink.link(imagesPath + "/" + d.getCategory() + "/" + d.getLabel() + "." + d.getOutputFormat());
+            sink.text(d.getLabel());
+            sink.link_();
+            sink.listItem_();
+            sink.list_();
+        }
+        sink.section2_();
+    }
+
+    protected void doHead(Sink sink) {
+        sink.head();
+        sink.title();
+        sink.text("Project Dependency Graphs");
+        sink.title_();
+        sink.head_();
     }
 
     @Override
@@ -52,7 +93,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
 
     @Override
     public String getCategoryName() {
-        return CATEGORY_PROJECT_REPORTS;
+        return CATEGORY_PROJECT_INFORMATION;
     }
 
     @Override
@@ -62,7 +103,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
 
     @Override
     public String getDescription(Locale locale) {
-        return "Maven dependency tree graphs";
+        return "This document provides links to graphs that make it easier to visualize the project's dependencies";
     }
 
     @Override
