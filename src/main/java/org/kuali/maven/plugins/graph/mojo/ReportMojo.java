@@ -28,9 +28,12 @@ public class ReportMojo extends MultiMojo implements MavenReport {
 
     /**
      * <p>
-     * Output folder where the main page of the report will be generated. Note that this parameter is only relevant if
-     * the goal is run directly from the command line or from the default lifecycle. If the goal is run indirectly as
-     * part of site generation, the output directory configured in the Maven Site Plugin will be used instead.
+     * Output folder where the main page of the report will be generated.
+     * </p>
+     * <p>
+     * Note that this parameter is only relevant if the goal is run directly from the command line or from the default
+     * lifecycle. If the goal is run indirectly as part of site generation, the output directory configured in the Maven
+     * Site Plugin will be used instead.
      * </p>
      *
      * @parameter expression="${project.reporting.outputDirectory}"
@@ -39,7 +42,9 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     private File reportOutputDirectory;
 
     /**
-     * Directory inside the output folder where graphs are created.
+     * <p>
+     * Sub-directory underneath the output folder where graphs are created.
+     * </p>
      *
      * @parameter expression="${graph.subDirectory}" default-value="graph"
      * @required
