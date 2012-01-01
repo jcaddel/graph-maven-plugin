@@ -111,7 +111,7 @@ public class MojoHelper {
     }
 
     protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir, Row group) {
-        gd.setGroup(group);
+        gd.setRow(group);
         logger.debug("default output format={}", gd.getOutputFormat());
         Counter counter = new Counter(1);
         for (GraphDescriptor descriptor : gds) {
@@ -139,9 +139,9 @@ public class MojoHelper {
 
     protected String getRelativePath(GraphDescriptor gd) {
         StringBuilder sb = new StringBuilder();
-        sb.append(gd.getGroup().getCategory().getName());
+        sb.append(gd.getRow().getCategory().getName());
         sb.append("/");
-        sb.append(gd.getGroup().getName());
+        sb.append(gd.getRow().getName());
         sb.append("/");
         sb.append(gd.getName());
         sb.append(".");
@@ -228,7 +228,7 @@ public class MojoHelper {
         descriptor.setTransitive(transitive);
         descriptor.setName(layout.toString().toLowerCase());
         descriptor.setLayout(layout);
-        descriptor.setGroup(group);
+        descriptor.setRow(group);
         return descriptor;
     }
 
