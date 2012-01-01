@@ -27,8 +27,8 @@ import org.kuali.maven.plugins.graph.dot.html.Table;
 import org.kuali.maven.plugins.graph.dot.html.TableCell;
 import org.kuali.maven.plugins.graph.dot.html.TableRow;
 import org.kuali.maven.plugins.graph.pojo.Direction;
-import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Display;
+import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
@@ -69,7 +69,7 @@ public class GraphHelper {
         addLabel("show", context.getShow(), labels);
         addLabel("hide", context.getHide(), labels);
         if (context.getDisplay() != Display.TREE) {
-            addLabel("show", context.getDisplay().toString(), labels);
+            addLabel("display", context.getDisplay().toString(), labels);
         }
         if (!context.getTransitive()) {
             addLabel("transitive", context.getTransitive() + "", labels);
