@@ -46,7 +46,7 @@ public class GraphDescriptor {
     File dotFile;
     String outputFormat;
     Layout layout;
-    FilterType filterType;
+    Display filterType;
     String description;
     String name;
     Row row;
@@ -243,11 +243,11 @@ public class GraphDescriptor {
         this.skipEmptyGraphs = skipEmptyGraphs;
     }
 
-    public FilterType getFilterType() {
+    public Display getFilterType() {
         return filterType;
     }
 
-    public void setFilterType(FilterType filterType) {
+    public void setFilterType(Display filterType) {
         this.filterType = filterType;
     }
 

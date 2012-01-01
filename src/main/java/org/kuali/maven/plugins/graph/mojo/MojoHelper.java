@@ -310,7 +310,7 @@ public class MojoHelper {
 
     protected Processor getHideShowProcessor(GraphDescriptor gd) {
         switch (gd.getFilterType()) {
-        case HIDE:
+        case TREE:
             return new HidingProcessor(gd);
         case PATH:
             return new ShowPathsProcessor(gd, false);

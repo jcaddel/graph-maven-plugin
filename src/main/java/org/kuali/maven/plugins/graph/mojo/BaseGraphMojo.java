@@ -16,7 +16,7 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import org.kuali.maven.plugins.graph.pojo.Direction;
-import org.kuali.maven.plugins.graph.pojo.FilterType;
+import org.kuali.maven.plugins.graph.pojo.Display;
 
 /**
  * <p>
@@ -27,22 +27,25 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * Controls how filtering is applied to the tree. Valid options are <code>HIDE</code>, <code>PATH</code>
+     * Controls how filtering is applied to the dependencies. Valid options are <code>TREE</code> and <code>PATH</code>
      * </p>
      *
      * <p>
-     * <code>HIDE</code> prunes the tree from the top down. The dependency tree is traversed and any node that does not
-     * match the filter criteria is removed (along with its entire sub-tree) from the graph.
+     * <code>TREE</code> prunes the dependency tree from the top down. Recursive traversal of transitive dependencies
+     * stops when a dependency does not match the filter criteria. Any further transitive dependencies in that part of
+     * the dependency tree are not displayed.
      * </p>
      *
      * <p>
-     * <code>PATH</code> searches the tree for any nodes that match the filter criteria. All matching nodes are
-     * displayed and all nodes in the path back to the root from all matching nodes are displayed as well.
+     * <code>PATH</code> searches the entire tree for any dependencies matching the filter criteria. All matching
+     * dependencies are displayed. In addition, the dependencies in the path from any matching dependency back to the
+     * top of the dependency tree are displayed. Dependencies in the path from a matching dependency to the top of the
+     * tree are always displayed, even if they do not match the filter criteria themselves.
      * </p>
      *
-     * @parameter expression="${graph.filterType}" default-value="HIDE"
+     * @parameter expression="${graph.display}" default-value="TREE"
      */
-    private FilterType filterType;
+    private Display display;
 
     /**
      * <p>
@@ -251,12 +254,12 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
         this.skipEmptyGraphs = skipEmptyGraphs;
     }
 
-    public FilterType getFilterType() {
-        return filterType;
+    public Display getDisplay() {
+        return display;
     }
 
-    public void setFilterType(FilterType filterType) {
-        this.filterType = filterType;
+    public void setDisplay(Display filterType) {
+        this.display = filterType;
     }
 
 }
