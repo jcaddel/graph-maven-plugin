@@ -30,7 +30,7 @@ import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
-import org.kuali.maven.plugins.graph.pojo.Group;
+import org.kuali.maven.plugins.graph.pojo.Row;
 import org.kuali.maven.plugins.graph.pojo.Layout;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
@@ -78,7 +78,7 @@ public class MojoHelper {
             categories.addAll(0, getDefaultCategories(gc));
         }
         for (Category category : categories) {
-            for (Group group : category.getGroups()) {
+            for (Row group : category.getRows()) {
                 group.setCategory(category);
                 fillInDescriptors(gc, group.getDescriptors(), mc.getOutputDir(), group);
                 List<GraphDescriptor> executed = execute(mc, gc, group.getDescriptors());
@@ -110,7 +110,7 @@ public class MojoHelper {
         }
     }
 
-    protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir, Group group) {
+    protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir, Row group) {
         gd.setGroup(group);
         logger.debug("default output format={}", gd.getOutputFormat());
         Counter counter = new Counter(1);
@@ -153,8 +153,8 @@ public class MojoHelper {
         String name = getTransitiveLabel(transitive);
         Category c = new Category(name);
         c.setDescription(getDescription(transitive));
-        c.setGroups(getGroups(gd, transitive));
-        for (Group group : c.getGroups()) {
+        c.setRows(getGroups(gd, transitive));
+        for (Row group : c.getRows()) {
             group.setCategory(c);
         }
         return c;
@@ -198,14 +198,14 @@ public class MojoHelper {
         return scope == null ? "all" : scope.toString();
     }
 
-    protected List<Group> getGroups(GraphDescriptor gd, boolean transitive) {
-        List<Group> groups = new ArrayList<Group>();
-        Group any = new Group(getScopeLabel(null));
+    protected List<Row> getGroups(GraphDescriptor gd, boolean transitive) {
+        List<Row> groups = new ArrayList<Row>();
+        Row any = new Row(getScopeLabel(null));
         any.setDescriptors(getDescriptors(gd, any, transitive, null));
         any.setDescription(getDescription(null));
         groups.add(any);
         for (Scope scope : Scope.values()) {
-            Group group = new Group(getScopeLabel(scope));
+            Row group = new Row(getScopeLabel(scope));
             group.setDescription(getDescription(scope));
             group.setDescriptors(getDescriptors(gd, group, transitive, scope));
             groups.add(group);
@@ -213,7 +213,7 @@ public class MojoHelper {
         return groups;
     }
 
-    protected List<GraphDescriptor> getDescriptors(GraphDescriptor gd, Group group, boolean transitive, Scope scope) {
+    protected List<GraphDescriptor> getDescriptors(GraphDescriptor gd, Row group, boolean transitive, Scope scope) {
         List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
         for (Layout layout : Layout.values()) {
             descriptors.add(getDescriptor(gd, group, transitive, scope, layout));
@@ -221,7 +221,7 @@ public class MojoHelper {
         return descriptors;
     }
 
-    protected GraphDescriptor getDescriptor(GraphDescriptor gd, Group group, boolean transitive, Scope scope,
+    protected GraphDescriptor getDescriptor(GraphDescriptor gd, Row group, boolean transitive, Scope scope,
             Layout layout) {
         GraphDescriptor descriptor = Helper.copyProperties(GraphDescriptor.class, gd);
         descriptor.setShow(scope == null ? "*" : scope.toString());

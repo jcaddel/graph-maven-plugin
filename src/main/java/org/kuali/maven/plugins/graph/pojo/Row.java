@@ -2,21 +2,21 @@ package org.kuali.maven.plugins.graph.pojo;
 
 import java.util.List;
 
-public class Group {
+public class Row {
     Category category;
     String name;
     String description;
     List<GraphDescriptor> descriptors;
 
-    public Group() {
+    public Row() {
         this(null);
     }
 
-    public Group(String name) {
+    public Row(String name) {
         this(name, null);
     }
 
-    public Group(String name, String description) {
+    public Row(String name, String description) {
         super();
         this.name = name;
         this.description = description;

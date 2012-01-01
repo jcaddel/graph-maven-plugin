@@ -5,7 +5,7 @@ import java.util.List;
 public class Category {
     String name;
     String description;
-    List<Group> groups;
+    List<Row> rows;
 
     public Category() {
         this(null);
@@ -37,11 +37,11 @@ public class Category {
         this.description = description;
     }
 
-    public List<Group> getGroups() {
-        return groups;
+    public List<Row> getRows() {
+        return rows;
     }
 
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
+    public void setRows(List<Row> rows) {
+        this.rows = rows;
     }
 }

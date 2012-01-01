@@ -36,7 +36,7 @@ public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * List of graphs to generate organized into categories and groups.
+     * List of graphs to generate organized into categories and rows.
      * </p>
      *
      * <p>
@@ -48,8 +48,8 @@ public class MultiMojo extends BaseGraphMojo {
      *   &lt;category&gt;
      *     &lt;name&gt;logging&lt;/name&gt;
      *     &lt;description&gt;Dependencies on logging libraries&lt;/description&gt;
-     *     &lt;groups&gt;
-     *       &lt;group&gt;
+     *     &lt;rows&gt;
+     *       &lt;row&gt;
      *         &lt;name&gt;logging&lt;/name&gt;
      *         &lt;description&gt;Dependencies on logging libraries&lt;/description&gt;
      *         &lt;descriptors&gt;
@@ -63,8 +63,8 @@ public class MultiMojo extends BaseGraphMojo {
      *             &lt;name&gt;commons-logging&lt;/name&gt;
      *           &lt;/descriptor&gt;
      *         &lt;/descriptors&gt;
-     *       &lt;/group&gt;
-     *     &lt;/groups&gt;
+     *       &lt;/row&gt;
+     *     &lt;/rows&gt;
      *   &lt;/category&gt;
      * &lt;/categories&gt;
      * </pre>

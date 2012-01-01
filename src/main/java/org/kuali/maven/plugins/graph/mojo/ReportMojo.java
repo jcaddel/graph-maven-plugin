@@ -10,7 +10,7 @@ import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
 import org.kuali.maven.plugins.graph.pojo.Category;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
-import org.kuali.maven.plugins.graph.pojo.Group;
+import org.kuali.maven.plugins.graph.pojo.Row;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.util.Helper;
 
@@ -105,14 +105,14 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         sink.text("Description");
         sink.tableHeaderCell_();
         sink.tableRow_();
-        for (Group group : category.getGroups()) {
+        for (Row group : category.getRows()) {
             doGroup(sink, group);
         }
         sink.table_();
         sink.section2_();
     }
 
-    protected void doGroup(Sink sink, Group group) {
+    protected void doGroup(Sink sink, Row group) {
         if (isEmpty(group)) {
             return;
         }
@@ -217,18 +217,18 @@ public class ReportMojo extends MultiMojo implements MavenReport {
     }
 
     protected boolean isEmpty(Category category) {
-        if (Helper.isEmpty(category.getGroups())) {
+        if (Helper.isEmpty(category.getRows())) {
             return true;
         } else {
-            return isEmptyGroups(category.getGroups());
+            return isEmptyGroups(category.getRows());
         }
     }
 
-    protected boolean isEmptyGroups(List<Group> groups) {
+    protected boolean isEmptyGroups(List<Row> groups) {
         if (Helper.isEmpty(groups)) {
             return true;
         }
-        for (Group group : groups) {
+        for (Row group : groups) {
             if (!isEmpty(group)) {
                 return false;
             }
@@ -236,7 +236,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         return true;
     }
 
-    protected boolean isEmpty(Group group) {
+    protected boolean isEmpty(Row group) {
         return Helper.isEmpty(group.getDescriptors());
     }
 

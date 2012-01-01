@@ -49,7 +49,7 @@ public class GraphDescriptor {
     FilterType filterType;
     String description;
     String name;
-    Group group;
+    Row group;
 
     public String getExecutable() {
         return executable;
@@ -275,11 +275,11 @@ public class GraphDescriptor {
         this.name = name;
     }
 
-    public Group getGroup() {
+    public Row getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(Row group) {
         this.group = group;
     }
 
