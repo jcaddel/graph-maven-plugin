@@ -18,22 +18,22 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
  * @author jeffcaddel
  *
  */
-public class ShowPathsProcessor implements Processor {
+public class PathDisplayProcessor implements Processor {
     public static final boolean DEFAULT_SHOW_SUB_TREES_VALUE = true;
     MojoHelper mh = new MojoHelper();
     TreeHelper helper = new TreeHelper();
     GraphDescriptor graphDescriptor;
     boolean showSubTrees = DEFAULT_SHOW_SUB_TREES_VALUE;
 
-    public ShowPathsProcessor() {
+    public PathDisplayProcessor() {
         this(null);
     }
 
-    public ShowPathsProcessor(GraphDescriptor graphDescriptor) {
+    public PathDisplayProcessor(GraphDescriptor graphDescriptor) {
         this(graphDescriptor, DEFAULT_SHOW_SUB_TREES_VALUE);
     }
 
-    public ShowPathsProcessor(GraphDescriptor graphDescriptor, boolean showSubTrees) {
+    public PathDisplayProcessor(GraphDescriptor graphDescriptor, boolean showSubTrees) {
         super();
         this.graphDescriptor = graphDescriptor;
         this.showSubTrees = showSubTrees;

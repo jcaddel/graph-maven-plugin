@@ -7,16 +7,16 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
-public class HidingProcessor implements Processor {
+public class TreeDisplayProcessor implements Processor {
     MojoHelper mh = new MojoHelper();
     TreeHelper helper = new TreeHelper();
     GraphDescriptor graphDescriptor;
 
-    public HidingProcessor() {
+    public TreeDisplayProcessor() {
         this(null);
     }
 
-    public HidingProcessor(GraphDescriptor graphDescriptor) {
+    public TreeDisplayProcessor(GraphDescriptor graphDescriptor) {
         super();
         this.graphDescriptor = graphDescriptor;
     }

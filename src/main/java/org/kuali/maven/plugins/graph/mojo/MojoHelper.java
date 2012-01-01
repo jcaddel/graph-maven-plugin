@@ -39,13 +39,13 @@ import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
-import org.kuali.maven.plugins.graph.processor.HidingProcessor;
+import org.kuali.maven.plugins.graph.processor.TreeDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
 import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
-import org.kuali.maven.plugins.graph.processor.ShowPathsProcessor;
+import org.kuali.maven.plugins.graph.processor.PathDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.StyleProcessor;
 import org.kuali.maven.plugins.graph.processor.ValidatingProcessor;
 import org.kuali.maven.plugins.graph.tree.Node;
@@ -311,9 +311,9 @@ public class MojoHelper {
     protected Processor getHideShowProcessor(GraphDescriptor gd) {
         switch (gd.getDisplay()) {
         case TREE:
-            return new HidingProcessor(gd);
+            return new TreeDisplayProcessor(gd);
         case PATH:
-            return new ShowPathsProcessor(gd, false);
+            return new PathDisplayProcessor(gd, false);
         default:
             throw new IllegalStateException("Unknown filter type " + gd.getDisplay());
         }
