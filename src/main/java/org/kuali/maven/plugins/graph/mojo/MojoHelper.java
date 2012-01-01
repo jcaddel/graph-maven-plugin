@@ -188,7 +188,7 @@ public class MojoHelper {
 
     protected String getDescription(boolean transitive) {
         if (transitive) {
-            return "These are the dependencies declared in this project's pom plus any transitive dependencies of the direct dependenies.";
+            return "These are the dependencies declared in this project's pom plus any transitive dependencies of those dependenies.";
         } else {
             return "These are the dependencies declared in this project's pom";
         }
