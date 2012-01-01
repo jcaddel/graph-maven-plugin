@@ -27,7 +27,8 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * Controls how filtering is applied to the dependencies. Valid options are <code>TREE</code> and <code>PATH</code>
+     * Controls what dependencies are displayed on the graph by applying different filtering techniques. Valid options
+     * are <code>PATH</code>, <code>TREE</code>, and <code>PT</code> (path and tree).
      * </p>
      *
      * <p>
@@ -41,6 +42,12 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
      * dependencies are displayed. In addition, the dependencies in the path from any matching dependency back to the
      * top of the dependency tree are displayed. Dependencies in the path from a matching dependency to the top of the
      * tree are always displayed, even if they do not match the filter criteria themselves.
+     * </p>
+     *
+     * <p>
+     * <code>PT</code> is similar to <code>PATH</code>. The difference between <code>PT</code> and <code>PATH</code> is
+     * that <code>PT</code> shows the transitive dependencies of dependencies matching the filter criteria in addition
+     * to the dependencies in the path back to the top of the dependency tree.
      * </p>
      *
      * @parameter expression="${graph.display}" default-value="TREE"

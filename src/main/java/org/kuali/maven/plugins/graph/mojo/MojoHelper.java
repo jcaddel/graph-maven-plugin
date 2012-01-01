@@ -39,14 +39,14 @@ import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
-import org.kuali.maven.plugins.graph.processor.TreeDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
+import org.kuali.maven.plugins.graph.processor.PathDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
 import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
-import org.kuali.maven.plugins.graph.processor.PathDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.StyleProcessor;
+import org.kuali.maven.plugins.graph.processor.TreeDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.ValidatingProcessor;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
@@ -287,33 +287,55 @@ public class MojoHelper {
 
     protected List<Processor> getProcessors(GraphDescriptor gc, boolean verbose) {
         List<Processor> processors = new ArrayList<Processor>();
+
+        // Validate some basic things about the tree Maven gave us
         processors.add(new ValidatingProcessor());
+
+        // Clean up a few edge cases so further processing can work with a tree in a known state
         processors.add(new SanitizingProcessor());
+
+        // Generate node labels
         processors.add(new LabelProcessor(gc));
+
+        // Cascade Maven's optional flag to transitive dependencies of optional dependencies
         if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
             processors.add(new CascadeOptionalProcessor());
         }
+
+        // Show some metadata
         if (verbose) {
             processors.add(new ShowMetadataProcessor());
         }
-        processors.add(getHideShowProcessor(gc));
+
+        // Figure out what nodes we are going to display
+        processors.add(getDisplayProcessor(gc));
+
+        // Style the nodes based on scope, optional/required, and state
         processors.add(new StyleProcessor());
+
+        // Generate lines connecting the tree nodes
         processors.add(getEdgeProcessor(gc.getLayout()));
+
+        // Hide duplicates
         if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
             processors.add(new HideDuplicatesProcessor());
         }
+
+        // Hide conflicts
         if (!Boolean.TRUE.equals(gc.getShowConflicts())) {
             processors.add(new HideConflictsProcessor(gc.getLayout()));
         }
         return processors;
     }
 
-    protected Processor getHideShowProcessor(GraphDescriptor gd) {
+    protected Processor getDisplayProcessor(GraphDescriptor gd) {
         switch (gd.getDisplay()) {
-        case TREE:
-            return new TreeDisplayProcessor(gd);
         case PATH:
             return new PathDisplayProcessor(gd, false);
+        case TREE:
+            return new TreeDisplayProcessor(gd);
+        case PT: // Path and Tree
+            return new PathDisplayProcessor(gd, true);
         default:
             throw new IllegalStateException("Unknown filter type " + gd.getDisplay());
         }
