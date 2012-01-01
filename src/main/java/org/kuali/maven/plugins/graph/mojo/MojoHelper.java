@@ -309,13 +309,13 @@ public class MojoHelper {
     }
 
     protected Processor getHideShowProcessor(GraphDescriptor gd) {
-        switch (gd.getFilterType()) {
+        switch (gd.getDisplay()) {
         case TREE:
             return new HidingProcessor(gd);
         case PATH:
             return new ShowPathsProcessor(gd, false);
         default:
-            throw new IllegalStateException("Unknown filter type " + gd.getFilterType());
+            throw new IllegalStateException("Unknown filter type " + gd.getDisplay());
         }
 
     }
