@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Dot {
     private static final Logger logger = LoggerFactory.getLogger(Dot.class);
+    public static final int SUCCESS = 0;
 
     public void fillInContext(GraphDescriptor gc, String content) {
         File dotFile = createDotFile(gc.getFile(), content);
@@ -100,10 +101,11 @@ public class Dot {
         return sb.toString();
     }
 
-    public void execute(GraphDescriptor context) {
+    public int execute(GraphDescriptor context) {
+        int exitValue = -1;
         if (context.getExecuteDot()) {
             Commandline commandline = getCommandLine(context);
-            execute(commandline, context);
+            exitValue = execute(commandline, context);
         } else {
             logger.info("Skip executing 'dot'");
         }
@@ -112,6 +114,7 @@ public class Dot {
         } else {
             logger.debug(context.getDotFile().getPath());
         }
+        return exitValue;
     }
 
     protected File createDotFile(File graph, String content) {

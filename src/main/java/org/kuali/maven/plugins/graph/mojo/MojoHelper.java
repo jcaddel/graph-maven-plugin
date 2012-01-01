@@ -30,10 +30,10 @@ import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
-import org.kuali.maven.plugins.graph.pojo.Row;
 import org.kuali.maven.plugins.graph.pojo.Layout;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
+import org.kuali.maven.plugins.graph.pojo.Row;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
@@ -248,9 +248,13 @@ public class MojoHelper {
             String content = getDotFileContent(graph);
             Dot dot = new Dot();
             dot.fillInContext(gc, content);
-            logger.info(gc.getFile().getPath());
-            dot.execute(gc);
-            return gc;
+            int exitValue = dot.execute(gc);
+            if (exitValue == Dot.SUCCESS) {
+                logger.info(gc.getFile().getPath());
+                return gc;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             throw new GraphException(e);
         }

@@ -116,7 +116,7 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             // Set state to conflict and store the artifact that replaced us
             duplicate.setState(State.CONFLICT);
             duplicate.setReplacement(similar.getArtifact());
-            logger.info("duplicate->conflict {}", duplicate.getArtifact());
+            logger.debug("duplicate->conflict {}", duplicate.getArtifact());
         } else {
             // This is just weird.
             // Maven has somehow marked this node as a duplicate, but no version of this artifact
@@ -149,6 +149,8 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
 
         // If all 3 are null, there is trouble
         if (exactMain == null && exactRelated == null && similar == null) {
+            // Maven somehow marked this as a conflict, but we can't find any version of this artifact participating in
+            // the build. Flip to unknown.
             conflict.setState(State.UNKNOWN);
             logger.warn("conflict->unknown {}", conflict.getArtifactIdentifier());
             return;
@@ -158,7 +160,7 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             conflict.setState(State.DUPLICATE);
             // Don't need a replacement, this artifact is participating in the build
             conflict.setReplacement(null);
-            logger.info("conflict->duplicate {}", conflict.getArtifactIdentifier());
+            logger.debug("conflict->duplicate {}", conflict.getArtifactIdentifier());
         } else if (exactRelated != null) {
             // This is the normal condition we would expect for conflicts
             // Maven marked it as a conflict, told us what artifact it conflicted with,
@@ -172,7 +174,7 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             conflict.setReplacement(similar.getArtifact());
             String newId = TreeHelper.getArtifactId(similar.getArtifact());
             String oldId = replacementId;
-            logger.warn("changed replacement {}->{}", oldId, newId);
+            logger.debug("changed replacement {}->{}", oldId, newId);
         } else {
             Assert.isTrue(false, "Invalid state");
         }
