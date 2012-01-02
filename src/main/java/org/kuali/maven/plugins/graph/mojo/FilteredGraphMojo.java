@@ -52,6 +52,9 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      *
      * <p>
      * For a shared dependency (eg commons-logging), <code>LINKED</code> mode shows what other libraries depend on it.
+     * </p>
+     *
+     * <p>
      * <code>LINKED</code> mode also shows the decisions Maven makes when resolving conflicts between pom's that depend
      * on different versions of the same artifact.
      * </p>
