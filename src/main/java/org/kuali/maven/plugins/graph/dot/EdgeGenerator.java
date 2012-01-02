@@ -16,7 +16,6 @@
 package org.kuali.maven.plugins.graph.dot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
@@ -38,18 +37,17 @@ public class EdgeGenerator {
 
     /**
      * <p>
-     * Add this edge to this node. If there are no edges on this node yet, create a <code>List<Edge></code> and store it
-     * on the node
+     * Add this edge to the GraphNode contained in this node. If there are no edges on the GraphNode yet, create a
+     * <code>List<Edge></code> and store it on the GraphNode
      * </p>
      */
     public void addEdge(Node<MavenContext> node, Edge edge) {
         MavenContext context = node.getObject();
-        List<Edge> edges = context.getEdges();
-        if (edges == null) {
-            edges = new ArrayList<Edge>();
-            context.setEdges(edges);
+        GraphNode graphNode = context.getGraphNode();
+        if (graphNode.getEdges() == null) {
+            graphNode.setEdges(new ArrayList<Edge>());
         }
-        edges.add(edge);
+        graphNode.getEdges().add(edge);
     }
 
     /**

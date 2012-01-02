@@ -15,6 +15,8 @@
  */
 package org.kuali.maven.plugins.graph.pojo;
 
+import java.util.List;
+
 public class GraphNode {
     int id;
     boolean hidden;
@@ -24,6 +26,7 @@ public class GraphNode {
     String fontcolor = "black";
     String fillcolor = "white";
     String style = "solid,filled";
+    List<Edge> edges;
 
     public int getId() {
         return id;
@@ -87,5 +90,13 @@ public class GraphNode {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public List<Edge> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(List<Edge> edges) {
+        this.edges = edges;
     }
 }

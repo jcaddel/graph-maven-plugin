@@ -116,7 +116,7 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             // Set state to conflict and store the artifact that replaced us
             duplicate.setState(State.CONFLICT);
             duplicate.setReplacement(similar.getArtifact());
-            logger.debug("duplicate->conflict {}", duplicate.getArtifact());
+            logger.info("duplicate->conflict {}", duplicate.getArtifact());
         } else {
             // This is just weird.
             // Maven has somehow marked this node as a duplicate, but no version of this artifact
@@ -160,7 +160,7 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             conflict.setState(State.DUPLICATE);
             // Don't need a replacement, this artifact is participating in the build
             conflict.setReplacement(null);
-            logger.debug("conflict->duplicate {}", conflict.getArtifactIdentifier());
+            logger.info("conflict->duplicate {}", conflict.getArtifactIdentifier());
         } else if (exactRelated != null) {
             // This is the normal condition we would expect for conflicts
             // Maven marked it as a conflict, told us what artifact it conflicted with,
@@ -174,8 +174,9 @@ public class BuildSanitizer implements NodeSanitizer<MavenContext> {
             conflict.setReplacement(similar.getArtifact());
             String newId = TreeHelper.getArtifactId(similar.getArtifact());
             String oldId = replacementId;
-            logger.debug("changed replacement {}->{}", oldId, newId);
+            logger.warn("changed replacement {}->{}", oldId, newId);
         } else {
+            // Something has gone horribly wrong
             Assert.isTrue(false, "Invalid state");
         }
     }

@@ -149,11 +149,11 @@ public class Helper {
     }
 
     /**
-     * Null safe method for adding all the elements in "from" to "to"
+     * Null safe method for adding all the elements in "orig" to "dest"
      */
-    public static final <T> void addAll(Collection<T> to, Collection<T> from) {
-        if (!isEmpty(from)) {
-            to.addAll(from);
+    public static final <T> void addAll(Collection<T> dest, Collection<T> orig) {
+        if (!isEmpty(orig)) {
+            dest.addAll(orig);
         }
     }
 

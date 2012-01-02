@@ -42,6 +42,7 @@ import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.PathDisplayProcessor;
+import org.kuali.maven.plugins.graph.processor.PathTreeDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
 import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
 import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
@@ -239,7 +240,7 @@ public class MojoHelper {
         }
 
         try {
-            Node<MavenContext> tree = getProcessedTree(mc, gc);
+            Node<MavenContext> tree = new TreeHelper().copy(getProcessedTree(mc, gc));
             Graph graph = getGraph(tree, mc, gc);
             if (isEmptyGraph(graph) && Boolean.TRUE.equals(gc.getSkipEmptyGraphs())) {
                 logger.debug("Skipping empty graph");
@@ -256,7 +257,8 @@ public class MojoHelper {
                 return null;
             }
         } catch (Exception e) {
-            throw new GraphException(e);
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -288,19 +290,8 @@ public class MojoHelper {
     protected List<Processor> getProcessors(GraphDescriptor gc, boolean verbose) {
         List<Processor> processors = new ArrayList<Processor>();
 
-        // Validate some basic things about the tree Maven gave us
-        processors.add(new ValidatingProcessor());
-
-        // Clean up a few edge cases so further processing can work with a tree in a known state
-        processors.add(new SanitizingProcessor());
-
         // Generate node labels
         processors.add(new LabelProcessor(gc));
-
-        // Cascade Maven's optional flag to transitive dependencies of optional dependencies
-        if (Boolean.TRUE.equals(gc.getCascadeOptional())) {
-            processors.add(new CascadeOptionalProcessor());
-        }
 
         // Show some metadata
         if (verbose) {
@@ -335,7 +326,7 @@ public class MojoHelper {
         case TREE:
             return new TreeDisplayProcessor(gd);
         case PT: // Path and Tree
-            return new PathDisplayProcessor(gd, true);
+            return new PathTreeDisplayProcessor(gd);
         default:
             throw new IllegalStateException("Unknown filter type " + gd.getDisplay());
         }
@@ -348,12 +339,36 @@ public class MojoHelper {
             DependencyNode mavenTree = getMavenTree(mc);
             mc.setMavenTree(mavenTree);
         }
-        Node<MavenContext> tree = helper.getTree(mc.getMavenTree());
+        if (mc.getSanitizedTree() == null) {
+            // The sanitized tree has all the funky conflict/duplicate stuff sorted out
+            // It has no edges or styling except for the root node fill color being gray
+            Node<MavenContext> tree = helper.getTree(mc.getMavenTree());
+            sanitizeTree(tree, gc);
+            mc.setSanitizedTree(tree);
+
+        }
+        Node<MavenContext> copy = helper.copy(mc.getSanitizedTree());
         List<Processor> processors = getProcessors(gc, mc.isVerbose());
         for (Processor processor : processors) {
-            processor.process(tree);
+            processor.process(copy);
         }
-        return tree;
+        return copy;
+    }
+
+    protected void sanitizeTree(Node<MavenContext> node, GraphDescriptor gd) {
+        // Validate some basic things about the tree Maven gave us
+        new ValidatingProcessor().process(node);
+
+        // Clean up a few funky edge cases
+        // Maven gives us a tree where CONFLICT nodes have identical artifacts and DUPLICATE nodes have
+        // different artifacts. Also, DUPLICATE and CONFLICT nodes sometimes don't have a match with an artifact in the
+        // INCLUDED nodes
+        new SanitizingProcessor().process(node);
+
+        // Cascade Maven's optional flag to transitive dependencies of optional dependencies
+        if (Boolean.TRUE.equals(gd.getCascadeOptional())) {
+            new CascadeOptionalProcessor().process(node);
+        }
     }
 
     public Graph getGraph(Node<MavenContext> tree, MojoContext mc, GraphDescriptor gc) {

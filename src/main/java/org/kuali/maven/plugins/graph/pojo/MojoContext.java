@@ -25,6 +25,7 @@ import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
+import org.kuali.maven.plugins.graph.tree.Node;
 
 /**
  *
@@ -55,6 +56,8 @@ public class MojoContext {
     private boolean generateDefaultGraphs;
 
     private DependencyNode mavenTree;
+
+    private Node<MavenContext> sanitizedTree;
 
     public MavenProject getProject() {
         return project;
@@ -150,5 +153,13 @@ public class MojoContext {
 
     public void setMavenTree(DependencyNode mavenTree) {
         this.mavenTree = mavenTree;
+    }
+
+    public Node<MavenContext> getSanitizedTree() {
+        return sanitizedTree;
+    }
+
+    public void setSanitizedTree(Node<MavenContext> sanitizedTree) {
+        this.sanitizedTree = sanitizedTree;
     }
 }

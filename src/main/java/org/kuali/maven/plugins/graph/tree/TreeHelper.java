@@ -30,7 +30,6 @@ import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
 import org.kuali.maven.plugins.graph.collector.VersionFreeArtifactTokenCollector;
 import org.kuali.maven.plugins.graph.dot.GraphHelper;
-import org.kuali.maven.plugins.graph.filter.Filter;
 import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
@@ -58,6 +57,24 @@ public class TreeHelper {
     Counter counter = new Counter();
     GraphHelper graphHelper = new GraphHelper();
 
+    public Node<MavenContext> copy(Node<MavenContext> node) {
+        Node<MavenContext> newNode = new Node<MavenContext>();
+        MavenContext newMavenContext = copy(node.getObject());
+        newNode.setObject(newMavenContext);
+        for (Node<MavenContext> child : node.getChildren()) {
+            Node<MavenContext> newChild = copy(child);
+            newNode.add(newChild);
+        }
+        return newNode;
+    }
+
+    public MavenContext copy(MavenContext context) {
+        GraphNode newGraphNode = Helper.copyProperties(GraphNode.class, context.getGraphNode());
+        MavenContext newContext = Helper.copyProperties(MavenContext.class, context);
+        newContext.setGraphNode(newGraphNode);
+        return newContext;
+    }
+
     public static Node<MavenContext> findRequiredIncludedNode(Node<MavenContext> root, String artifactId) {
         List<Node<MavenContext>> nodes = root.getBreadthFirstList();
         for (Node<MavenContext> node : nodes) {
@@ -71,30 +88,6 @@ public class TreeHelper {
             }
         }
         throw new IllegalStateException("Can't locate " + artifactId);
-    }
-
-    public void filterButShowPath(Node<MavenContext> node, Filter<Node<MavenContext>> filter) {
-        List<Node<MavenContext>> hidden = new ArrayList<Node<MavenContext>>();
-        List<Node<MavenContext>> displayed = new ArrayList<Node<MavenContext>>();
-
-        List<Node<MavenContext>> list = node.getBreadthFirstList();
-        for (Node<MavenContext> element : list) {
-            boolean display = filter.isMatch(element) || element.isRoot();
-            if (display) {
-                displayed.add(element);
-            } else {
-                hidden.add(element);
-            }
-        }
-        logger.info("hide list size={}", hidden.size());
-        logger.info("display list size={}", hidden.size());
-
-        for (Node<MavenContext> element : hidden) {
-            hideTree(element);
-        }
-        for (Node<MavenContext> element : displayed) {
-            showPath(element);
-        }
     }
 
     /**
@@ -312,19 +305,6 @@ public class TreeHelper {
 
     /**
      * <p>
-     * Convenience method for obtaining a <code>State</code> object from the <code>int</code> supplied by Maven in the
-     * embedded <code>DependencyNode</code>
-     * </p>
-     *
-     * @param node
-     * @return
-     */
-    public State getState(Node<MavenContext> node) {
-        return State.getState(node.getObject().getDependencyNode().getState());
-    }
-
-    /**
-     * <p>
      * Return true, if and only if, the two artifacts are an exact match of each other.
      * </p>
      *
@@ -362,33 +342,9 @@ public class TreeHelper {
         return n1.equals(n2);
     }
 
-    protected boolean replacementFound(MavenContext context, Map<String, MavenContext> included) {
-        if (included.get(context.getArtifactIdentifier()) != null) {
-            return true;
-        }
-        Artifact related = context.getDependencyNode().getRelatedArtifact();
-        if (related == null) {
-            return false;
-        } else {
-            String artifactId = getArtifactId(related);
-            return (included.get(artifactId) != null);
-        }
-    }
-
-    protected int getStateCount(List<Node<MavenContext>> nodes, State state) {
-        int count = 0;
-        for (Node<MavenContext> node : nodes) {
-            MavenContext context = node.getObject();
-            DependencyNode dn = context.getDependencyNode();
-            State nodeState = State.getState(dn.getState());
-            count = (state == nodeState) ? ++count : count;
-        }
-        return count;
-    }
-
     protected boolean isMatch(State state, State[] states) {
-        for (State arrayState : states) {
-            if (state == arrayState) {
+        for (State s : states) {
+            if (state == s) {
                 return true;
             }
         }
@@ -467,11 +423,9 @@ public class TreeHelper {
         List<Edge> edges = new ArrayList<Edge>();
         List<Node<MavenContext>> list = node.getBreadthFirstList();
         for (Node<MavenContext> element : list) {
-            List<Edge> elementEdges = element.getObject().getEdges();
-            boolean empty = Helper.isEmpty(elementEdges);
-            if (!empty) {
-                edges.addAll(element.getObject().getEdges());
-            }
+            MavenContext context = element.getObject();
+            GraphNode graphNode = context.getGraphNode();
+            Helper.addAll(edges, graphNode.getEdges());
         }
         return edges;
     }

@@ -88,7 +88,7 @@ public class RelatedArtifactSanitizer implements NodeSanitizer<MavenContext> {
                 // Maven told us this was a CONFLICT, yet the artifacts are exactly the same.
                 // WTF is up with that? The only thing it is possible to do at this point is
                 // switch this artifact out WITH THE EXACT SAME ARTIFACT!!! How is that a conflict?
-                logger.debug(CONFLICT + "->" + DUPLICATE + " " + artifact);
+                logger.info(CONFLICT + "->" + DUPLICATE + " " + artifact);
             }
             // Set state to duplicate and make sure replacement is nulled out
             context.setState(DUPLICATE);
@@ -98,7 +98,7 @@ public class RelatedArtifactSanitizer implements NodeSanitizer<MavenContext> {
             if (state == DUPLICATE) {
                 // Maven told us this was a DUPLICATE, yet the related artifact is a different version
                 // We are going to assume the duplicate flag is a mistake and re-flag this as a conflict
-                logger.debug(DUPLICATE + "->" + CONFLICT + " " + artifact);
+                logger.info(DUPLICATE + "->" + CONFLICT + " " + artifact);
             }
             // Set state to conflict, and store the artifact Maven replaced it with
             context.setState(CONFLICT);
