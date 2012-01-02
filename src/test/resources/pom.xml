@@ -30,26 +30,47 @@
         <artifactId>${project.artifactId}</artifactId>
         <version>${project.version}</version>
         <configuration>
+          <generateDefaultGraphs>false</generateDefaultGraphs>
+          <showTitle>false</showTitle>
+          <showGroupIds>false</showGroupIds>
           <categories>
             <category>
-              <name>other</name>
+              <name>a</name>
               <description>other</description>
-              <groups>
-                <group>
-                  <name>other</name>
+              <rows>
+                <row>
+                  <name>b</name>
                   <description>other</description>
                   <descriptors>
                     <descriptor>
-                      <includes>org.kuali.*</includes>
-                      <name>kuali</name>
+                      <layout>FLAT</layout>
+                      <showDuplicates>true</showDuplicates>
                     </descriptor>
                     <descriptor>
-                      <includes>commons-logging,org.slf4j,log4j</includes>
-                      <name>logging</name>
+                      <layout>FLAT</layout>
+                      <showDuplicates>true</showDuplicates>
+                      <display>PATH</display>
+                      <includes>:aether-impl</includes>
+                      <showDuplicates>true</showDuplicates>
+                      <show>::included,::duplicate</show>
+                    </descriptor>
+                    <descriptor>
+                      <layout>FLAT</layout>
+                      <showDuplicates>true</showDuplicates>
+                      <display>PATH</display>
+                      <includes>:plexus-utils</includes>
+                      <show>::included</show>
+                    </descriptor>
+                    <descriptor>
+                      <layout>FLAT</layout>
+                      <showDuplicates>true</showDuplicates>
+                      <display>PATH</display>
+                      <includes>:plexus*</includes>
+                      <show>::included</show>
                     </descriptor>
                   </descriptors>
-                </group>
-              </groups>
+                </row>
+              </rows>
             </category>
           </categories>
         </configuration>

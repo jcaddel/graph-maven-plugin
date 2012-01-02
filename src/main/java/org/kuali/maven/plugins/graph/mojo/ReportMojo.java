@@ -10,8 +10,8 @@ import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.doxia.sink.Sink;
 import org.kuali.maven.plugins.graph.pojo.Category;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
-import org.kuali.maven.plugins.graph.pojo.Row;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
+import org.kuali.maven.plugins.graph.pojo.Row;
 import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
@@ -87,13 +87,26 @@ public class ReportMojo extends MultiMojo implements MavenReport {
             return;
         }
         sink.section2();
+        doCategoryHeader(sink, category);
+        sink.table();
+        doTableHeader(sink);
+        for (Row row : category.getRows()) {
+            doRow(sink, row);
+        }
+        sink.table_();
+        sink.section2_();
+    }
+
+    protected void doCategoryHeader(Sink sink, Category category) {
         sink.sectionTitle2();
         sink.text(category.getName());
         sink.sectionTitle2_();
         sink.text(category.getDescription());
         sink.lineBreak();
         sink.lineBreak();
-        sink.table();
+    }
+
+    protected void doTableHeader(Sink sink) {
         sink.tableRow();
         sink.tableHeaderCell();
         sink.text("Type");
@@ -105,26 +118,21 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         sink.text("Description");
         sink.tableHeaderCell_();
         sink.tableRow_();
-        for (Row group : category.getRows()) {
-            doGroup(sink, group);
-        }
-        sink.table_();
-        sink.section2_();
     }
 
-    protected void doGroup(Sink sink, Row group) {
-        if (isEmpty(group)) {
+    protected void doRow(Sink sink, Row row) {
+        if (isEmpty(row)) {
             return;
         }
         sink.tableRow();
         sink.tableCell();
-        sink.text(group.getName());
+        sink.text(row.getName());
         sink.tableCell_();
         sink.tableCell();
-        doDescriptors(sink, group.getDescriptors());
+        doDescriptors(sink, row.getDescriptors());
         sink.tableCell_();
         sink.tableCell();
-        sink.text(group.getDescription());
+        sink.text(row.getDescription());
         sink.tableCell_();
         sink.tableRow_();
     }
@@ -220,24 +228,24 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         if (Helper.isEmpty(category.getRows())) {
             return true;
         } else {
-            return isEmptyGroups(category.getRows());
+            return isEmptyRows(category.getRows());
         }
     }
 
-    protected boolean isEmptyGroups(List<Row> groups) {
-        if (Helper.isEmpty(groups)) {
+    protected boolean isEmptyRows(List<Row> rows) {
+        if (Helper.isEmpty(rows)) {
             return true;
         }
-        for (Row group : groups) {
-            if (!isEmpty(group)) {
+        for (Row row : rows) {
+            if (!Helper.isEmpty(row.getDescriptors())) {
                 return false;
             }
         }
         return true;
     }
 
-    protected boolean isEmpty(Row group) {
-        return Helper.isEmpty(group.getDescriptors());
+    protected boolean isEmpty(Row row) {
+        return Helper.isEmpty(row.getDescriptors());
     }
 
 }

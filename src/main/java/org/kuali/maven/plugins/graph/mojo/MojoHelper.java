@@ -78,13 +78,18 @@ public class MojoHelper {
         if (mc.isGenerateDefaultGraphs()) {
             categories.addAll(0, getDefaultCategories(gc));
         }
+        int count = 0;
         for (Category category : categories) {
             for (Row group : category.getRows()) {
                 group.setCategory(category);
                 fillInDescriptors(gc, group.getDescriptors(), mc.getOutputDir(), group);
                 List<GraphDescriptor> executed = execute(mc, gc, group.getDescriptors());
+                count += executed.size();
                 group.setDescriptors(executed);
             }
+        }
+        if (count == 0) {
+            logger.info("No graphs to generate");
         }
     }
 
