@@ -12,11 +12,11 @@ ${project.name}
 
 * Example Graphs
 
-  * {{{./graph/logging/slf4j/linked.png}Graph #1}} shows the logging dependencies of this plugin using LINKED mode
+  * {{{./graph/logging/slf4j/linked.png}Graph #1}} shows dependencies on logging libraries used by this plugin
   
   * {{{./graph/logging/slf4j/flat.png}Graph #2}} is the same graph drawn in FLAT mode 
   
-  * {{{./dependency-graphs.html}The dependency graphs}} report has more examples, including the full dependency tree for this plugin. 
+  * The {{{./dependency-graphs.html}project information}} report has more examples, including the full dependency tree for this plugin. 
   
 * Plugin Documentation
 
