@@ -32,6 +32,11 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
      * </p>
      *
      * <p>
+     * NOTE: Support for display types other than <code>TREE</code> should be considered experimental. <code>PATH</code>
+     * and <code>PT</code> are not fully implemented or tested. Use at your own risk.
+     * </p>
+     *
+     * <p>
      * <code>TREE</code> prunes the dependency tree from the top down. Recursive traversal of transitive dependencies
      * stops when a dependency does not match the filter criteria. Any further transitive dependencies in that part of
      * the dependency tree are not displayed.
