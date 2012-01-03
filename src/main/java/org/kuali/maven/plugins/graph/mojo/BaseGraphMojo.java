@@ -111,6 +111,12 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
      * If true, dependency conflicts are displayed on the graph
      * </p>
      *
+     * <p>
+     * Maven supports the resolution of artifact versions by way of nearest-wins. That is, for any set of dependencies
+     * that share the same groupId:artifactId:type:classifier, the one declared nearest to the current project in the
+     * dependency tree will be selected for use.
+     * </p>
+     *
      * @parameter expression="${graph.showConflicts}" default-value="true"
      */
     private boolean showConflicts;
