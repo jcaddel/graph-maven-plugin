@@ -39,7 +39,7 @@
     <url>https://github.com/jcaddel/graph-maven-plugin</url>
   </scm>
 
-  <name>Maven Graph Plugin</name>
+  <name>Graph Maven Plugin</name>
   <description>Create dependency graphs for Maven projects using Graphviz.  The Graphviz "dot" executable needs to be installed and in your path for the plugin to produce graphs - http://www.graphviz.org/</description>
   <properties>
     <kuali.slf4j.version>1.6.4</kuali.slf4j.version>
