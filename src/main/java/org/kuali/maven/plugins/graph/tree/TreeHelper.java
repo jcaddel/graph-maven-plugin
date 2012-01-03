@@ -59,13 +59,19 @@ public class TreeHelper {
 
     public Node<MavenContext> copy(Node<MavenContext> node) {
         Node<MavenContext> newNode = new Node<MavenContext>();
-        MavenContext newMavenContext = copy(node.getObject());
+        MavenContext newMavenContext = copyWithoutEdges(node.getObject());
         newNode.setObject(newMavenContext);
         for (Node<MavenContext> child : node.getChildren()) {
             Node<MavenContext> newChild = copy(child);
             newNode.add(newChild);
         }
         return newNode;
+    }
+
+    public MavenContext copyWithoutEdges(MavenContext context) {
+        MavenContext copy = copy(context);
+        copy.getGraphNode().setEdges(null);
+        return copy;
     }
 
     public MavenContext copy(MavenContext context) {

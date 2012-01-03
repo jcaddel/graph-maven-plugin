@@ -49,7 +49,7 @@
                     <descriptor>
                       <layout>FLAT</layout>
                       <showDuplicates>true</showDuplicates>
-                      <display>PATH</display>
+                      <display>PT</display>
                       <includes>:aether-impl</includes>
                       <showDuplicates>true</showDuplicates>
                       <show>::included,::duplicate</show>

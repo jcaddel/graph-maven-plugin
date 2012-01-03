@@ -245,7 +245,7 @@ public class MojoHelper {
         }
 
         try {
-            Node<MavenContext> tree = new TreeHelper().copy(getProcessedTree(mc, gc));
+            Node<MavenContext> tree = getProcessedTree(mc, gc);
             Graph graph = getGraph(tree, mc, gc);
             if (isEmptyGraph(graph) && Boolean.TRUE.equals(gc.getSkipEmptyGraphs())) {
                 logger.debug("Skipping empty graph");

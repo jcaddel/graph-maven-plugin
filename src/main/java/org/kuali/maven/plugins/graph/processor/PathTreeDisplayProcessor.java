@@ -10,16 +10,14 @@ import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * This processor searches the entire tree for nodes that match the filter. Any nodes that match are collected into a
- * list. Once the list is created, the path from each node back to the root is displayed along with the entire tree
- * below the node.
- *
- * @author jeffcaddel
  *
  */
 public class PathTreeDisplayProcessor implements Processor {
+    private static final Logger logger = LoggerFactory.getLogger(PathTreeDisplayProcessor.class);
     MojoHelper mh = new MojoHelper();
     TreeHelper helper = new TreeHelper();
     GraphDescriptor graphDescriptor;
@@ -39,18 +37,19 @@ public class PathTreeDisplayProcessor implements Processor {
         List<Node<MavenContext>> list = node.getBreadthFirstList();
         List<Node<MavenContext>> displayed = new ArrayList<Node<MavenContext>>();
         for (Node<MavenContext> element : list) {
-            helper.hide(element);
-            boolean display = filter.isMatch(element) || element.isRoot();
+            if (!element.isRoot()) {
+                helper.hide(element);
+            }
+            boolean display = filter.isMatch(element);
             if (display) {
                 displayed.add(element);
+                logger.info("displaying " + element.getObject().getArtifactIdentifier());
             }
         }
         for (Node<MavenContext> element : displayed) {
             helper.showPath(element);
-            if (!element.isRoot()) {
-                helper.showTree(element);
-                showDuplicates(element);
-            }
+            helper.showTree(element);
+            showDuplicates(element);
         }
 
     }
