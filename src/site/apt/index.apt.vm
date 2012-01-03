@@ -16,10 +16,10 @@ ${project.name}
   
   * {{{./graph/logging/slf4j/flat.png}Graph #2}} is the same graph drawn in FLAT mode 
   
-  * The {{{./dependency-graphs.html}project information}} report has more examples, including the full dependency tree for this plugin. 
+  * The {{{./dependency-graphs.html}project information}} report has a more comprehensive set of examples. 
   
 * Plugin Documentation
 
-  * {{{./plugin-info.html}Plugin goals}} support generating a single graph, multiple graphs, or generating a report during Maven site generation. 
+  * {{{./plugin-info.html}Plugin goals}} support generating a single graph, multiple graphs, and generating a report during Maven site generation. 
 
   
