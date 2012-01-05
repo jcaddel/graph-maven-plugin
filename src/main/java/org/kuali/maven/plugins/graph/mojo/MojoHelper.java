@@ -2,6 +2,7 @@ package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -41,6 +42,7 @@ import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
+import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor3;
 import org.kuali.maven.plugins.graph.processor.PathDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.PathTreeDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
@@ -310,7 +312,7 @@ public class MojoHelper {
         processors.add(new StyleProcessor());
 
         // Generate lines connecting the tree nodes
-        processors.add(getEdgeProcessor(gc.getLayout()));
+        processors.addAll(getEdgeProcessors(gc.getLayout()));
 
         // Hide duplicates
         if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
@@ -321,6 +323,7 @@ public class MojoHelper {
         if (!Boolean.TRUE.equals(gc.getShowConflicts())) {
             processors.add(new HideConflictsProcessor(gc.getLayout()));
         }
+
         return processors;
     }
 
@@ -388,12 +391,15 @@ public class MojoHelper {
         return gh.getGraph(title, gc.getDirection(), nodes, edges);
     }
 
-    protected Processor getEdgeProcessor(Layout layout) {
+    protected List<? extends Processor> getEdgeProcessors(Layout layout) {
         switch (layout) {
         case LINKED:
-            return new LinkedEdgeProcessor();
+            List<Processor> processors = new ArrayList<Processor>();
+            processors.add(new LinkedEdgeProcessor());
+            processors.add(new LinkedEdgeProcessor3());
+            return processors;
         case FLAT:
-            return new FlatEdgeProcessor();
+            return Collections.singletonList(new FlatEdgeProcessor());
         default:
             throw new IllegalStateException("Layout style " + layout + " is unknown");
         }

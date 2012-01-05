@@ -26,6 +26,7 @@ import org.kuali.maven.plugins.graph.pojo.Style;
 import org.kuali.maven.plugins.graph.processor.StyleProcessor;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
+import org.kuali.maven.plugins.graph.util.Counter;
 
 /**
  * <p>
@@ -34,6 +35,7 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
  */
 public class EdgeGenerator {
     StyleProcessor sp = new StyleProcessor();
+    Counter counter = new Counter(1);
 
     /**
      * <p>
@@ -88,8 +90,10 @@ public class EdgeGenerator {
      */
     public Edge getStyledEdge(GraphNode parent, GraphNode child, boolean optional, Scope scope, State state) {
         Style style = sp.getStyle(scope, optional, state);
+        int id = counter.increment();
         String label = TreeHelper.getRelationshipLabel(scope, optional, state);
         Edge edge = new Edge(parent, child);
+        edge.setId(id);
         sp.copyStyleProperties(edge, style);
         edge.setLabel(label);
         return edge;
