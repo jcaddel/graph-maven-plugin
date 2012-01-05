@@ -12,12 +12,14 @@ import org.kuali.maven.plugins.graph.util.Helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LinkedEdgeProcessor3 implements Processor {
-    private static final Logger logger = LoggerFactory.getLogger(LinkedEdgeProcessor3.class);
+public class ReduceClutterProcessor implements Processor {
+    private static final Logger logger = LoggerFactory.getLogger(ReduceClutterProcessor.class);
+    int removeCount = 0;
 
     @Override
     public void process(Node<MavenContext> node) {
         processEdges(node);
+        logger.info("removed {} redundant edges", removeCount);
     }
 
     public void processEdges(Node<MavenContext> node) {
@@ -28,29 +30,46 @@ public class LinkedEdgeProcessor3 implements Processor {
     }
 
     protected void handleEdges(Node<MavenContext> node) {
-        MavenContext context = node.getObject();
-        GraphNode graphNode = context.getGraphNode();
-        List<Edge> edges = graphNode.getEdges();
+        List<Edge> edges = getEdges(node);
+        List<Edge> edgesToRemove = getEdgesToRemove(edges, node);
+        remove(edges, edgesToRemove);
+    }
+
+    protected List<Edge> getEdges(Node<MavenContext> node) {
+        List<Edge> edges = node.getObject().getGraphNode().getEdges();
         if (Helper.isEmpty(edges)) {
-            return;
+            return new ArrayList<Edge>();
+        } else {
+            return edges;
         }
+    }
+
+    protected List<Edge> getEdgesToRemove(List<Edge> edges, Node<MavenContext> node) {
         List<Edge> edgesToRemove = new ArrayList<Edge>();
         for (Edge edge : edges) {
-            List<Edge> subList = getEdgesThatAreNotMe(edge, edges);
-            GraphNode child = edge.getChild();
-            boolean isReachable = isReachable(child, subList, node);
-            if (isReachable) {
+            boolean redundant = isRedundantEdge(edge, edges, node);
+            if (redundant) {
                 edgesToRemove.add(edge);
-                logger.debug("reached graph node id {}", child.getId());
             }
         }
+        return edgesToRemove;
+    }
+
+    protected boolean isRedundantEdge(Edge edge, List<Edge> edges, Node<MavenContext> node) {
+        List<Edge> subList = getEdgesThatAreNotMe(edge, edges);
+        GraphNode child = edge.getChild();
+        return isReachable(child, subList, node);
+    }
+
+    protected void remove(List<Edge> edges, List<Edge> edgesToRemove) {
         Iterator<Edge> itr = edges.iterator();
         while (itr.hasNext()) {
             Edge edge = itr.next();
             boolean contains = contains(edgesToRemove, edge);
             if (contains) {
                 itr.remove();
-                logger.info("removing edge {}", edge.getId());
+                logger.debug("removing edge {}", edge.getId());
+                removeCount++;
             }
         }
     }

@@ -42,7 +42,7 @@ import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
-import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor3;
+import org.kuali.maven.plugins.graph.processor.ReduceClutterProcessor;
 import org.kuali.maven.plugins.graph.processor.PathDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.PathTreeDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
@@ -396,7 +396,7 @@ public class MojoHelper {
         case LINKED:
             List<Processor> processors = new ArrayList<Processor>();
             processors.add(new LinkedEdgeProcessor());
-            processors.add(new LinkedEdgeProcessor3());
+            processors.add(new ReduceClutterProcessor());
             return processors;
         case FLAT:
             return Collections.singletonList(new FlatEdgeProcessor());
