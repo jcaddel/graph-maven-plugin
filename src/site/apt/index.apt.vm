@@ -16,6 +16,8 @@ ${project.name}
   
   * {{{./graph/logging/slf4j/flat.png}Graph #2}} is the same graph drawn in FLAT mode 
   
+  * {{{./graph/transitive/all/linked.png}Graph #3}} is the complete transitive closure for the dependencies of this plugin 
+  
   * The {{{./dependency-graphs.html}project information}} report has a more comprehensive set of examples. 
   
 * Plugin Documentation
