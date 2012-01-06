@@ -42,10 +42,10 @@ import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
 import org.kuali.maven.plugins.graph.processor.LabelProcessor;
 import org.kuali.maven.plugins.graph.processor.LinkedEdgeProcessor;
-import org.kuali.maven.plugins.graph.processor.ReduceClutterProcessor;
 import org.kuali.maven.plugins.graph.processor.PathDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.PathTreeDisplayProcessor;
 import org.kuali.maven.plugins.graph.processor.Processor;
+import org.kuali.maven.plugins.graph.processor.ReduceClutterProcessor;
 import org.kuali.maven.plugins.graph.processor.SanitizingProcessor;
 import org.kuali.maven.plugins.graph.processor.ShowMetadataProcessor;
 import org.kuali.maven.plugins.graph.processor.StyleProcessor;
@@ -358,6 +358,7 @@ public class MojoHelper {
         Node<MavenContext> copy = helper.copy(mc.getSanitizedTree());
         List<Processor> processors = getProcessors(gc, mc.isVerbose());
         for (Processor processor : processors) {
+            logger.info("processor={}", processor.getClass());
             processor.process(copy);
         }
         return copy;

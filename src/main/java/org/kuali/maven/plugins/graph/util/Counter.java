@@ -36,8 +36,13 @@ public class Counter implements Comparable<Counter> {
     }
 
     public synchronized int increment() {
-        Assert.isTrue(count < Integer.MAX_VALUE, "Maximum counter value exceeded");
+        Assert.state(count < Integer.MAX_VALUE, "Maximum counter value exceeded");
         return count++;
+    }
+
+    public synchronized int decrement() {
+        Assert.state(count > Integer.MIN_VALUE, "Minimum counter value exceeded");
+        return count--;
     }
 
     public synchronized int getCount() {

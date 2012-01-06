@@ -132,6 +132,17 @@ public class Helper {
         return strings.toArray(new String[strings.size()]);
     }
 
+    /**
+     * Return an empty list if null is passed in, otherwise return the list
+     */
+    public static final <T> List<T> toEmpty(List<T> list) {
+        if (list == null) {
+            return Collections.emptyList();
+        } else {
+            return list;
+        }
+    }
+
     public static final String toEmpty(String s) {
         if (isBlank(s)) {
             return EMPTY_STRING;

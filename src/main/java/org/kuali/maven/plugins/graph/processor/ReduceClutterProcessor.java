@@ -18,14 +18,14 @@ public class ReduceClutterProcessor implements Processor {
 
     @Override
     public void process(Node<MavenContext> node) {
-        processEdges(node);
+        recurse(node);
         logger.info("removed {} redundant edges", removeCount);
     }
 
-    public void processEdges(Node<MavenContext> node) {
+    public void recurse(Node<MavenContext> node) {
         handleEdges(node);
         for (Node<MavenContext> child : node.getChildren()) {
-            processEdges(child);
+            recurse(child);
         }
     }
 
@@ -37,7 +37,7 @@ public class ReduceClutterProcessor implements Processor {
 
     protected List<Edge> getEdges(Node<MavenContext> node) {
         List<Edge> edges = node.getObject().getGraphNode().getEdges();
-        if (Helper.isEmpty(edges)) {
+        if (edges == null) {
             return new ArrayList<Edge>();
         } else {
             return edges;
@@ -84,8 +84,10 @@ public class ReduceClutterProcessor implements Processor {
     }
 
     protected boolean isReachable(GraphNode graphNode, List<Edge> edges, Node<MavenContext> node) {
-        List<Node<MavenContext>> nodeList = getRecursiveNodeList(node, edges);
-        for (Node<MavenContext> element : nodeList) {
+        List<Node<MavenContext>> list = new ArrayList<Node<MavenContext>>();
+        recursivelyFillNodeList(node, edges, list);
+        logger.debug("nodeList.size()={}", list.size());
+        for (Node<MavenContext> element : list) {
             MavenContext context = element.getObject();
             GraphNode gn = context.getGraphNode();
             if (gn.getId() == graphNode.getId()) {
@@ -95,18 +97,28 @@ public class ReduceClutterProcessor implements Processor {
         return false;
     }
 
-    protected List<Node<MavenContext>> getRecursiveNodeList(Node<MavenContext> node, List<Edge> edges) {
-        if (Helper.isEmpty(edges)) {
-            return new ArrayList<Node<MavenContext>>();
-        }
-        List<Node<MavenContext>> recursiveList = new ArrayList<Node<MavenContext>>();
+    protected void recursivelyFillNodeList(Node<MavenContext> node, List<Edge> edges, List<Node<MavenContext>> list) {
+        edges = Helper.toEmpty(edges);
         for (Edge edge : edges) {
             GraphNode graphNode = edge.getChild();
             Node<MavenContext> foundNode = findNode(node, graphNode.getId());
-            recursiveList.add(foundNode);
-            recursiveList.addAll(getRecursiveNodeList(node, foundNode.getObject().getGraphNode().getEdges()));
+            if (!contains(list, foundNode)) {
+                list.add(foundNode);
+                List<Edge> foundEdges = foundNode.getObject().getGraphNode().getEdges();
+                recursivelyFillNodeList(node, foundEdges, list);
+            }
         }
-        return recursiveList;
+    }
+
+    protected boolean contains(List<Node<MavenContext>> list, Node<MavenContext> node) {
+        int targetId = node.getObject().getId();
+        for (Node<MavenContext> element : list) {
+            int id = element.getObject().getId();
+            if (id == targetId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected Node<MavenContext> findNode(Node<MavenContext> node, int graphNodeId) {
