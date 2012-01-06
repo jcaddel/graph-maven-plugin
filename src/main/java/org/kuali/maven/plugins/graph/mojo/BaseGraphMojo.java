@@ -170,7 +170,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * If true, do not invoke Graphviz if there are no dependencies to graph.
+     * If true, skip invoking Graphviz if there are no dependencies to graph.
      * </p>
      *
      * @parameter expression="${graph.skipEmptyGraphs}" default-value="true"
