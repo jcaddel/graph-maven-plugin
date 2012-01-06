@@ -98,16 +98,18 @@ public class ReduceClutterProcessor implements Processor {
         return false;
     }
 
+    protected boolean isRecurseNode(Node<MavenContext> node, List<Node<MavenContext>> list) {
+        State state = node.getObject().getState();
+        return state != State.CONFLICT && !contains(list, node);
+    }
+
     protected void recursivelyFillNodeList(Node<MavenContext> node, List<Edge> edges, List<Node<MavenContext>> list) {
         edges = Helper.toEmpty(edges);
         for (Edge edge : edges) {
             GraphNode graphNode = edge.getChild();
             Node<MavenContext> foundNode = findNode(node, graphNode.getId());
-            State state = foundNode.getObject().getState();
-            if (state == State.CONFLICT) {
-                continue;
-            }
-            if (!contains(list, foundNode)) {
+            boolean recurse = isRecurseNode(foundNode, list);
+            if (recurse) {
                 list.add(foundNode);
                 List<Edge> foundEdges = foundNode.getObject().getGraphNode().getEdges();
                 recursivelyFillNodeList(node, foundEdges, list);
