@@ -98,7 +98,7 @@ public class ReduceClutterProcessor implements Processor {
         return false;
     }
 
-    protected boolean isRecurseNode(Node<MavenContext> node, List<Node<MavenContext>> list) {
+    protected boolean isRecurse(Node<MavenContext> node, List<Node<MavenContext>> list) {
         State state = node.getObject().getState();
         return state != State.CONFLICT && !contains(list, node);
     }
@@ -108,7 +108,7 @@ public class ReduceClutterProcessor implements Processor {
         for (Edge edge : edges) {
             GraphNode graphNode = edge.getChild();
             Node<MavenContext> foundNode = findNode(node, graphNode.getId());
-            boolean recurse = isRecurseNode(foundNode, list);
+            boolean recurse = isRecurse(foundNode, list);
             if (recurse) {
                 list.add(foundNode);
                 List<Edge> foundEdges = foundNode.getObject().getGraphNode().getEdges();
