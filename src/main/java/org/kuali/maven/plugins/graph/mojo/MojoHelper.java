@@ -348,8 +348,8 @@ public class MojoHelper {
             mc.setMavenTree(mavenTree);
         }
         if (mc.getSanitizedTree() == null) {
-            // The sanitized tree has all the funky conflict/duplicate stuff sorted out
-            // It has no edges or styling except for the root node fill color being gray
+            // The sanitized tree has all the funky conflict/duplicate stuff sorted out,
+            // but has no edges or styling except for the root node being gray
             Node<MavenContext> tree = helper.getTree(mc.getMavenTree());
             sanitizeTree(tree, gc);
             mc.setSanitizedTree(tree);
@@ -358,7 +358,7 @@ public class MojoHelper {
         Node<MavenContext> copy = helper.copy(mc.getSanitizedTree());
         List<Processor> processors = getProcessors(gc, mc.isVerbose());
         for (Processor processor : processors) {
-            logger.info("processor={}", processor.getClass());
+            logger.debug("processor={}", processor.getClass());
             processor.process(copy);
         }
         return copy;

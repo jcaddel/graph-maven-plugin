@@ -108,7 +108,8 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * If true, dependency conflicts are displayed on the graph
+     * If true, dependency conflicts are displayed on the graph. This will show the version a downstream pom declared
+     * for a dependency along with an arrow to the replacement version Maven is using instead.
      * </p>
      *
      * <p>
@@ -117,7 +118,7 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
      * dependency tree will be selected for use.
      * </p>
      *
-     * @parameter expression="${graph.showConflicts}" default-value="true"
+     * @parameter expression="${graph.showConflicts}" default-value="false"
      */
     private boolean showConflicts;
 

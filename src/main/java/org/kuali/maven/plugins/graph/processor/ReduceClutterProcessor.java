@@ -7,6 +7,7 @@ import java.util.List;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
+import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.util.Helper;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class ReduceClutterProcessor implements Processor {
     @Override
     public void process(Node<MavenContext> node) {
         recurse(node);
-        logger.info("removed {} redundant edges", removeCount);
+        logger.debug("removed {} redundant edges", removeCount);
     }
 
     public void recurse(Node<MavenContext> node) {
@@ -102,6 +103,10 @@ public class ReduceClutterProcessor implements Processor {
         for (Edge edge : edges) {
             GraphNode graphNode = edge.getChild();
             Node<MavenContext> foundNode = findNode(node, graphNode.getId());
+            State state = foundNode.getObject().getState();
+            if (state == State.CONFLICT) {
+                continue;
+            }
             if (!contains(list, foundNode)) {
                 list.add(foundNode);
                 List<Edge> foundEdges = foundNode.getObject().getGraphNode().getEdges();
