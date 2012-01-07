@@ -25,7 +25,7 @@ ${project.name}
   
   ${project.description}
   
-  There are mature, stable, executables for Linux, Mac, Solaris and Windows available for download from the {{{http://www.graphviz.org/}Graphviz website}} 
+  There are free, mature, stable, executables for Linux, Mac, Solaris and Windows available at {{{http://www.graphviz.org/}http://www.graphviz.org/}} 
 
 * Example Graphs
 
@@ -33,7 +33,7 @@ ${project.name}
   
   * {{{./graph/logging/slf4j/flat.png}Graph #2}} is the same graph drawn in FLAT mode 
   
-  * {{{./graph/transitive/all/linked.png}Graph #3}} is the default graph produced by this plugin.  It is the complete transitive closure for the dependencies of a project with styling for scope/optional.  If Maven's conflict resolution logic replaces a dependency it is highlighted with a red line labeled "conflict"  
+  * {{{./graph/transitive/all/linked.png}Graph #3}} is the complete transitive closure for the dependencies of this plugin.  This is the default type of graph produced by the plugin if no customizations are being applied.   Dependences are styled according to their scope and optional settings.  Anywhere Maven's conflict resolution logic replaces a dependency it is highlighted with a red line labeled "conflict"  
   
   * The {{{./dependency-graphs.html}Dependency Graphs}} report has a more comprehensive set of examples. 
   
