@@ -79,7 +79,7 @@ public class RelatedArtifactSanitizer implements NodeSanitizer<MavenContext> {
         boolean equal = helper.equals(artifact, related);
         boolean similar = helper.similar(artifact, related);
 
-        // The validation logic assures that one or the either is true, but no harm in double checking
+        // The validation logic assures that at least one is true, but no harm in double checking
         Assert.isTrue(equal || similar, "Invalid state.");
 
         if (equal) {
