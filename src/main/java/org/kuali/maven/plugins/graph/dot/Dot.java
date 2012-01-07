@@ -75,7 +75,7 @@ public class Dot {
                 if (context.getIgnoreDotFailure()) {
                     logger.info("Ignoring failure of the 'dot' binary. Exit value=" + exitValue);
                 } else {
-                    throw new GraphException(getErrorMessage(context, commandLine, exitValue));
+                    throw new GraphException(getErrorMessage(commandLine, exitValue));
                 }
             } else {
                 // Log the name of the image that was created
@@ -87,7 +87,7 @@ public class Dot {
         }
     }
 
-    protected String getErrorMessage(GraphDescriptor context, Commandline commandLine, int exitValue) {
+    protected String getErrorMessage(Commandline commandLine, int exitValue) {
         String[] args = commandLine.getArguments();
         String executable = commandLine.getExecutable();
         String s = executable;
