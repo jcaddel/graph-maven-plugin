@@ -25,7 +25,7 @@ ${project.name}
   
   ${project.description}
   
-  There are free, stable, and mature executables for Linux, Mac, Solaris and Windows available for download from {{{http://www.graphviz.org/}http://www.graphviz.org/}} 
+  There are free, stable, and mature executables for Linux, Mac, Solaris, and Windows available for download from {{{http://www.graphviz.org/}http://www.graphviz.org/}} 
 
 * Example Graphs
 
@@ -33,7 +33,7 @@ ${project.name}
   
   * {{{./graph/logging/klog/flat.png}Graph #2}} is the same graph drawn in FLAT mode with duplicate dependencies being displayed.
   
-  * {{{./graph/transitive/all/linked.png}Graph #3}} is the complete transitive closure for the dependencies of this plugin.  
+  * {{{./graph/transitive/all/linked.png}Graph #3}} is the complete transitive dependency tree for this plugin (aka "the transitive closure")  
 
     [[a]] This is the default type of graph produced by the plugin when no customizations are applied.
        
