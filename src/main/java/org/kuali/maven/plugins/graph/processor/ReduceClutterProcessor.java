@@ -153,20 +153,21 @@ public class ReduceClutterProcessor implements Processor {
 
     /**
      * Return true if we need to recurse the edges stored at this node. More specifically, return true only if the node
-     * is not a <code>CONFLICT</code> node and it is not already in the list of nodes we have found.
+     * is not hidden, is not a <code>CONFLICT</code> node, and is not already in the list of nodes we have found.
      *
      * @param node
      * @param list
      * @return
      */
-    protected boolean isRecurse(Node<MavenContext> node, List<Node<MavenContext>> list) {
+    protected boolean isInclude(Node<MavenContext> node, List<Node<MavenContext>> list, Edge edge) {
+        boolean hidden = edge.getParent().isHidden() || edge.getChild().isHidden();
         State state = node.getObject().getState();
-        return state != State.CONFLICT && !contains(list, node);
+        return !hidden && state != State.CONFLICT && !contains(list, node);
     }
 
     /**
-     * Recurse the trees pointed to by <code>edges</code> and generate a list of <code>nodes</code> that are located by
-     * traversing those trees.
+     * Recurse the trees pointed to by <code>edges</code> and generate a list of <code>nodes</code> that are reachable
+     * by traversing those trees.
      *
      * @param node
      * @param edges
@@ -177,7 +178,7 @@ public class ReduceClutterProcessor implements Processor {
         for (Edge edge : edges) {
             GraphNode graphNode = edge.getChild();
             Node<MavenContext> foundNode = findRequiredNode(node, graphNode.getId());
-            boolean recurse = isRecurse(foundNode, list);
+            boolean recurse = isInclude(foundNode, list, edge);
             if (recurse) {
                 list.add(foundNode);
                 List<Edge> foundEdges = foundNode.getObject().getGraphNode().getEdges();
