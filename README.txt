@@ -18,6 +18,6 @@ This plugin creates customizable dependency graphs for Maven projects using Grap
 
 The Graphviz "dot" executable needs to be installed and in your path for the plugin to produce graphs
 
-There are mature, stable binaries for Linux, Mac, Solaris, and Windows available at http://www.graphviz.org/
+There are mature, stable, executables for Linux, Mac, Solaris, and Windows available at http://www.graphviz.org/
 
 See http://site.kuali.org/maven/plugins/graph-maven-plugin/ for documentation and example graphs
