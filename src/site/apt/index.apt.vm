@@ -39,7 +39,7 @@ ${project.name}
        
     [[a]] Dependences are styled according to their scope and optional settings.
       
-    [[a]] Anywhere Maven's conflict resolution logic has replaced a dependency is highlighted with a red line labeled "conflict"  
+    [[a]] Anywhere Maven's conflict resolution logic decides to replace a dependency is highlighted with a red line labeled "conflict"  
   
   * The {{{./dependency-graphs.html}Dependency Graphs}} report has a more comprehensive set of examples. 
   
