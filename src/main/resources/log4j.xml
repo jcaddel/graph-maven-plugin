@@ -24,7 +24,7 @@
       <param name="ConversionPattern" value="[%-4p] %m%n" />
     </layout>
   </appender>
-  <logger name="org.fusesource">
+  <logger name="org.kuali.maven.plugins">
     <level value="info" />
   </logger>
   <root>
