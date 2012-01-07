@@ -273,7 +273,6 @@ public class TreeHelper {
      *
      * @param gn
      * @param dn
-     * @return
      */
     protected MavenContext getMavenContext(GraphNode gn, DependencyNode dn) {
         int id = gn.getId();
@@ -295,7 +294,6 @@ public class TreeHelper {
      * </p>
      *
      * @param dependencyNode
-     * @return
      */
     public Node<MavenContext> getTree(DependencyNode dependencyNode) {
         GraphNode gn = getGraphNode(dependencyNode);
@@ -321,7 +319,6 @@ public class TreeHelper {
      *
      * @param a1
      * @param a2
-     * @return
      */
     public boolean equals(Artifact a1, Artifact a2) {
         String id1 = getArtifactId(a1);
@@ -340,7 +337,6 @@ public class TreeHelper {
      *
      * @param a1
      * @param a2
-     * @return
      */
     public boolean similar(Artifact a1, Artifact a2) {
         String n1 = getPartialArtifactId(a1);

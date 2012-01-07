@@ -78,7 +78,6 @@ public class ReduceClutterProcessor implements Processor {
      *
      * @param edges
      * @param node
-     * @return
      */
     protected List<Edge> getEdgesToRemove(List<Edge> edges, Node<MavenContext> node) {
         List<Edge> edgesToRemove = new ArrayList<Edge>();
@@ -99,7 +98,6 @@ public class ReduceClutterProcessor implements Processor {
      * @param edge
      * @param edges
      * @param node
-     * @return
      */
     protected boolean isRedundantEdge(Edge edge, List<Edge> edges, Node<MavenContext> node) {
         List<Edge> subList = getEdgesThatAreNotMe(edge, edges);
@@ -133,7 +131,6 @@ public class ReduceClutterProcessor implements Processor {
      *
      * @param edges
      * @param edge
-     * @return
      */
     protected boolean contains(List<Edge> edges, Edge edge) {
         for (Edge element : edges) {
@@ -150,7 +147,6 @@ public class ReduceClutterProcessor implements Processor {
      * @param graphNode
      * @param edges
      * @param node
-     * @return
      */
     protected boolean isReachable(GraphNode graphNode, List<Edge> edges, Node<MavenContext> node) {
         List<Node<MavenContext>> list = new ArrayList<Node<MavenContext>>();
@@ -172,7 +168,6 @@ public class ReduceClutterProcessor implements Processor {
      *
      * @param node
      * @param list
-     * @return
      */
     protected boolean isInclude(Node<MavenContext> node, List<Node<MavenContext>> list, Edge edge) {
         boolean hidden = edge.getParent().isHidden() || edge.getChild().isHidden();
@@ -207,7 +202,6 @@ public class ReduceClutterProcessor implements Processor {
      *
      * @param list
      * @param node
-     * @return
      */
     protected boolean contains(List<Node<MavenContext>> list, Node<MavenContext> node) {
         int targetId = node.getObject().getId();
@@ -226,7 +220,6 @@ public class ReduceClutterProcessor implements Processor {
      *
      * @param node
      * @param graphNodeId
-     * @return
      */
     protected Node<MavenContext> findRequiredNode(Node<MavenContext> node, int graphNodeId) {
         List<Node<MavenContext>> list = node.getRoot().getBreadthFirstList();
@@ -245,7 +238,6 @@ public class ReduceClutterProcessor implements Processor {
      *
      * @param me
      * @param edges
-     * @return
      */
     protected List<Edge> getEdgesThatAreNotMe(Edge me, List<Edge> edges) {
         List<Edge> newEdges = new ArrayList<Edge>();
