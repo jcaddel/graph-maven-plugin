@@ -31,7 +31,7 @@ ${project.name}
 
   * {{{./graph/logging/slf4j/linked.png}Graph #1}} shows dependencies on logging libraries used by this plugin
   
-  * {{{./graph/logging/slf4j/flat.png}Graph #2}} is the same graph drawn in FLAT mode 
+  * {{{./graph/logging/slf4j/flat.png}Graph #2}} is the same graph drawn in FLAT mode with duplicate dependencies being displayed.
   
   * {{{./graph/transitive/all/linked.png}Graph #3}} is the complete transitive closure for the dependencies of this plugin.  This is the default type of graph produced by the plugin when no customizations are applied.   Dependences are styled according to their scope and optional settings.  Anywhere Maven's conflict resolution logic replaces a dependency it is highlighted with a red line labeled "conflict"  
   
