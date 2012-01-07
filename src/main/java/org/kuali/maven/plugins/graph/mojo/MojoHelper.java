@@ -199,7 +199,7 @@ public class MojoHelper {
         case PROVIDED:
             return "Similar to compile, but with the expectation that the JDK or a container will provide the dependency at runtime.  These dependencies are only available on the compilation and test classpaths, and are not transitive.";
         case RUNTIME:
-            return "These dependencies are not required for compilation, but are for execution. They are in the runtime and test classpaths, but not the compile classpath.";
+            return "These dependencies are not required for compilation, but are for execution. They are in the runtime (eg WEB-INF/lib) and test classpaths, but not the compile classpath.";
         case SYSTEM:
             return "This scope is similar to provided except that you have to provide the JAR which contains it explicitly. The artifact must always be available and is not looked up in a repository.";
         case TEST:
