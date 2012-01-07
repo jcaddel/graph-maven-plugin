@@ -25,7 +25,7 @@ ${project.name}
   
   ${project.description}
   
-  There are mature, stable executables for Linux, Mac, Solaris and Windows available for download from the {{{http://www.graphviz.org/}Graphviz website}} 
+  There are mature, stable, executables for Linux, Mac, Solaris and Windows available for download from the {{{http://www.graphviz.org/}Graphviz website}} 
 
 * Example Graphs
 
