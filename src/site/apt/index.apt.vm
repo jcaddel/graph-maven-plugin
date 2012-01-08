@@ -39,12 +39,16 @@ ${project.name}
        
     [[a]] Dependences are styled according to their scope and optional settings.
       
-    [[a]] Any spots in the tree where Maven conflict resolution replaced a dependency are highlighted with a red line labeled "conflict"  
-
-  * {{{./graph/examples/4.png}Graph #4}} is the transitive closure but with conflicts displayed via the "showConflicts" flag  
+  * {{{./graph/examples/4.png}Graph #4}} is the transitive closure but with conflicts labeled via the "conflicts" option  
 
 +--
-mvn graph:dependencies -Dgraph.showConflicts=true
+mvn graph:dependencies -Dgraph.conflicts=LABEL
++--   
+
+  * {{{./graph/examples/5.png}Graph #5}} is the transitive closure but with conflicts explicitly shown  
+
++--
+mvn graph:dependencies -Dgraph.conflicts=SHOW
 +--   
   
   * The {{{./dependency-graphs.html}Dependency Graphs}} report has a more comprehensive set of examples. 

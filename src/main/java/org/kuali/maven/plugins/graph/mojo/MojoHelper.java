@@ -490,6 +490,7 @@ public class MojoHelper {
             } else if (conflicts == Conflicts.SHOW) {
                 logger.debug("showing conflicts");
             } else if (conflicts == Conflicts.IGNORE) {
+                processors.add(conflictsProcessor);
                 logger.debug("ignoring conflicts");
             }
             return processors;

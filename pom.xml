@@ -147,10 +147,13 @@
                   <showDuplicates>true</showDuplicates>
                 </descriptor>
                 <descriptor>
-                  <showConflicts>false</showConflicts>
+                  <conflicts>IGNORE</conflicts>
                 </descriptor>
                 <descriptor>
-                  <showConflicts>true</showConflicts>
+                  <conflicts>LABEL</conflicts>
+                </descriptor>
+                <descriptor>
+                  <conflicts>SHOW</conflicts>
                 </descriptor>
               </descriptors>
             </configuration>
