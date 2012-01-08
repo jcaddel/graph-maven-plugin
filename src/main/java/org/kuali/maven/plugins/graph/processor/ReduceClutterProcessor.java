@@ -29,10 +29,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Remove redundant edges from the graph. For the purposes of this processor, an edge is considered redundant if it
- * points to a dependency that is included by a downstream dependency. If your pom declares a dependency on
- * commons-logging-1.1.1 and your pom also declares a dependency on commons-beanutils-1.8.3 (which declares a dependency
- * on commons-logging-1.1.1), the graph will not display a line from your pom to commons-logging.
+ * <p>
+ * Remove redundant edges from the graph.
+ * </p>
+ *
+ * <p>
+ * For the purposes of this processor, an edge is considered redundant if it points to a dependency that is reachable
+ * via a transitive dependency.
+ * </p>
+ *
+ * <p>
+ * For example, if a pom declares a dependency on commons-logging-1.1.1 and also declares a dependency on
+ * commons-beanutils-1.8.3 (which declares a dependency on commons-logging-1.1.1), the graph will not draw a line from
+ * the pom to commons-logging.
+ * </p>
  *
  * @author jeffcaddel
  */

@@ -97,12 +97,12 @@ public class MojoHelper {
         }
         int count = 0;
         for (Category category : categories) {
-            for (Row group : category.getRows()) {
-                group.setCategory(category);
-                fillInDescriptors(gc, group.getDescriptors(), mc.getOutputDir(), group);
-                List<GraphDescriptor> executed = execute(mc, gc, group.getDescriptors());
+            for (Row row : category.getRows()) {
+                row.setCategory(category);
+                fillInDescriptors(gc, row.getDescriptors(), mc.getOutputDir(), row);
+                List<GraphDescriptor> executed = execute(mc, gc, row.getDescriptors());
                 count += executed.size();
-                group.setDescriptors(executed);
+                row.setDescriptors(executed);
             }
         }
         if (count == 0) {
@@ -133,8 +133,8 @@ public class MojoHelper {
         }
     }
 
-    protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir, Row group) {
-        gd.setRow(group);
+    protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir, Row row) {
+        gd.setRow(row);
         logger.debug("default output format={}", gd.getOutputFormat());
         Counter counter = new Counter(1);
         for (GraphDescriptor descriptor : gds) {
@@ -168,15 +168,19 @@ public class MojoHelper {
         return sb.toString();
     }
 
+    protected String getFilename(GraphDescriptor gd) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(gd.getName());
+        sb.append(".");
+        sb.append(gd.getOutputFormat());
+        return sb.toString();
+    }
+
     protected String getRelativePath(GraphDescriptor gd) {
         StringBuilder sb = new StringBuilder();
         sb.append(getPathFromRow(gd.getRow()));
         sb.append("/");
-        sb.append(gd.getRow().getName());
-        sb.append("/");
-        sb.append(gd.getName());
-        sb.append(".");
-        sb.append(gd.getOutputFormat());
+        sb.append(getFilename(gd));
         return sb.toString();
     }
 
@@ -184,9 +188,9 @@ public class MojoHelper {
         String name = getTransitiveLabel(transitive);
         Category c = new Category(name);
         c.setDescription(getDescription(transitive));
-        c.setRows(getGroups(gd, transitive));
-        for (Row group : c.getRows()) {
-            group.setCategory(c);
+        c.setRows(getRows(gd, transitive));
+        for (Row row : c.getRows()) {
+            row.setCategory(c);
         }
         return c;
     }
@@ -229,37 +233,37 @@ public class MojoHelper {
         return scope == null ? "all" : scope.toString();
     }
 
-    protected List<Row> getGroups(GraphDescriptor gd, boolean transitive) {
-        List<Row> groups = new ArrayList<Row>();
+    protected List<Row> getRows(GraphDescriptor gd, boolean transitive) {
+        List<Row> rows = new ArrayList<Row>();
         Row any = new Row(getScopeLabel(null));
         any.setDescriptors(getDescriptors(gd, any, transitive, null));
         any.setDescription(getDescription(null));
-        groups.add(any);
+        rows.add(any);
         for (Scope scope : Scope.values()) {
-            Row group = new Row(getScopeLabel(scope));
-            group.setDescription(getDescription(scope));
-            group.setDescriptors(getDescriptors(gd, group, transitive, scope));
-            groups.add(group);
+            Row row = new Row(getScopeLabel(scope));
+            row.setDescription(getDescription(scope));
+            row.setDescriptors(getDescriptors(gd, row, transitive, scope));
+            rows.add(row);
         }
-        return groups;
+        return rows;
     }
 
-    protected List<GraphDescriptor> getDescriptors(GraphDescriptor gd, Row group, boolean transitive, Scope scope) {
+    protected List<GraphDescriptor> getDescriptors(GraphDescriptor gd, Row row, boolean transitive, Scope scope) {
         List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
         for (Layout layout : Layout.values()) {
-            descriptors.add(getDescriptor(gd, group, transitive, scope, layout));
+            descriptors.add(getDescriptor(gd, row, transitive, scope, layout));
         }
         return descriptors;
     }
 
-    protected GraphDescriptor getDescriptor(GraphDescriptor gd, Row group, boolean transitive, Scope scope,
-            Layout layout) {
+    protected GraphDescriptor getDescriptor(GraphDescriptor gd, Row row, boolean transitive, Scope scope, Layout layout) {
         GraphDescriptor descriptor = Helper.copyProperties(GraphDescriptor.class, gd);
         descriptor.setShow(scope == null ? null : scope.toString());
         descriptor.setTransitive(transitive);
         descriptor.setName(layout.toString().toLowerCase());
         descriptor.setLayout(layout);
-        descriptor.setRow(group);
+        descriptor.setRow(row);
+        descriptor.setPath(getPathFromRow(row));
         return descriptor;
     }
 
