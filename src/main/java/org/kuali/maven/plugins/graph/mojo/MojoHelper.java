@@ -17,7 +17,6 @@ package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -42,6 +41,7 @@ import org.kuali.maven.plugins.graph.filter.NodeFilter;
 import org.kuali.maven.plugins.graph.filter.NodeFilterChain;
 import org.kuali.maven.plugins.graph.filter.ReverseNodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Category;
+import org.kuali.maven.plugins.graph.pojo.Conflicts;
 import org.kuali.maven.plugins.graph.pojo.Edge;
 import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
@@ -369,11 +369,11 @@ public class MojoHelper {
         }
     }
 
-    protected List<Processor> getProcessors(GraphDescriptor gc, boolean verbose) {
+    protected List<Processor> getProcessors(GraphDescriptor gd, boolean verbose) {
         List<Processor> processors = new ArrayList<Processor>();
 
         // Generate node labels
-        processors.add(new LabelProcessor(gc));
+        processors.add(new LabelProcessor(gd));
 
         // Show some metadata
         if (verbose) {
@@ -381,22 +381,17 @@ public class MojoHelper {
         }
 
         // Figure out what nodes we are going to display
-        processors.add(getDisplayProcessor(gc));
+        processors.add(getDisplayProcessor(gd));
 
         // Style the nodes based on scope, optional/required, and state
         processors.add(new StyleProcessor());
 
         // Generate lines connecting the tree nodes
-        processors.addAll(getEdgeProcessors(gc.getLayout()));
+        processors.addAll(getEdgeProcessors(gd));
 
         // Hide duplicates
-        if (!Boolean.TRUE.equals(gc.getShowDuplicates())) {
+        if (!Boolean.TRUE.equals(gd.getShowDuplicates())) {
             processors.add(new HideDuplicatesProcessor());
-        }
-
-        // Hide conflicts
-        if (!Boolean.TRUE.equals(gc.getShowConflicts())) {
-            processors.add(new HideConflictsProcessor(gc.getLayout()));
         }
 
         return processors;
@@ -467,17 +462,39 @@ public class MojoHelper {
         return gh.getGraph(title, gc.getDirection(), nodes, edges);
     }
 
-    protected List<? extends Processor> getEdgeProcessors(Layout layout) {
-        switch (layout) {
+    protected List<? extends Processor> getEdgeProcessors(GraphDescriptor gd) {
+        Conflicts conflicts = gd.getConflicts();
+        List<Processor> processors = new ArrayList<Processor>();
+        Processor conflictsProcessor = new HideConflictsProcessor(gd);
+        switch (gd.getLayout()) {
         case LINKED:
-            List<Processor> processors = new ArrayList<Processor>();
             processors.add(new LinkedEdgeProcessor());
-            processors.add(new ReduceClutterProcessor());
+            if (conflicts == Conflicts.LABEL) {
+                logger.info("labeling conflicts");
+                processors.add(new ReduceClutterProcessor());
+                processors.add(conflictsProcessor);
+            } else if (conflicts == Conflicts.SHOW) {
+                logger.info("showing conflicts");
+                processors.add(new ReduceClutterProcessor());
+            } else if (conflicts == Conflicts.IGNORE) {
+                logger.info("ignoring conflicts");
+                processors.add(conflictsProcessor);
+                processors.add(new ReduceClutterProcessor());
+            }
             return processors;
         case FLAT:
-            return Collections.singletonList(new FlatEdgeProcessor());
+            processors.add(new FlatEdgeProcessor());
+            if (conflicts == Conflicts.LABEL) {
+                logger.info("labeling conflicts");
+                processors.add(conflictsProcessor);
+            } else if (conflicts == Conflicts.SHOW) {
+                logger.info("showing conflicts");
+            } else if (conflicts == Conflicts.IGNORE) {
+                logger.info("ignoring conflicts");
+            }
+            return processors;
         default:
-            throw new IllegalStateException("Layout style " + layout + " is unknown");
+            throw new IllegalStateException("Layout style " + gd.getLayout() + " is unknown");
         }
     }
 

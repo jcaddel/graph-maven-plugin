@@ -72,14 +72,22 @@ public class EdgeGenerator {
      * Create an edge running from this node's parent to the replacement node
      * </p>
      */
-    public Edge getParentChildEdge(Node<MavenContext> node, Node<MavenContext> replacement) {
+    public Edge getParentChildEdge(Node<MavenContext> node, Node<MavenContext> replacement, State state) {
         GraphNode parent = node.getParent().getObject().getGraphNode();
         MavenContext context = node.getObject();
         GraphNode child = replacement.getObject().getGraphNode();
         boolean optional = context.isOptional();
-        State state = context.getState();
         Scope scope = Scope.getScope(context.getArtifact().getScope());
         return getStyledEdge(parent, child, optional, scope, state);
+    }
+
+    /**
+     * <p>
+     * Create an edge running from this node's parent to the replacement node
+     * </p>
+     */
+    public Edge getParentChildEdge(Node<MavenContext> node, Node<MavenContext> replacement) {
+        return getParentChildEdge(node, replacement, node.getObject().getState());
     }
 
     /**

@@ -32,7 +32,7 @@ public class GraphDescriptor {
     Direction direction;
     Boolean showGroupIds;
     Boolean showDuplicates;
-    Boolean showConflicts;
+    Conflicts conflicts;
     Boolean cascadeOptional;
     Boolean showLegend;
     Boolean showTitle;
@@ -228,14 +228,6 @@ public class GraphDescriptor {
         this.cascadeOptional = cascadeOptional;
     }
 
-    public Boolean getShowConflicts() {
-        return showConflicts;
-    }
-
-    public void setShowConflicts(Boolean showConflicts) {
-        this.showConflicts = showConflicts;
-    }
-
     public Boolean getSkipEmptyGraphs() {
         return skipEmptyGraphs;
     }
@@ -290,6 +282,14 @@ public class GraphDescriptor {
 
     public void setRelativeFilename(String relativeFilename) {
         this.relativeFilename = relativeFilename;
+    }
+
+    public Conflicts getConflicts() {
+        return conflicts;
+    }
+
+    public void setConflicts(Conflicts conflicts) {
+        this.conflicts = conflicts;
     }
 
 }

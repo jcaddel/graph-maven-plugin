@@ -18,30 +18,31 @@ package org.kuali.maven.plugins.graph.processor;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.dot.EdgeGenerator;
+import org.kuali.maven.plugins.graph.pojo.Conflicts;
 import org.kuali.maven.plugins.graph.pojo.Edge;
-import org.kuali.maven.plugins.graph.pojo.Layout;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
 import org.kuali.maven.plugins.graph.tree.Node;
 import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
 public class HideConflictsProcessor implements Processor {
-    Layout layout;
     TreeHelper helper = new TreeHelper();
     EdgeGenerator generator = new EdgeGenerator();
+    GraphDescriptor descriptor;
 
     public HideConflictsProcessor() {
         this(null);
     }
 
-    public HideConflictsProcessor(Layout layout) {
+    public HideConflictsProcessor(GraphDescriptor descriptor) {
         super();
-        this.layout = layout;
+        this.descriptor = descriptor;
     }
 
     @Override
     public void process(Node<MavenContext> root) {
-        switch (layout) {
+        switch (descriptor.getLayout()) {
         case LINKED:
             handleLinkedConflicts(root);
             return;
@@ -49,7 +50,7 @@ public class HideConflictsProcessor implements Processor {
             handleFlatConflicts(root);
             return;
         default:
-            throw new IllegalStateException("Unknown layout " + layout);
+            throw new IllegalStateException("Unknown layout " + descriptor.getLayout());
         }
     }
 
@@ -58,7 +59,12 @@ public class HideConflictsProcessor implements Processor {
         for (Node<MavenContext> conflict : conflicts) {
             String replacementId = TreeHelper.getArtifactId(conflict.getObject().getReplacement());
             Node<MavenContext> replacement = TreeHelper.findRequiredIncludedNode(root, replacementId);
-            Edge edge = generator.getParentChildEdge(conflict, replacement);
+            Conflicts conflictMode = descriptor.getConflicts();
+            State state = State.CONFLICT;
+            if (conflictMode == Conflicts.IGNORE) {
+                state = State.INCLUDED;
+            }
+            Edge edge = generator.getParentChildEdge(conflict, replacement, state);
             generator.addEdge(conflict.getParent(), edge);
             helper.hide(conflict);
         }
@@ -71,11 +77,12 @@ public class HideConflictsProcessor implements Processor {
         }
     }
 
-    public Layout getLayout() {
-        return layout;
+    public GraphDescriptor getDescriptor() {
+        return descriptor;
     }
 
-    public void setLayout(Layout layout) {
-        this.layout = layout;
+    public void setDescriptor(GraphDescriptor descriptor) {
+        this.descriptor = descriptor;
     }
+
 }

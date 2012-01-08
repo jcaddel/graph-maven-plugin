@@ -15,6 +15,7 @@
  */
 package org.kuali.maven.plugins.graph.mojo;
 
+import org.kuali.maven.plugins.graph.pojo.Conflicts;
 import org.kuali.maven.plugins.graph.pojo.Direction;
 import org.kuali.maven.plugins.graph.pojo.Display;
 
@@ -108,8 +109,21 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
-     * If true, dependency conflicts are displayed on the graph. This will show the version a downstream pom declared
-     * for a dependency along with an arrow to the replacement version Maven is using instead.
+     * Determines how conflicts in the dependency tree are displayed. Valid options are <code>IGNORE</code>,
+     * <code>LABEL</code>, and <code>SHOW</code>.
+     * </p>
+     *
+     * <p>
+     * <code>IGNORE</code>, ignores conflicts and draws the graph without any reference to them.
+     * </p>
+     *
+     * <p>
+     * <code>LABEL</code>, draws a red line with the word "conflict" for any spots in the dependency tree where there
+     * are conflicts.
+     * </p>
+     *
+     * <p>
+     * <code>SHOW</code>, draws a red line, and also shows what version of the artifact was conflicted out of the build.
      * </p>
      *
      * <p>
@@ -118,9 +132,9 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
      * dependency tree will be selected for use.
      * </p>
      *
-     * @parameter expression="${graph.showConflicts}" default-value="false"
+     * @parameter expression="${graph.conflicts}" default-value="IGNORE"
      */
-    private boolean showConflicts;
+    private Conflicts conflicts;
 
     /**
      * <p>
@@ -257,14 +271,6 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
         this.cascadeOptional = cascadeOptional;
     }
 
-    public boolean isShowConflicts() {
-        return showConflicts;
-    }
-
-    public void setShowConflicts(boolean showConflicts) {
-        this.showConflicts = showConflicts;
-    }
-
     public boolean isSkipEmptyGraphs() {
         return skipEmptyGraphs;
     }
@@ -279,6 +285,14 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     public void setDisplay(Display filterType) {
         this.display = filterType;
+    }
+
+    public Conflicts getConflicts() {
+        return conflicts;
+    }
+
+    public void setConflicts(Conflicts conflicts) {
+        this.conflicts = conflicts;
     }
 
 }
