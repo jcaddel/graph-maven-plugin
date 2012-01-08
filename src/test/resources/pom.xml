@@ -30,7 +30,7 @@
         <artifactId>${project.artifactId}</artifactId>
         <version>${project.version}</version>
         <configuration>
-          <generateDefaultGraphs>false</generateDefaultGraphs>
+          <generateDefaultGraphs>true</generateDefaultGraphs>
           <showTitle>false</showTitle>
           <showGroupIds>false</showGroupIds>
           <folders>

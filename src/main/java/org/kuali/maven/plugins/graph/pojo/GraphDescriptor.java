@@ -21,7 +21,6 @@ import java.io.File;
  *
  */
 public class GraphDescriptor {
-    Folder folder;
     String executable = "dot";
     String title;
     Boolean keepDotFile;
@@ -40,6 +39,7 @@ public class GraphDescriptor {
     Boolean executeDot;
     Boolean ignoreDotFailure;
     Boolean skipEmptyGraphs;
+    String path;
     Integer depth;
     Scope scope;
     File file;
@@ -284,12 +284,12 @@ public class GraphDescriptor {
         this.row = row;
     }
 
-    public Folder getFolder() {
-        return folder;
+    public String getPath() {
+        return path;
     }
 
-    public void setFolder(Folder folder) {
-        this.folder = folder;
+    public void setPath(String path) {
+        this.path = path;
     }
 
 }

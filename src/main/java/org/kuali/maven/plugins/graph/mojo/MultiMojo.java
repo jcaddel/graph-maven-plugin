@@ -18,8 +18,6 @@ package org.kuali.maven.plugins.graph.mojo;
 import java.io.File;
 import java.util.List;
 
-import org.kuali.maven.plugins.graph.pojo.Category;
-import org.kuali.maven.plugins.graph.pojo.Folder;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.util.Helper;
@@ -36,42 +34,14 @@ public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * List of graphs to generate organized into categories and rows.
+     * List of graph descriptors
      * </p>
      *
-     * <p>
-     * For example:
-     * </p>
      *
-     * <pre>
-     * &lt;categories&gt;
-     *   &lt;category&gt;
-     *     &lt;name&gt;logging&lt;/name&gt;
-     *     &lt;description&gt;Dependencies on logging libraries&lt;/description&gt;
-     *     &lt;rows&gt;
-     *       &lt;row&gt;
-     *         &lt;name&gt;logging&lt;/name&gt;
-     *         &lt;description&gt;Dependencies on logging libraries&lt;/description&gt;
-     *         &lt;descriptors&gt;
-     *           &lt;descriptor&gt;
-     *             &lt;includes&gt;org.slf4j,log4j&lt;/includes&gt;
-     *             &lt;name&gt;other-logging&lt;/name&gt;
-     *           &lt;/descriptor&gt;
-     *           &lt;descriptor&gt;
-     *             &lt;includes&gt;commons-logging&lt;/includes&gt;
-     *             &lt;filterType&gt;PATH&lt;/filterType&gt;
-     *             &lt;name&gt;commons-logging&lt;/name&gt;
-     *           &lt;/descriptor&gt;
-     *         &lt;/descriptors&gt;
-     *       &lt;/row&gt;
-     *     &lt;/rows&gt;
-     *   &lt;/category&gt;
-     * &lt;/categories&gt;
-     * </pre>
      *
      * @parameter
      */
-    List<Category> categories;
+    List<GraphDescriptor> descriptors;
 
     /**
      * <p>
@@ -85,15 +55,6 @@ public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * List of graphs to generate organized into folders
-     * </p>
-     *
-     * @parameter
-     */
-    List<Folder> folders;
-
-    /**
-     * <p>
      * The output format for the graph. This can be any format supported by Graphviz (png, jpg, gif, pdf, ...)
      * </p>
      *
@@ -104,7 +65,8 @@ public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>
-     * If true, the default set of graphs is generated in addition to those provided in <code>categories</code> list.
+     * If true, the default set of graphs is generated in addition to those provided in the <code>descriptors</code>
+     * list.
      * </p>
      *
      * @parameter expression="${graph.generateDefaultGraphs}" default-value="true"
@@ -116,9 +78,7 @@ public class MultiMojo extends BaseGraphMojo {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        // categories = Helper.isEmpty(categories) ? new ArrayList<Category>() : categories;
-        folders = Helper.toEmpty(folders);
-        helper.folders(mc, gc, folders);
+        helper.execute(mc, gc, Helper.toEmpty(descriptors));
     }
 
     public File getOutputDir() {
@@ -145,20 +105,12 @@ public class MultiMojo extends BaseGraphMojo {
         this.outputFormat = type;
     }
 
-    public List<Category> getCategories() {
-        return categories;
+    public List<GraphDescriptor> getDescriptors() {
+        return descriptors;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
-
-    public List<Folder> getFolders() {
-        return folders;
-    }
-
-    public void setFolders(List<Folder> folders) {
-        this.folders = folders;
+    public void setDescriptors(List<GraphDescriptor> descriptors) {
+        this.descriptors = descriptors;
     }
 
 }
