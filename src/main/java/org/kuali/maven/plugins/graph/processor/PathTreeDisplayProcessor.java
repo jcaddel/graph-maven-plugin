@@ -58,7 +58,7 @@ public class PathTreeDisplayProcessor implements Processor {
             boolean display = filter.isMatch(element);
             if (display) {
                 displayed.add(element);
-                logger.info("displaying " + element.getObject().getArtifactIdentifier());
+                logger.debug("displaying " + element.getObject().getArtifactIdentifier());
             }
         }
         for (Node<MavenContext> element : displayed) {

@@ -42,6 +42,7 @@ import org.kuali.maven.plugins.graph.filter.NodeFilterChain;
 import org.kuali.maven.plugins.graph.filter.ReverseNodeFilter;
 import org.kuali.maven.plugins.graph.pojo.Category;
 import org.kuali.maven.plugins.graph.pojo.Edge;
+import org.kuali.maven.plugins.graph.pojo.Folder;
 import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphException;
@@ -81,6 +82,27 @@ public class MojoHelper {
         NodeFilter<MavenContext> include = getIncludeFilter(descriptor);
         NodeFilter<MavenContext> exclude = getExcludeFilter(descriptor);
         return new IncludeExcludeFilter<Node<MavenContext>>(include, exclude);
+    }
+
+    public void folders(MojoContext mc, GraphDescriptor gc, List<Folder> folders) {
+        if (mc.isSkip()) {
+            logger.info("Skipping execution");
+            return;
+        }
+        if (Helper.isEmpty(folders) && !mc.isGenerateDefaultGraphs()) {
+            logger.info("No folders");
+            return;
+        }
+        int count = 0;
+        for (Folder folder : folders) {
+            fillInDescriptors(gc, folder.getDescriptors(), mc.getOutputDir(), folder);
+            List<GraphDescriptor> executed = execute(mc, gc, folder.getDescriptors());
+            count += executed.size();
+            folder.setDescriptors(executed);
+        }
+        if (count == 0) {
+            logger.info("No graphs to generate");
+        }
     }
 
     public void categories(MojoContext mc, GraphDescriptor gc, List<Category> categories) {
@@ -133,6 +155,26 @@ public class MojoHelper {
         }
     }
 
+    protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir, Folder folder) {
+        gd.setFolder(folder);
+        logger.debug("default output format={}", gd.getOutputFormat());
+        Counter counter = new Counter(1);
+        for (GraphDescriptor descriptor : gds) {
+            Helper.copyPropertiesIfNull(descriptor, gd);
+            if (descriptor.getName() == null) {
+                descriptor.setName(counter.increment() + "");
+            }
+            if (descriptor.getTransitive() == null) {
+                descriptor.setTransitive(true);
+            }
+            if (descriptor.getLayout() == null) {
+                descriptor.setLayout(Layout.LINKED);
+            }
+            File file = new File(outputDir, getRelativePath2(descriptor));
+            descriptor.setFile(file);
+        }
+    }
+
     protected void fillInDescriptors(GraphDescriptor gd, List<GraphDescriptor> gds, File outputDir, Row group) {
         gd.setRow(group);
         logger.debug("default output format={}", gd.getOutputFormat());
@@ -153,11 +195,37 @@ public class MojoHelper {
         }
     }
 
+    protected List<Folder> getDefaultFolders(GraphDescriptor gd) {
+        List<Folder> folders = new ArrayList<Folder>();
+        folders.add(getFolder(gd, false));
+        folders.add(getFolder(gd, true));
+        return folders;
+    }
+
     protected List<Category> getDefaultCategories(GraphDescriptor gd) {
         List<Category> categories = new ArrayList<Category>();
         categories.add(getCategory(gd, false));
         categories.add(getCategory(gd, true));
         return categories;
+    }
+
+    protected String getPath(Folder folder) {
+        StringBuilder sb = new StringBuilder();
+        if (folder.getParent() != null) {
+            sb.append(getPath(folder.getParent()) + "/");
+        }
+        sb.append(folder.getName());
+        return sb.toString();
+    }
+
+    protected String getRelativePath2(GraphDescriptor gd) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getPath(gd.getFolder()));
+        sb.append("/");
+        sb.append(gd.getName());
+        sb.append(".");
+        sb.append(gd.getOutputFormat());
+        return sb.toString();
     }
 
     protected String getRelativePath(GraphDescriptor gd) {
@@ -170,6 +238,16 @@ public class MojoHelper {
         sb.append(".");
         sb.append(gd.getOutputFormat());
         return sb.toString();
+    }
+
+    protected Folder getFolder(GraphDescriptor gd, boolean transitive) {
+        String name = getTransitiveLabel(transitive);
+        Folder f = new Folder(name);
+        f.setFolders(getFolders(gd, transitive));
+        for (Folder folder : f.getFolders()) {
+            folder.setParent(f);
+        }
+        return f;
     }
 
     protected Category getCategory(GraphDescriptor gd, boolean transitive) {
@@ -221,6 +299,19 @@ public class MojoHelper {
         return scope == null ? "all" : scope.toString();
     }
 
+    protected List<Folder> getFolders(GraphDescriptor gd, boolean transitive) {
+        List<Folder> folders = new ArrayList<Folder>();
+        Folder any = new Folder(getScopeLabel(null));
+        any.setDescriptors(getDescriptors(gd, any, transitive, null));
+        folders.add(any);
+        for (Scope scope : Scope.values()) {
+            Folder folder = new Folder(getScopeLabel(scope));
+            folder.setDescriptors(getDescriptors(gd, folder, transitive, scope));
+            folders.add(folder);
+        }
+        return folders;
+    }
+
     protected List<Row> getGroups(GraphDescriptor gd, boolean transitive) {
         List<Row> groups = new ArrayList<Row>();
         Row any = new Row(getScopeLabel(null));
@@ -236,12 +327,31 @@ public class MojoHelper {
         return groups;
     }
 
+    protected List<GraphDescriptor> getDescriptors(GraphDescriptor gd, Folder folder, boolean transitive, Scope scope) {
+        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
+        for (Layout layout : Layout.values()) {
+            descriptors.add(getDescriptor(gd, folder, transitive, scope, layout));
+        }
+        return descriptors;
+    }
+
     protected List<GraphDescriptor> getDescriptors(GraphDescriptor gd, Row group, boolean transitive, Scope scope) {
         List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
         for (Layout layout : Layout.values()) {
             descriptors.add(getDescriptor(gd, group, transitive, scope, layout));
         }
         return descriptors;
+    }
+
+    protected GraphDescriptor getDescriptor(GraphDescriptor gd, Folder folder, boolean transitive, Scope scope,
+            Layout layout) {
+        GraphDescriptor descriptor = Helper.copyProperties(GraphDescriptor.class, gd);
+        descriptor.setShow(scope == null ? null : scope.toString());
+        descriptor.setTransitive(transitive);
+        descriptor.setName(layout.toString().toLowerCase());
+        descriptor.setLayout(layout);
+        descriptor.setFolder(folder);
+        return descriptor;
     }
 
     protected GraphDescriptor getDescriptor(GraphDescriptor gd, Row group, boolean transitive, Scope scope,

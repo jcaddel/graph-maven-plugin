@@ -24,34 +24,34 @@ import org.springframework.util.Assert;
  */
 public class Counter implements Comparable<Counter> {
 
-    private int count;
+    private int value;
 
     public Counter() {
         this(0);
     }
 
-    public Counter(int count) {
+    public Counter(int value) {
         super();
-        this.count = count;
+        this.value = value;
     }
 
     public synchronized int increment() {
-        Assert.state(count < Integer.MAX_VALUE, "Maximum counter value exceeded");
-        return count++;
+        Assert.state(value < Integer.MAX_VALUE, "Maximum counter value exceeded");
+        return value++;
     }
 
     public synchronized int decrement() {
-        Assert.state(count > Integer.MIN_VALUE, "Minimum counter value exceeded");
-        return count--;
+        Assert.state(value > Integer.MIN_VALUE, "Minimum counter value exceeded");
+        return value--;
     }
 
-    public synchronized int getCount() {
-        return count;
+    public synchronized int getValue() {
+        return value;
     }
 
     @Override
     public synchronized int compareTo(Counter other) {
-        return count > other.count ? 1 : count < other.count ? -1 : 0;
+        return value > other.value ? 1 : value < other.value ? -1 : 0;
     }
 
 }

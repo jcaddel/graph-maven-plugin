@@ -16,10 +16,10 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.pojo.Category;
+import org.kuali.maven.plugins.graph.pojo.Folder;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.util.Helper;
@@ -85,6 +85,15 @@ public class MultiMojo extends BaseGraphMojo {
 
     /**
      * <p>
+     * List of graphs to generate organized into folders
+     * </p>
+     *
+     * @parameter
+     */
+    List<Folder> folders;
+
+    /**
+     * <p>
      * The output format for the graph. This can be any format supported by Graphviz (png, jpg, gif, pdf, ...)
      * </p>
      *
@@ -107,8 +116,9 @@ public class MultiMojo extends BaseGraphMojo {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        categories = Helper.isEmpty(categories) ? new ArrayList<Category>() : categories;
-        helper.categories(mc, gc, categories);
+        // categories = Helper.isEmpty(categories) ? new ArrayList<Category>() : categories;
+        folders = Helper.toEmpty(folders);
+        helper.folders(mc, gc, folders);
     }
 
     public File getOutputDir() {
@@ -141,6 +151,14 @@ public class MultiMojo extends BaseGraphMojo {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public List<Folder> getFolders() {
+        return folders;
+    }
+
+    public void setFolders(List<Folder> folders) {
+        this.folders = folders;
     }
 
 }
