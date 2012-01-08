@@ -16,6 +16,7 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -110,8 +111,13 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gd = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        categories = Helper.toEmptyList(categories);
-        helper.categories(mc, gd, categories);
+        if (isSkip()) {
+            categories = Collections.emptyList();
+            getLog().info("Skipping graphs");
+        } else {
+            categories = Helper.toEmptyList(categories);
+            helper.categories(mc, gd, categories);
+        }
         doHead(sink);
         doBody(sink, categories);
         sink.flush();

@@ -75,6 +75,10 @@ public class DependenciesMojo extends FilteredGraphMojo {
 
     @Override
     public void execute() {
+        if (isSkip()) {
+            getLog().info("Skipping graphs");
+            return;
+        }
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper mh = new MojoHelper();
