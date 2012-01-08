@@ -78,7 +78,7 @@ public class ReduceClutterProcessor implements Processor {
      * @param node
      */
     protected void handleEdges(Node<MavenContext> node) {
-        List<Edge> edges = Helper.toEmpty(node.getObject().getGraphNode().getEdges());
+        List<Edge> edges = Helper.toEmptyList(node.getObject().getGraphNode().getEdges());
         List<Edge> edgesToRemove = getEdgesToRemove(edges, node);
         remove(edges, edgesToRemove);
     }
@@ -194,7 +194,7 @@ public class ReduceClutterProcessor implements Processor {
      * @param list
      */
     protected void recursivelyFillNodeList(Node<MavenContext> node, List<Edge> edges, List<Node<MavenContext>> list) {
-        edges = Helper.toEmpty(edges);
+        edges = Helper.toEmptyList(edges);
         for (Edge edge : edges) {
             GraphNode graphNode = edge.getChild();
             Node<MavenContext> foundNode = findRequiredNode(node, graphNode.getId());

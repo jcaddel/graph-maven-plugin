@@ -80,7 +80,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gd = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        categories = Helper.toEmpty(categories);
+        categories = Helper.toEmptyList(categories);
         helper.categories(mc, gd, categories);
         doHead(sink);
         doBody(sink, categories);
@@ -172,7 +172,7 @@ public class ReportMojo extends MultiMojo implements MavenReport {
 
     protected void doLink(Sink sink, GraphDescriptor gd) {
         MojoHelper helper = new MojoHelper();
-        String href = subDirectory + "/" + helper.getRelativePath(gd);
+        String href = subDirectory + "/" + helper.getRelativeFilename(gd);
         sink.link(href);
         sink.text(gd.getName());
         sink.link_();

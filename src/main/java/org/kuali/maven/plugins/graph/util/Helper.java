@@ -135,7 +135,7 @@ public class Helper {
     /**
      * Return an empty list if null is passed in, otherwise return the list
      */
-    public static final <T> List<T> toEmpty(List<T> list) {
+    public static final <T> List<T> toEmptyList(List<T> list) {
         if (list == null) {
             return Collections.emptyList();
         } else {

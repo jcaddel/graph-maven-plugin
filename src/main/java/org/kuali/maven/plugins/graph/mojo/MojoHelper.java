@@ -137,19 +137,24 @@ public class MojoHelper {
         gd.setRow(row);
         logger.debug("default output format={}", gd.getOutputFormat());
         Counter counter = new Counter(1);
-        for (GraphDescriptor descriptor : gds) {
-            Helper.copyPropertiesIfNull(descriptor, gd);
-            if (descriptor.getName() == null) {
-                descriptor.setName(counter.increment() + "");
+        for (GraphDescriptor desc : gds) {
+            Helper.copyPropertiesIfNull(desc, gd);
+            if (desc.getName() == null) {
+                desc.setName(counter.increment() + "");
             }
-            if (descriptor.getTransitive() == null) {
-                descriptor.setTransitive(true);
+            if (desc.getTransitive() == null) {
+                desc.setTransitive(true);
             }
-            if (descriptor.getLayout() == null) {
-                descriptor.setLayout(Layout.LINKED);
+            if (desc.getLayout() == null) {
+                desc.setLayout(Layout.LINKED);
             }
-            File file = new File(outputDir, getRelativePath(descriptor));
-            descriptor.setFile(file);
+            String filename = getFilename(desc);
+            String path = desc.getPath();
+            if (path == null && row != null) {
+                path = getPathFromRow(desc.getRow());
+            }
+            File file = new File(outputDir, Helper.toEmpty(path) + "/" + filename);
+            desc.setFile(file);
         }
     }
 
@@ -176,7 +181,7 @@ public class MojoHelper {
         return sb.toString();
     }
 
-    protected String getRelativePath(GraphDescriptor gd) {
+    protected String getRelativeFilename(GraphDescriptor gd) {
         StringBuilder sb = new StringBuilder();
         sb.append(getPathFromRow(gd.getRow()));
         sb.append("/");
