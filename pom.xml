@@ -27,7 +27,7 @@
 
   <groupId>org.kuali.maven.plugins</groupId>
   <artifactId>graph-maven-plugin</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <url>http://${kuali.site.hostname}/maven/plugins/${project.artifactId}/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
