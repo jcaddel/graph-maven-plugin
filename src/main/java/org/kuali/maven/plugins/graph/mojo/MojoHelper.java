@@ -470,14 +470,14 @@ public class MojoHelper {
         case LINKED:
             processors.add(new LinkedEdgeProcessor());
             if (conflicts == Conflicts.LABEL) {
-                logger.info("labeling conflicts");
+                logger.debug("labeling conflicts");
                 processors.add(new ReduceClutterProcessor());
                 processors.add(conflictsProcessor);
             } else if (conflicts == Conflicts.SHOW) {
-                logger.info("showing conflicts");
+                logger.debug("showing conflicts");
                 processors.add(new ReduceClutterProcessor());
             } else if (conflicts == Conflicts.IGNORE) {
-                logger.info("ignoring conflicts");
+                logger.debug("ignoring conflicts");
                 processors.add(conflictsProcessor);
                 processors.add(new ReduceClutterProcessor());
             }
@@ -485,12 +485,12 @@ public class MojoHelper {
         case FLAT:
             processors.add(new FlatEdgeProcessor());
             if (conflicts == Conflicts.LABEL) {
-                logger.info("labeling conflicts");
+                logger.debug("labeling conflicts");
                 processors.add(conflictsProcessor);
             } else if (conflicts == Conflicts.SHOW) {
-                logger.info("showing conflicts");
+                logger.debug("showing conflicts");
             } else if (conflicts == Conflicts.IGNORE) {
-                logger.info("ignoring conflicts");
+                logger.debug("ignoring conflicts");
             }
             return processors;
         default:
