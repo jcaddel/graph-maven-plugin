@@ -110,7 +110,34 @@ public class MojoHelper {
         }
     }
 
-    public List<GraphDescriptor> execute(MojoContext mc, GraphDescriptor gc, List<GraphDescriptor> descriptors) {
+    public List<GraphDescriptor> executeMulti(MojoContext mc, GraphDescriptor gd, List<GraphDescriptor> descriptors) {
+        try {
+            if (mc.isSkip()) {
+                logger.info("Skipping execution");
+                return null;
+            }
+            if (Helper.isEmpty(descriptors) && !mc.isGenerateDefaultGraphs()) {
+                logger.info("No descriptors");
+                return null;
+            }
+            if (mc.isGenerateDefaultGraphs()) {
+                descriptors.addAll(0, getDefaultDescriptors(mc, gd));
+            }
+            fillInDescriptors(gd, descriptors, mc.getOutputDir(), null);
+            List<GraphDescriptor> executedGraphs = new ArrayList<GraphDescriptor>();
+            for (GraphDescriptor descriptor : descriptors) {
+                GraphDescriptor executed = execute(mc, descriptor);
+                if (executed != null) {
+                    executedGraphs.add(executed);
+                }
+            }
+            return executedGraphs;
+        } catch (Exception e) {
+            throw new GraphException(e);
+        }
+    }
+
+    public List<GraphDescriptor> execute(MojoContext mc, GraphDescriptor gd, List<GraphDescriptor> descriptors) {
         try {
             if (mc.isSkip()) {
                 logger.info("Skipping execution");
@@ -158,6 +185,18 @@ public class MojoHelper {
         }
     }
 
+    protected List<GraphDescriptor> getDefaultDescriptors(MojoContext mc, GraphDescriptor gd) {
+        List<GraphDescriptor> descriptors = new ArrayList<GraphDescriptor>();
+        List<Category> categories = getDefaultCategories(gd);
+        for (Category category : categories) {
+            for (Row row : category.getRows()) {
+                descriptors.addAll(row.getDescriptors());
+                fillInDescriptors(gd, row.getDescriptors(), mc.getOutputDir(), row);
+            }
+        }
+        return descriptors;
+    }
+
     protected List<Category> getDefaultCategories(GraphDescriptor gd) {
         List<Category> categories = new ArrayList<Category>();
         categories.add(getCategory(gd, false));
@@ -193,10 +232,7 @@ public class MojoHelper {
         String name = getTransitiveLabel(transitive);
         Category c = new Category(name);
         c.setDescription(getDescription(transitive));
-        c.setRows(getRows(gd, transitive));
-        for (Row row : c.getRows()) {
-            row.setCategory(c);
-        }
+        c.setRows(getRows(gd, transitive, c));
         return c;
     }
 
@@ -238,14 +274,16 @@ public class MojoHelper {
         return scope == null ? "all" : scope.toString();
     }
 
-    protected List<Row> getRows(GraphDescriptor gd, boolean transitive) {
+    protected List<Row> getRows(GraphDescriptor gd, boolean transitive, Category category) {
         List<Row> rows = new ArrayList<Row>();
         Row any = new Row(getScopeLabel(null));
+        any.setCategory(category);
         any.setDescriptors(getDescriptors(gd, any, transitive, null));
         any.setDescription(getDescription(null));
         rows.add(any);
         for (Scope scope : Scope.values()) {
             Row row = new Row(getScopeLabel(scope));
+            row.setCategory(category);
             row.setDescription(getDescription(scope));
             row.setDescriptors(getDescriptors(gd, row, transitive, scope));
             rows.add(row);
@@ -296,8 +334,7 @@ public class MojoHelper {
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new GraphException(e);
         }
     }
 
