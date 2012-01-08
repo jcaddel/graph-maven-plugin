@@ -67,8 +67,38 @@ public class ReportMojo extends MultiMojo implements MavenReport {
 
     /**
      * <p>
-     * Graphs to generate, organized into categories and rows.
+     * List of graphs to generate organized into categories and rows.
      * </p>
+     *
+     * <p>
+     * For example:
+     * </p>
+     *
+     * <pre>
+     * &lt;categories&gt;
+     *   &lt;category&gt;
+     *     &lt;name&gt;logging&lt;/name&gt;
+     *     &lt;description&gt;Dependencies on logging libraries&lt;/description&gt;
+     *     &lt;rows&gt;
+     *       &lt;row&gt;
+     *         &lt;name&gt;logging&lt;/name&gt;
+     *         &lt;description&gt;Dependencies on logging libraries&lt;/description&gt;
+     *         &lt;descriptors&gt;
+     *           &lt;descriptor&gt;
+     *             &lt;includes&gt;org.slf4j,log4j&lt;/includes&gt;
+     *             &lt;name&gt;other-logging&lt;/name&gt;
+     *           &lt;/descriptor&gt;
+     *           &lt;descriptor&gt;
+     *             &lt;includes&gt;commons-logging&lt;/includes&gt;
+     *             &lt;filterType&gt;PATH&lt;/filterType&gt;
+     *             &lt;name&gt;commons-logging&lt;/name&gt;
+     *           &lt;/descriptor&gt;
+     *         &lt;/descriptors&gt;
+     *       &lt;/row&gt;
+     *     &lt;/rows&gt;
+     *   &lt;/category&gt;
+     * &lt;/categories&gt;
+     * </pre>
      *
      * @parameter
      */

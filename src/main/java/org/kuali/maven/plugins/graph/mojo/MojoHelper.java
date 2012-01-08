@@ -24,6 +24,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
+import org.codehaus.plexus.util.StringUtils;
 import org.kuali.maven.plugins.graph.collector.ArtifactIdTokenCollector;
 import org.kuali.maven.plugins.graph.collector.MavenContextTokenCollector;
 import org.kuali.maven.plugins.graph.collector.TokenCollector;
@@ -175,13 +176,19 @@ public class MojoHelper {
             if (desc.getLayout() == null) {
                 desc.setLayout(Layout.LINKED);
             }
-            String filename = getFilename(desc);
-            String path = desc.getPath();
-            if (path == null && row != null) {
-                path = getPathFromRow(desc.getRow());
+            String relativeFilename = desc.getRelativeFilename();
+            if (relativeFilename == null) {
+                String path = "";
+                String filename = getFilename(desc);
+                if (row != null) {
+                    path = getPathFromRow(desc.getRow());
+                }
+                relativeFilename = StringUtils.isBlank(path) ? filename : path + "/" + filename;
             }
-            File file = new File(outputDir, Helper.toEmpty(path) + "/" + filename);
-            desc.setFile(file);
+            if (desc.getFile() == null) {
+                File file = new File(outputDir, relativeFilename);
+                desc.setFile(file);
+            }
         }
     }
 
@@ -306,7 +313,6 @@ public class MojoHelper {
         descriptor.setName(layout.toString().toLowerCase());
         descriptor.setLayout(layout);
         descriptor.setRow(row);
-        descriptor.setPath(getPathFromRow(row));
         return descriptor;
     }
 

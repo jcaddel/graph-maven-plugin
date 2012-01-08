@@ -39,10 +39,10 @@ public class GraphDescriptor {
     Boolean executeDot;
     Boolean ignoreDotFailure;
     Boolean skipEmptyGraphs;
-    String path;
     Integer depth;
     Scope scope;
     File file;
+    String relativeFilename;
     String content;
     File dotFile;
     String outputFormat;
@@ -284,12 +284,12 @@ public class GraphDescriptor {
         this.row = row;
     }
 
-    public String getPath() {
-        return path;
+    public String getRelativeFilename() {
+        return relativeFilename;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setRelativeFilename(String relativeFilename) {
+        this.relativeFilename = relativeFilename;
     }
 
 }

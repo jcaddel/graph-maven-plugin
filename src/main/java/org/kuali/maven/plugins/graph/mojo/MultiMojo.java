@@ -37,7 +37,21 @@ public class MultiMojo extends BaseGraphMojo {
      * List of graph descriptors
      * </p>
      *
+     * <p>
+     * For example:
+     * </p>
      *
+     * <pre>
+     * &lt;descriptors&gt;
+     *   &lt;descriptor&gt;
+     *     &lt;includes&gt;org.slf4j,log4j&lt;/includes&gt;
+     *   &lt;/descriptor&gt;
+     *   &lt;descriptor&gt;
+     *     &lt;includes&gt;commons-logging&lt;/includes&gt;
+     *     &lt;filterType&gt;PATH&lt;/filterType&gt;
+     *   &lt;/descriptor&gt;
+     * &lt;/descriptors&gt;
+     * </pre>
      *
      * @parameter
      */

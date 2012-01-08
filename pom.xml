@@ -135,43 +135,27 @@
             <configuration>
               <generateDefaultGraphs>false</generateDefaultGraphs>
               <outputDir>${project.build.directory}/site/graph</outputDir>
-              <categories>
-                <category>
-                  <name>examples</name>
-                  <description>Example graphs</description>
-                  <rows>
-                    <row>
-                      <name>logging</name>
-                      <descriptors>
-                        <descriptor>
-                          <name>linked</name>
-                          <includes>org.slf4j,log4j</includes>
-                          <display>PATH</display>
-                        </descriptor>
-                        <descriptor>
-                          <name>flat</name>
-                          <includes>org.slf4j,log4j</includes>
-                          <display>PATH</display>
-                          <layout>FLAT</layout>
-                          <showDuplicates>true</showDuplicates>
-                        </descriptor>
-                      </descriptors>
-                    </row>
-                    <row>
-                      <name>closure</name>
-                      <descriptors>
-                        <descriptor>
-                          <name>default</name>
-                        </descriptor>
-                        <descriptor>
-                          <name>conflicts</name>
-                          <showConflicts>true</showConflicts>
-                        </descriptor>
-                      </descriptors>
-                    </row>
-                  </rows>
-                </category>
-              </categories>
+              <descriptors>
+                <descriptor>
+                  <relativeFilename>examples/logging/linked.png</relativeFilename>
+                  <includes>org.slf4j,log4j</includes>
+                  <display>PATH</display>
+                </descriptor>
+                <descriptor>
+                  <relativeFilename>examples/logging/flat.png</relativeFilename>
+                  <includes>org.slf4j,log4j</includes>
+                  <display>PATH</display>
+                  <layout>FLAT</layout>
+                  <showDuplicates>true</showDuplicates>
+                </descriptor>
+                <descriptor>
+                  <relativeFilename>examples/closure/default.png</relativeFilename>
+                </descriptor>
+                <descriptor>
+                  <showConflicts>true</showConflicts>
+                  <relativeFilename>examples/closure/conflicts.png</relativeFilename>
+                </descriptor>
+              </descriptors>
             </configuration>
           </execution>
         </executions>
