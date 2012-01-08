@@ -134,26 +134,23 @@
             </goals>
             <configuration>
               <generateDefaultGraphs>false</generateDefaultGraphs>
-              <outputDir>${project.build.directory}/site/graph</outputDir>
+              <outputDir>${project.build.directory}/site/graph/examples</outputDir>
               <descriptors>
                 <descriptor>
-                  <relativeFilename>examples/logging/linked.png</relativeFilename>
                   <includes>org.slf4j,log4j</includes>
                   <display>PATH</display>
                 </descriptor>
                 <descriptor>
-                  <relativeFilename>examples/logging/flat.png</relativeFilename>
                   <includes>org.slf4j,log4j</includes>
                   <display>PATH</display>
                   <layout>FLAT</layout>
                   <showDuplicates>true</showDuplicates>
                 </descriptor>
                 <descriptor>
-                  <relativeFilename>examples/closure/default.png</relativeFilename>
+                  <showConflicts>false</showConflicts>
                 </descriptor>
                 <descriptor>
                   <showConflicts>true</showConflicts>
-                  <relativeFilename>examples/closure/conflicts.png</relativeFilename>
                 </descriptor>
               </descriptors>
             </configuration>

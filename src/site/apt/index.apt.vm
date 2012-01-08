@@ -29,11 +29,11 @@ ${project.name}
 
 * Example Graphs
 
-  * {{{./graph/examples/logging/linked.png}Graph #1}} shows dependencies on logging libraries used by this plugin
+  * {{{./graph/examples/1.png}Graph #1}} shows dependencies on logging libraries used by this plugin
   
-  * {{{./graph/examples/logging/flat.png}Graph #2}} is the same graph drawn in FLAT mode with duplicate dependencies being displayed.
+  * {{{./graph/examples/2.png}Graph #2}} is the same graph drawn in FLAT mode with duplicate dependencies being displayed.
   
-  * {{{./graph/examples/closure/default.png}Graph #3}} is the complete transitive dependency tree for this plugin (aka "the transitive closure")  
+  * {{{./graph/examples/3.png}Graph #3}} is the complete transitive dependency tree for this plugin (aka "the transitive closure")  
 
     [[a]] This is the default type of graph produced by the plugin when no customizations are applied.
        
@@ -41,7 +41,7 @@ ${project.name}
       
     [[a]] Any spots in the tree where Maven conflict resolution replaced a dependency are highlighted with a red line labeled "conflict"  
 
-  * {{{./graph/examples/closure/conflicts.png}Graph #4}} is the transitive closure but with dependencies that were conflicted out displayed via the "showConflicts" flag  
+  * {{{./graph/examples/4.png}Graph #4}} is the transitive closure but with dependencies that were conflicted out displayed via the "showConflicts" flag  
 
 +--
 mvn graph:dependencies -Dgraph.showConflicts=true
