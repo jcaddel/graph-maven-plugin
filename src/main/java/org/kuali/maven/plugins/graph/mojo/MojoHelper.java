@@ -126,11 +126,16 @@ public class MojoHelper {
             }
             fillInDescriptors(gd, descriptors, mc.getOutputDir(), null);
             List<GraphDescriptor> executedGraphs = new ArrayList<GraphDescriptor>();
+            int count = 0;
             for (GraphDescriptor descriptor : descriptors) {
                 GraphDescriptor executed = execute(mc, descriptor);
                 if (executed != null) {
                     executedGraphs.add(executed);
+                    count++;
                 }
+            }
+            if (count == 0) {
+                logger.info("No graphs to generate");
             }
             return executedGraphs;
         } catch (Exception e) {

@@ -78,7 +78,11 @@ public class DependenciesMojo extends FilteredGraphMojo {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper mh = new MojoHelper();
-        mh.execute(mc, gc);
+        GraphDescriptor gd = mh.execute(mc, gc);
+        if (gd == null) {
+            getLog().info("No dependencies to graph");
+        }
+
     }
 
     @Override

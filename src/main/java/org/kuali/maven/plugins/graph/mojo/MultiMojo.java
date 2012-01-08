@@ -92,11 +92,7 @@ public class MultiMojo extends BaseGraphMojo {
         MojoContext mc = Helper.copyProperties(MojoContext.class, this);
         GraphDescriptor gc = Helper.copyProperties(GraphDescriptor.class, this);
         MojoHelper helper = new MojoHelper();
-        try {
-            helper.executeMulti(mc, gc, Helper.toEmptyList(descriptors));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        helper.executeMulti(mc, gc, Helper.toEmptyList(descriptors));
     }
 
     public File getOutputDir() {

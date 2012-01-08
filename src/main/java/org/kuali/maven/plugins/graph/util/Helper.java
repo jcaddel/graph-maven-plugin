@@ -137,7 +137,7 @@ public class Helper {
      */
     public static final <T> List<T> toEmptyList(List<T> list) {
         if (list == null) {
-            return Collections.emptyList();
+            return new ArrayList<T>();
         } else {
             return list;
         }
