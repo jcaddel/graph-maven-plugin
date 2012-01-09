@@ -100,6 +100,42 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
+     * If true, artifact id's are displayed on the graph.
+     * </p>
+     *
+     * @parameter expression="${graph.showArtifactIds}" default-value="true"
+     */
+    private boolean showArtifactIds;
+
+    /**
+     * <p>
+     * If true, artifact versions's are displayed on the graph.
+     * </p>
+     *
+     * @parameter expression="${graph.showVersions}" default-value="true"
+     */
+    private boolean showVersions;
+
+    /**
+     * <p>
+     * If true, artifact classifiers's are displayed on the graph.
+     * </p>
+     *
+     * @parameter expression="${graph.showClassifiers}" default-value="true"
+     */
+    private boolean showClassifiers;
+
+    /**
+     * <p>
+     * If true, artifact types (aka "packaging") are displayed on the graph
+     * </p>
+     *
+     * @parameter expression="${graph.showTypes}" default-value="true"
+     */
+    private boolean showTypes;
+
+    /**
+     * <p>
      * If true, duplicate dependencies are displayed on the graph.
      * </p>
      *
@@ -293,6 +329,38 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     public void setConflicts(Conflicts conflicts) {
         this.conflicts = conflicts;
+    }
+
+    public boolean isShowArtifactIds() {
+        return showArtifactIds;
+    }
+
+    public void setShowArtifactIds(boolean showArtifactIds) {
+        this.showArtifactIds = showArtifactIds;
+    }
+
+    public boolean isShowVersions() {
+        return showVersions;
+    }
+
+    public void setShowVersions(boolean showVersions) {
+        this.showVersions = showVersions;
+    }
+
+    public boolean isShowClassifiers() {
+        return showClassifiers;
+    }
+
+    public void setShowClassifiers(boolean showClassifiers) {
+        this.showClassifiers = showClassifiers;
+    }
+
+    public boolean isShowTypes() {
+        return showTypes;
+    }
+
+    public void setShowTypes(boolean showTypes) {
+        this.showTypes = showTypes;
     }
 
 }

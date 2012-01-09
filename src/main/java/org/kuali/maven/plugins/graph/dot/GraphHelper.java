@@ -33,7 +33,6 @@ import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
-import org.kuali.maven.plugins.graph.pojo.LabelContext;
 import org.kuali.maven.plugins.graph.pojo.NameValue;
 import org.kuali.maven.plugins.graph.util.Helper;
 
@@ -174,20 +173,30 @@ public class GraphHelper {
         }
     }
 
-    public String getLabel(Artifact a) {
-        return getLabel(a, new LabelContext());
+    protected boolean isTrue(Boolean flag) {
+        return Boolean.TRUE.equals(flag);
     }
 
-    public String getLabel(Artifact a, LabelContext context) {
+    public String getLabel(Artifact a) {
+        GraphDescriptor d = new GraphDescriptor();
+        d.setShowTypes(true);
+        d.setShowGroupIds(true);
+        d.setShowArtifactIds(true);
+        d.setShowVersions(true);
+        d.setShowClassifiers(true);
+        return getLabel(a, d);
+    }
 
-        boolean showType = context.isShowTypes() && !DEFAULT_TYPE.equalsIgnoreCase(a.getType());
+    public String getLabel(Artifact a, GraphDescriptor d) {
+
+        boolean showType = isTrue(d.getShowTypes()) && !DEFAULT_TYPE.equalsIgnoreCase(a.getType());
 
         List<String> labelTokens = new ArrayList<String>();
-        add(labelTokens, a.getGroupId(), context.isShowGroupIds());
-        add(labelTokens, a.getArtifactId(), context.isShowArtifactIds());
+        add(labelTokens, a.getGroupId(), isTrue(d.getShowGroupIds()));
+        add(labelTokens, a.getArtifactId(), isTrue(d.getShowArtifactIds()));
         add(labelTokens, a.getType(), showType);
-        add(labelTokens, a.getClassifier(), context.isShowClassifiers());
-        add(labelTokens, a.getVersion(), context.isShowVersions());
+        add(labelTokens, a.getClassifier(), isTrue(d.getShowClassifiers()));
+        add(labelTokens, a.getVersion(), isTrue(d.getShowVersions()));
         return getLabel(labelTokens);
     }
 

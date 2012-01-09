@@ -31,6 +31,10 @@ public class GraphDescriptor {
     String show;
     Direction direction;
     Boolean showGroupIds;
+    Boolean showArtifactIds;
+    Boolean showVersions;
+    Boolean showTypes;
+    Boolean showClassifiers;
     Boolean showDuplicates;
     Conflicts conflicts;
     Boolean cascadeOptional;
@@ -290,6 +294,38 @@ public class GraphDescriptor {
 
     public void setConflicts(Conflicts conflicts) {
         this.conflicts = conflicts;
+    }
+
+    public Boolean getShowArtifactIds() {
+        return showArtifactIds;
+    }
+
+    public void setShowArtifactIds(Boolean showArtifactIds) {
+        this.showArtifactIds = showArtifactIds;
+    }
+
+    public Boolean getShowVersions() {
+        return showVersions;
+    }
+
+    public void setShowVersions(Boolean showVersions) {
+        this.showVersions = showVersions;
+    }
+
+    public Boolean getShowTypes() {
+        return showTypes;
+    }
+
+    public void setShowTypes(Boolean showTypes) {
+        this.showTypes = showTypes;
+    }
+
+    public Boolean getShowClassifiers() {
+        return showClassifiers;
+    }
+
+    public void setShowClassifiers(Boolean showClassifiers) {
+        this.showClassifiers = showClassifiers;
     }
 
 }
