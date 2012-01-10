@@ -51,7 +51,7 @@ mvn graph:dependencies -Dgraph.conflicts=LABEL
 mvn graph:dependencies -Dgraph.conflicts=SHOW
 +--   
   
-  * The {{{./dependency-graphs.html}Dependency Graphs}} report has a more comprehensive set of examples. 
+  * The {{{./dependency-graphs.html}Dependency Graphs}} report has more examples. 
   
 * Plugin Documentation
 
