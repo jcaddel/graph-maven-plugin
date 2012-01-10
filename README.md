@@ -14,6 +14,9 @@
     limitations under the License.
 ====
 
+Graph Maven Plugin
+-------
+
 This plugin creates customizable dependency graphs for Maven projects using Graphviz.  
 
 The Graphviz "dot" executable needs to be installed and in your path for the plugin to produce graphs
