@@ -7,4 +7,4 @@ The Graphviz "dot" executable needs to be installed and in your path for the plu
 
 There are free, stable, and mature, executables for Linux, Mac, Solaris, and Windows at http://www.graphviz.org/
 
-See http://site.kuali.org/maven/plugins/graph-maven-plugin/ for documentation and example graphs
+See http://site.kuali.org/maven/plugins/graph-maven-plugin/1.2.3/ for documentation and example graphs
