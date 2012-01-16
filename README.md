@@ -3,7 +3,7 @@ Graph Maven Plugin
 
 This plugin creates customizable dependency graphs for Maven projects using Graphviz.
 
-For example:
+For example, this is a graph of the logging libraries used by this plugin:
 
 ![Logging Dependencies](https://github.com/jcaddel/graph-maven-plugin/raw/master/src/site/resources/example.png)
 
