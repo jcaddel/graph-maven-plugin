@@ -3,7 +3,7 @@ Graph Maven Plugin
 
 This plugin creates customizable dependency graphs for Maven projects using Graphviz.
 
-https://github.com/jcaddel/graph-maven-plugin/blob/master/src/site/resources/example.png  
+https://github.com/jcaddel/graph-maven-plugin/raw/master/src/site/resources/example.png
 
 The Graphviz "dot" executable needs to be installed and in your path for the plugin to produce graphs
 
