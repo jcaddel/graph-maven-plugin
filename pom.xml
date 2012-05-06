@@ -84,6 +84,17 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <configuration>
+          <aggregate>true</aggregate>
+          <excludes>
+            <exclude>**/*.md</exclude>
+            <exclude>**/.gitignore</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.kuali.maven.plugins</groupId>
         <artifactId>graph-maven-plugin</artifactId>
         <executions>
