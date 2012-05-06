@@ -21,8 +21,8 @@
 
   <parent>
     <groupId>org.kuali.pom</groupId>
-    <artifactId>kuali-common</artifactId>
-    <version>1.0.29</version>
+    <artifactId>kuali-maven</artifactId>
+    <version>1.2.2</version>
   </parent>
 
   <groupId>org.kuali.maven.plugins</groupId>
@@ -40,17 +40,7 @@
 
   <name>Graph Maven Plugin</name>
   <description>Create customizable dependency graphs for Maven projects using Graphviz.  The Graphviz "dot" executable needs to be installed and in your path for the plugin to produce graphs - http://www.graphviz.org/</description>
-  <properties>
-    <kuali.slf4j.version>1.6.4</kuali.slf4j.version>
-  </properties>
-
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.10</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
@@ -61,11 +51,6 @@
           <artifactId>commons-logging</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.collections</groupId>
@@ -85,11 +70,6 @@
     </dependency>
     <!-- Maven -->
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-compat</artifactId>
-      <version>3.0.3</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-dependency-tree</artifactId>
       <version>1.2</version>
@@ -98,24 +78,6 @@
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-api</artifactId>
       <version>3.0</version>
-    </dependency>
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${kuali.slf4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-      <version>${kuali.slf4j.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>${kuali.slf4j.version}</version>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
 
