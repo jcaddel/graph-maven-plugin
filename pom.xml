@@ -40,6 +40,11 @@
   <description>Create customizable dependency graphs for Maven projects using Graphviz.  The Graphviz "dot" executable needs to be installed and in your path for the plugin to produce graphs - http://www.graphviz.org/</description>
   <dependencies>
     <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
       <version>1.8.3</version>

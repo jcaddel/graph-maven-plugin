@@ -43,6 +43,8 @@ public class GraphDescriptor {
     Boolean executeDot;
     Boolean ignoreDotFailure;
     Boolean skipEmptyGraphs;
+    String defaultColor;
+    String colorRules;
     Integer depth;
     Scope scope;
     File file;
@@ -240,6 +242,22 @@ public class GraphDescriptor {
         this.skipEmptyGraphs = skipEmptyGraphs;
     }
 
+    public String getDefaultColor() {
+        return defaultColor;
+    }
+
+    public void setDefaultColor(String defaultColor) {
+        this.defaultColor = defaultColor;
+    }
+
+    public String getColorRules() {
+        return colorRules;
+    }
+
+    public void setColorRules(String colorRules) {
+        this.colorRules = colorRules;
+    }
+
     public Display getDisplay() {
         return display;
     }
@@ -327,5 +345,4 @@ public class GraphDescriptor {
     public void setShowClassifiers(Boolean showClassifiers) {
         this.showClassifiers = showClassifiers;
     }
-
 }

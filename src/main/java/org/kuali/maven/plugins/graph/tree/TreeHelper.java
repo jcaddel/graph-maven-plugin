@@ -51,7 +51,6 @@ import org.springframework.util.Assert;
  */
 public class TreeHelper {
     private static final Logger logger = LoggerFactory.getLogger(TreeHelper.class);
-    public static final String ROOT_FILL_COLOR = "#dddddd";
     public static final String OPTIONAL = "optional";
     public static final String REQUIRED = "required";
     Counter counter = new Counter();
@@ -407,8 +406,6 @@ public class TreeHelper {
         GraphNode n = new GraphNode();
         n.setId(counter.increment());
         n.setLabel(graphHelper.getLabel(a));
-        String fillcolor = dn.getParent() == null ? ROOT_FILL_COLOR : n.getFillcolor();
-        n.setFillcolor(fillcolor);
         return n;
     }
 

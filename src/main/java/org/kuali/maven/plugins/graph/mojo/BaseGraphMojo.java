@@ -227,6 +227,29 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
      */
     private boolean skipEmptyGraphs;
 
+    /**
+     * <p>
+     * Default node-backgroundcolor if colorRules yield to no result (e.g. white or #000 or #000000)
+     * </p>
+     *
+     * @parameter expression="${graph.defaultColor}" default-value="white"
+     */
+    private String defaultColor;
+
+    /**
+     * <p>
+     * Configuration of rules for node-backgroundcolors. e.g. ARTIFACT|api|yellow:GROUP|apache|red <br/>
+     * <ul>
+     *   <li>ARTIFACT|api|yellow => Use yellow as color for nodes with ARTIFACT-name containing "api"</li>
+     *   <li>GROUP|apache|red => use red as color for nodes with GROUP-name containing "apache"</li>
+     *   <li>if more than one rule matches => background-color will be striped</li>
+     * </ul>
+     * </p>
+     *
+     * @parameter expression="${graph.colorConfig}"
+     */
+    private String colorRules;
+
     public String getTitle() {
         return title;
     }
@@ -315,6 +338,22 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
         this.skipEmptyGraphs = skipEmptyGraphs;
     }
 
+    public String getDefaultColor() {
+        return defaultColor;
+    }
+
+    public void setDefaultColor(String defaultColor) {
+        this.defaultColor = defaultColor;
+    }
+
+    public String getColorRules() {
+        return colorRules;
+    }
+
+    public void setColorRules(String colorRules) {
+        this.colorRules = colorRules;
+    }
+
     public Display getDisplay() {
         return display;
     }
@@ -362,5 +401,4 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
     public void setShowTypes(boolean showTypes) {
         this.showTypes = showTypes;
     }
-
 }

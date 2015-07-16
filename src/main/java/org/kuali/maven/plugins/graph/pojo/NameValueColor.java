@@ -15,18 +15,15 @@
  */
 package org.kuali.maven.plugins.graph.pojo;
 
-public class NameValue {
+public class NameValueColor {
     String name;
     String value;
+    String color;
 
-    public NameValue() {
-        this(null, null);
-    }
-
-    public NameValue(String name, String value) {
-        super();
+    public NameValueColor(String name, String value, String color) {
         this.name = name;
         this.value = value;
+        this.color = color;
     }
 
     public String getName() {
@@ -43,5 +40,13 @@ public class NameValue {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

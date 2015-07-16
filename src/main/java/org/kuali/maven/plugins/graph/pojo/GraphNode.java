@@ -25,7 +25,7 @@ public class GraphNode {
     String color = "black";
     String fontcolor = "black";
     String fillcolor = "white";
-    String style = "solid,filled";
+    String style = "solid,striped";
     List<Edge> edges;
 
     public int getId() {

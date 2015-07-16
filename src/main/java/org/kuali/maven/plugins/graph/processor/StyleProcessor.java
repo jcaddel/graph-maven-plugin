@@ -132,9 +132,9 @@ public class StyleProcessor implements Processor {
         }
         copyStyleProperties(context.getGraphNode(), style);
         if (optional) {
-            context.getGraphNode().setStyle("dotted,filled");
+            context.getGraphNode().setStyle("dotted,striped");
         } else {
-            context.getGraphNode().setStyle("solid,filled");
+            context.getGraphNode().setStyle("solid,striped");
         }
     }
 
