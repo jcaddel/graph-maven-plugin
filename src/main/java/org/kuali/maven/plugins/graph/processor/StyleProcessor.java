@@ -21,10 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.pojo.State;
@@ -41,7 +43,22 @@ import org.springframework.core.io.ResourceLoader;
 public class StyleProcessor implements Processor {
     private static final Logger logger = LoggerFactory.getLogger(StyleProcessor.class);
     TreeHelper helper = new TreeHelper();
-    Properties properties = getProperties();
+    Properties properties;
+
+    public StyleProcessor(GraphDescriptor gd)
+    {
+        final Properties defaultProperties = getProperties();
+        this.properties = new Properties(defaultProperties);
+
+        Set<String> legalNames = defaultProperties.stringPropertyNames();
+
+        // copy only the properties from the pom that are also in the default dot.properties file.
+        for (String propertyName : gd.getStyleProperties().stringPropertyNames()) {
+            if (legalNames.contains(propertyName)) {
+                this.properties.setProperty(propertyName, gd.getStyleProperties().getProperty(propertyName));
+            }
+        }
+    }
 
     @Override
     public void process(Node<MavenContext> node) {
@@ -51,7 +68,7 @@ public class StyleProcessor implements Processor {
         }
     }
 
-    protected Properties getProperties() {
+    protected static Properties getProperties() {
         String location = "classpath:dot.properties";
         ResourceLoader loader = new DefaultResourceLoader();
         Resource resource = loader.getResource(location);

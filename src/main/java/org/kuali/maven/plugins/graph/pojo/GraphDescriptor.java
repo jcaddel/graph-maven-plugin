@@ -16,6 +16,7 @@
 package org.kuali.maven.plugins.graph.pojo;
 
 import java.io.File;
+import java.util.Properties;
 
 /**
  *
@@ -55,6 +56,7 @@ public class GraphDescriptor {
     String description;
     String name;
     Row row;
+    Properties styleProperties;
 
     public String getExecutable() {
         return executable;
@@ -328,4 +330,11 @@ public class GraphDescriptor {
         this.showClassifiers = showClassifiers;
     }
 
+    public Properties getStyleProperties() {
+        return styleProperties;
+    }
+
+    public void setStyleProperties(Properties styleProperties) {
+        this.styleProperties = styleProperties;
+    }
 }

@@ -389,7 +389,7 @@ public class MojoHelper {
         processors.add(getDisplayProcessor(gd));
 
         // Style the nodes based on scope, optional/required, and state
-        processors.add(new StyleProcessor());
+        processors.add(new StyleProcessor(gd));
 
         // Generate lines connecting the tree nodes
         processors.addAll(getEdgeProcessors(gd));
@@ -473,7 +473,7 @@ public class MojoHelper {
         Processor conflictsProcessor = new HideConflictsProcessor(gd);
         switch (gd.getLayout()) {
         case LINKED:
-            processors.add(new LinkedEdgeProcessor());
+            processors.add(new LinkedEdgeProcessor(gd));
             if (conflicts == Conflicts.LABEL) {
                 logger.debug("labeling conflicts");
                 processors.add(new ReduceClutterProcessor());
@@ -488,7 +488,7 @@ public class MojoHelper {
             }
             return processors;
         case FLAT:
-            processors.add(new FlatEdgeProcessor());
+            processors.add(new FlatEdgeProcessor(gd));
             if (conflicts == Conflicts.LABEL) {
                 logger.debug("labeling conflicts");
                 processors.add(conflictsProcessor);

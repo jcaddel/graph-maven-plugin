@@ -16,6 +16,7 @@
 package org.kuali.maven.plugins.graph.mojo;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.kuali.maven.plugins.graph.pojo.Layout;
 
@@ -227,6 +228,13 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
      */
     private int depth;
 
+    /**
+     * Allows overriding of the various style properties used to render the graph.
+     *
+     * @parameter
+     */
+    private Properties styleProperties = new Properties();
+
     public boolean isTransitive() {
         return transitive;
     }
@@ -283,4 +291,11 @@ public abstract class FilteredGraphMojo extends BaseGraphMojo {
         this.depth = depth;
     }
 
+    public Properties getStyleProperties() {
+        return styleProperties;
+    }
+
+    public void setStyleProperties(Properties styleProperties) {
+        this.styleProperties = styleProperties;
+    }
 }
