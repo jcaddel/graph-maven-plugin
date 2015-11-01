@@ -36,6 +36,7 @@ public class GraphDescriptor {
     Boolean showTypes;
     Boolean showClassifiers;
     Boolean showDuplicates;
+    Boolean showEdgeLabels;
     Conflicts conflicts;
     Boolean cascadeOptional;
     Boolean showLegend;
@@ -328,4 +329,11 @@ public class GraphDescriptor {
         this.showClassifiers = showClassifiers;
     }
 
+    public Boolean getShowEdgeLabels() {
+        return showEdgeLabels;
+    }
+
+    public void setShowEdgeLabels(Boolean showEdgeLabels) {
+        this.showEdgeLabels = showEdgeLabels;
+    }
 }

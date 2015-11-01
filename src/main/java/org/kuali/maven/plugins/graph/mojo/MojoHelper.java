@@ -473,7 +473,7 @@ public class MojoHelper {
         Processor conflictsProcessor = new HideConflictsProcessor(gd);
         switch (gd.getLayout()) {
         case LINKED:
-            processors.add(new LinkedEdgeProcessor());
+            processors.add(new LinkedEdgeProcessor(gd));
             if (conflicts == Conflicts.LABEL) {
                 logger.debug("labeling conflicts");
                 processors.add(new ReduceClutterProcessor());
@@ -488,7 +488,7 @@ public class MojoHelper {
             }
             return processors;
         case FLAT:
-            processors.add(new FlatEdgeProcessor());
+            processors.add(new FlatEdgeProcessor(gd));
             if (conflicts == Conflicts.LABEL) {
                 logger.debug("labeling conflicts");
                 processors.add(conflictsProcessor);
