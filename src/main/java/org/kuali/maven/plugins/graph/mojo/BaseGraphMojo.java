@@ -145,6 +145,15 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
+     * If true, redundant dependency edges are kept in the graph.
+     * </p>
+     *
+     * @parameter expression="${graph.showRedundant}" default-value="false"
+     */
+    private boolean showRedundant;
+
+    /**
+     * <p>
      * Determines how conflicts in the dependency tree are displayed. Valid options are <code>IGNORE</code>,
      * <code>LABEL</code>, and <code>SHOW</code>.
      * </p>
@@ -363,4 +372,11 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
         this.showTypes = showTypes;
     }
 
+    public boolean isShowRedundant() {
+        return showRedundant;
+    }
+
+    public void setShowRedundant(boolean showRedundant) {
+        this.showRedundant = showRedundant;
+    }
 }

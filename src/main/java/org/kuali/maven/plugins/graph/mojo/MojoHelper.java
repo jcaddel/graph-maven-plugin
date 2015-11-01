@@ -476,15 +476,15 @@ public class MojoHelper {
             processors.add(new LinkedEdgeProcessor());
             if (conflicts == Conflicts.LABEL) {
                 logger.debug("labeling conflicts");
-                processors.add(new ReduceClutterProcessor());
+                processors.add(new ReduceClutterProcessor(gd));
                 processors.add(conflictsProcessor);
             } else if (conflicts == Conflicts.SHOW) {
                 logger.debug("showing conflicts");
-                processors.add(new ReduceClutterProcessor());
+                processors.add(new ReduceClutterProcessor(gd));
             } else if (conflicts == Conflicts.IGNORE) {
                 logger.debug("ignoring conflicts");
                 processors.add(conflictsProcessor);
-                processors.add(new ReduceClutterProcessor());
+                processors.add(new ReduceClutterProcessor(gd));
             }
             return processors;
         case FLAT:
