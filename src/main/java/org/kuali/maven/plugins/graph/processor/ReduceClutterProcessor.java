@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kuali.maven.plugins.graph.pojo.Edge;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.State;
@@ -50,14 +51,20 @@ public class ReduceClutterProcessor implements Processor {
     private static final Logger logger = LoggerFactory.getLogger(ReduceClutterProcessor.class);
     // Track how many edges we remove
     int removeCount = 0;
+    Boolean showRedundant;
 
+    public ReduceClutterProcessor(GraphDescriptor gd) {
+        this.showRedundant = gd.getShowRedundant();
+    }
     /**
      * Process the tree
      */
     @Override
     public void process(Node<MavenContext> node) {
-        recurse(node);
-        logger.debug("removed {} redundant edges", removeCount);
+        if (!Boolean.TRUE.equals(showRedundant)) {
+            recurse(node);
+            logger.debug("removed {} redundant edges", removeCount);
+        }
     }
 
     /**

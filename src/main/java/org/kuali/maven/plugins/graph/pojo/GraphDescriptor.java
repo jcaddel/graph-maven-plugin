@@ -55,6 +55,7 @@ public class GraphDescriptor {
     String description;
     String name;
     Row row;
+    Boolean showRedundant;
 
     public String getExecutable() {
         return executable;
@@ -328,4 +329,11 @@ public class GraphDescriptor {
         this.showClassifiers = showClassifiers;
     }
 
+    public Boolean getShowRedundant() {
+        return showRedundant;
+    }
+
+    public void setShowRedundant(Boolean showRedundant) {
+        this.showRedundant = showRedundant;
+    }
 }
