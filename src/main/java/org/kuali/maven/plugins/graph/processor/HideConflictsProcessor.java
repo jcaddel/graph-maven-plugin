@@ -28,16 +28,13 @@ import org.kuali.maven.plugins.graph.tree.TreeHelper;
 
 public class HideConflictsProcessor implements Processor {
     TreeHelper helper = new TreeHelper();
-    EdgeGenerator generator = new EdgeGenerator();
+    EdgeGenerator generator;
     GraphDescriptor descriptor;
-
-    public HideConflictsProcessor() {
-        this(null);
-    }
 
     public HideConflictsProcessor(GraphDescriptor descriptor) {
         super();
         this.descriptor = descriptor;
+        this.generator = new EdgeGenerator(descriptor);
     }
 
     @Override
