@@ -145,6 +145,15 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
 
     /**
      * <p>
+     * Show labels on the graph edges.
+     * </p>
+     *
+     *  @parameter expression="${graph.showEdgeLabels}" default-value="true"
+     */
+    private boolean showEdgeLabels = true;
+
+    /**
+     * <p>
      * Determines how conflicts in the dependency tree are displayed. Valid options are <code>IGNORE</code>,
      * <code>LABEL</code>, and <code>SHOW</code>.
      * </p>
@@ -363,4 +372,11 @@ public abstract class BaseGraphMojo extends BaseMavenMojo {
         this.showTypes = showTypes;
     }
 
+    public boolean isShowEdgeLabels() {
+        return showEdgeLabels;
+    }
+
+    public void setShowEdgeLabels(boolean showEdgeLabels) {
+        this.showEdgeLabels = showEdgeLabels;
+    }
 }

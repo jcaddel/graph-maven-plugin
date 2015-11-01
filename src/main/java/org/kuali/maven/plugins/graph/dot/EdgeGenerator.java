@@ -18,6 +18,7 @@ package org.kuali.maven.plugins.graph.dot;
 import java.util.ArrayList;
 
 import org.kuali.maven.plugins.graph.pojo.Edge;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
@@ -36,6 +37,11 @@ import org.kuali.maven.plugins.graph.util.Counter;
 public class EdgeGenerator {
     StyleProcessor sp = new StyleProcessor();
     Counter counter = new Counter(1);
+    Boolean showEdgeLabels;
+
+    public EdgeGenerator(GraphDescriptor gd) {
+        this.showEdgeLabels = gd.getShowEdgeLabels();
+    }
 
     /**
      * <p>
@@ -103,7 +109,11 @@ public class EdgeGenerator {
         Edge edge = new Edge(parent, child);
         edge.setId(id);
         sp.copyStyleProperties(edge, style);
-        edge.setLabel(label);
+
+        if (!Boolean.FALSE.equals(showEdgeLabels)) {
+            edge.setLabel(label);
+        }
+
         return edge;
     }
 }

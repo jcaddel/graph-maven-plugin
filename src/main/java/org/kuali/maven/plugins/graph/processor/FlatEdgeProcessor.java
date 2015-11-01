@@ -17,11 +17,16 @@ package org.kuali.maven.plugins.graph.processor;
 
 import org.kuali.maven.plugins.graph.dot.EdgeGenerator;
 import org.kuali.maven.plugins.graph.pojo.Edge;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.tree.Node;
 
 public class FlatEdgeProcessor implements Processor {
-    EdgeGenerator generator = new EdgeGenerator();
+    EdgeGenerator generator;
+
+    public FlatEdgeProcessor(GraphDescriptor gd) {
+        generator = new EdgeGenerator(gd);
+    }
 
     @Override
     public void process(Node<MavenContext> node) {

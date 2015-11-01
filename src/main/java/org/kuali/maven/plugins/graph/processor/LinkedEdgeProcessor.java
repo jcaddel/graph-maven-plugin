@@ -17,6 +17,7 @@ package org.kuali.maven.plugins.graph.processor;
 
 import org.kuali.maven.plugins.graph.dot.EdgeGenerator;
 import org.kuali.maven.plugins.graph.pojo.Edge;
+import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
 import org.kuali.maven.plugins.graph.pojo.MavenContext;
 import org.kuali.maven.plugins.graph.pojo.Scope;
@@ -29,7 +30,11 @@ import org.slf4j.LoggerFactory;
 public class LinkedEdgeProcessor implements Processor {
     private static final Logger logger = LoggerFactory.getLogger(LinkedEdgeProcessor.class);
     public static final String REPLACEMENT_LABEL = "replacement";
-    EdgeGenerator generator = new EdgeGenerator();
+    EdgeGenerator generator;
+
+    public LinkedEdgeProcessor(GraphDescriptor gd) {
+        generator = new EdgeGenerator(gd);
+    }
 
     @Override
     public void process(Node<MavenContext> node) {
