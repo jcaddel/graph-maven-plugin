@@ -33,7 +33,8 @@ import org.kuali.maven.plugins.graph.pojo.Graph;
 import org.kuali.maven.plugins.graph.pojo.GraphDecorator;
 import org.kuali.maven.plugins.graph.pojo.GraphDescriptor;
 import org.kuali.maven.plugins.graph.pojo.GraphNode;
-import org.kuali.maven.plugins.graph.pojo.NameValue;
+import org.kuali.maven.plugins.graph.pojo.NameValueColor;
+import org.kuali.maven.plugins.graph.processor.ColorRuleExtractor;
 import org.kuali.maven.plugins.graph.util.Helper;
 
 /**
@@ -52,98 +53,105 @@ public class GraphHelper {
             return '"' + title + '"';
         }
 
-        List<NameValue> labels = getLegendLabels(context);
+        List<NameValueColor> labels = getLegendLabels(context);
         if (Helper.isEmpty(labels)) {
             return '"' + title + '"';
         }
-        HtmlUtils htmlUtils = new HtmlUtils();
         Table table = getTitle(title, labels);
         return "<" + htmlUtils.toHtml(table) + ">";
     }
 
-    protected List<NameValue> getLegendLabels(GraphDescriptor context) {
-        List<NameValue> labels = new ArrayList<NameValue>();
-        addLabel("includes", context.getIncludes(), labels);
-        addLabel("excludes", context.getExcludes(), labels);
-        addLabel("show", context.getShow(), labels);
-        addLabel("hide", context.getHide(), labels);
+    protected List<NameValueColor> getLegendLabels(GraphDescriptor context) {
+        List<NameValueColor> labels = new ArrayList<NameValueColor>();
+        addLabel("includes", context.getIncludes(), null, labels);
+        addLabel("excludes", context.getExcludes(), null, labels);
+        addLabel("show", context.getShow(), null, labels);
+        addLabel("hide", context.getHide(), null, labels);
         if (context.getDisplay() != Display.TREE) {
-            addLabel("display", context.getDisplay().toString(), labels);
+            addLabel("display", context.getDisplay().toString(), null, labels);
         }
         if (!context.getTransitive()) {
-            addLabel("transitive", context.getTransitive() + "", labels);
+            addLabel("transitive", context.getTransitive() + "", null, labels);
         }
         if (context.getDepth() != null && context.getDepth() >= 0) {
-            addLabel("depth", context.getDepth() + "", labels);
+            addLabel("depth", context.getDepth() + "", null, labels);
+        }
+        if (!context.getColorRules().isEmpty()) {
+            for (ColorRuleExtractor.ColorRule rule : new ColorRuleExtractor().getColorRules(context.getColorRules())) {
+                addLabel(rule.getTarget().name(), rule.getPattern(), rule.getColor(), labels);
+            }
         }
         return labels;
     }
 
-    protected void addLabel(String name, String value, List<NameValue> labels) {
+    protected void addLabel(String name, String value, String color, List<NameValueColor> labels) {
         if (!Helper.isBlank(value)) {
-            NameValue nv = new NameValue(name, value);
-            labels.add(nv);
+            labels.add(new NameValueColor(name, value, color));
         }
     }
 
-    protected String getLegendText(NameValue label, int padding) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(StringUtils.leftPad(label.getName(), padding, " "));
-        sb.append(" = ");
-        sb.append(label.getValue());
-        return sb.toString();
+    protected TableRow getLegendRow(NameValueColor legendEntry) {
+        TableCell right = createTableCell(CellAlign.LEFT, legendEntry.getValue());
+        right.setBgcolor(legendEntry.getColor());
+
+        return new TableRow(
+            createTableCell(CellAlign.RIGHT, legendEntry.getName()),
+            createTableCell(null, "="),
+            right
+        );
     }
 
-    protected TableRow getLegendRow(NameValue label, Font font, int padding) {
-        font.setContent(getLegendText(label, padding));
-        TableCell cell = new TableCell(htmlUtils.toHtml(font));
-        cell.setAlign(CellAlign.LEFT);
-        return new TableRow(cell);
+    protected TableRow getSpacingRow() {
+        return new TableRow(
+            createTableCell(CellAlign.RIGHT, null),
+            createTableCell(null, null),
+            createTableCell(CellAlign.LEFT, null)
+        );
     }
 
-    protected int getMaxNameLength(List<NameValue> labels) {
-        int max = 0;
-        for (NameValue label : labels) {
-            int length = label.getName().length();
-            if (length > max) {
-                max = length;
-            }
-        }
-        return max;
-    }
-
-    protected List<TableRow> getLegendRows(String title, List<NameValue> labels) {
+    private TableCell createTableCell(CellAlign align, String content) {
         Font font = new Font("black", 10);
         // Needs to be a fixed width font
         font.setFace("Courier");
         font.setContent(" ");
-        List<TableRow> rows = new ArrayList<TableRow>();
-        // Add a blank row for spacing if there is a title to display
-        if (!StringUtils.isBlank(title)) {
-            rows.add(new TableRow(new TableCell(htmlUtils.toHtml(font))));
+
+        if (content == null) {
+            return new TableCell("");
         }
-        int padding = getMaxNameLength(labels);
-        for (NameValue label : labels) {
-            rows.add(getLegendRow(label, font, padding));
+        font.setContent(content);
+        TableCell result = new TableCell(htmlUtils.toHtml(font));
+        if (align != null) {
+            result.setAlign(align);
         }
-        // Add a blank row for spacing
-        font.setContent(" ");
-        rows.add(new TableRow(new TableCell(htmlUtils.toHtml(font))));
-        return rows;
+        return result;
     }
 
-    public Table getTitle(String title, List<NameValue> labels) {
-        List<TableRow> rows = new ArrayList<TableRow>(getLegendRows(title, labels));
-        TableCell titleCell = new TableCell(title);
-        TableRow titleRow = new TableRow(titleCell);
-        if (!StringUtils.isBlank(title)) {
-            rows.add(0, titleRow);
-        }
-        Table table = new Table(rows);
+    public Table getTitle(String title, List<NameValueColor> labels) {
+        Table table = new Table(getRows(title, labels));
         table.setBorder(0);
         table.setCellpadding(0);
         table.setCellspacing(0);
         return table;
+    }
+
+    private List<TableRow> getRows(String title, List<NameValueColor> labels) {
+        List<TableRow> result = new ArrayList<TableRow>();
+        if (!StringUtils.isBlank(title)) {
+            TableCell tableCell = new TableCell(title);
+            tableCell.setColspan(3);
+            result.add(new TableRow(tableCell));
+        }
+
+        // Add a blank row for spacing if there is a title to display
+        if (!StringUtils.isBlank(title)) {
+            result.add(getSpacingRow());
+        }
+        for (NameValueColor label : labels) {
+            result.add(getLegendRow(label));
+        }
+        // Add a blank row for spacing
+        result.add(getSpacingRow());
+        return result;
     }
 
     public Graph getGraph(String title) {

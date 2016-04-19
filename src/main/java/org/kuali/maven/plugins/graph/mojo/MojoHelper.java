@@ -53,6 +53,7 @@ import org.kuali.maven.plugins.graph.pojo.MojoContext;
 import org.kuali.maven.plugins.graph.pojo.Row;
 import org.kuali.maven.plugins.graph.pojo.Scope;
 import org.kuali.maven.plugins.graph.processor.CascadeOptionalProcessor;
+import org.kuali.maven.plugins.graph.processor.ColorProcessor;
 import org.kuali.maven.plugins.graph.processor.FlatEdgeProcessor;
 import org.kuali.maven.plugins.graph.processor.HideConflictsProcessor;
 import org.kuali.maven.plugins.graph.processor.HideDuplicatesProcessor;
@@ -390,6 +391,9 @@ public class MojoHelper {
 
         // Style the nodes based on scope, optional/required, and state
         processors.add(new StyleProcessor());
+
+        // Colorize the nodes
+        processors.add(new ColorProcessor(gd));
 
         // Generate lines connecting the tree nodes
         processors.addAll(getEdgeProcessors(gd));
